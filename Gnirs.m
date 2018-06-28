@@ -2,10 +2,20 @@
 close all
 %% Load database
 %inserire un percorso predefinito nel quale si andra a inserire l'app
-dbNIRS = loadNIRSdb;
+dataBaseDirectoryName = 'DataBase';
 
+currentPath = fileparts(which(mfilename));
+dataBaseTxtPath = fullfile(currentPath,'Path.txt');
 
+if exist(dataBaseTxtPath, 'file')
+	fid = fopen(dataBaseTxtPath);
+	databasePath = fgetl(fid);
+else
+	newDatabasePath = fullfile(currentPath , dataBaseDirectoryName);%cambiare con quello specifico
+	databasePath = NewNIRSDataBase(newDatabasePath, currentPath);
+end
 
+dbNIRS = loadNIRSdb(databasePath);
 %% Create the widget
 Hmain.dataBasePath = dbNIRS.Path;
 Hmain.screenSize = get(0,'ScreenSize');

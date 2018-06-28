@@ -45,7 +45,7 @@ function StudyFigure = NewNIRSStudy(~, ~, Hmain,~)
 	'String', 'Load',...
 	'Units', 'normalize', ...
 	'Position', [0.8 0.15 0.2 0.1],...
-	'Callback', {@AddStudytoDataBase ,Hmain.dataBasePath ,StudyFigure }); 
+	'Callback', {@AddStudytoDataBase ,Hmain ,StudyFigure }); 
 
 
 
@@ -57,7 +57,12 @@ end
 %% extra function
 
 
-function	AddStudytoDataBase( ~, ~, path , studyhandle )
+function	AddStudytoDataBase( ~, ~, MainHandle , studyhandle )
+
+
+	path = MainHandle.dataBasePath;
+	
+
 	dbPath = fullfile(path,'NIRSDataBase.mat');
 	if ~exist(dbPath,'file') %check if it exixst and then create it
 		error('database not found')
@@ -97,6 +102,10 @@ function	AddStudytoDataBase( ~, ~, path , studyhandle )
 	save(dbPath,'DataBase');
 	
 	close(studyhandle.MainFigure);
+	
+		
+	MainHandle = NIRSTree(MainHandle,DataBase);
+	
 
 
 end
