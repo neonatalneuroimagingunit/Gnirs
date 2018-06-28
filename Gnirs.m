@@ -1,8 +1,8 @@
 
 close all
 %% Load database
-%inserire un percorso predefinito nel quale si andra a inserire l'app
-dataBaseDirectoryName = 'DataBase';
+
+
 
 currentPath = fileparts(which(mfilename));
 dataBaseTxtPath = fullfile(currentPath,'Path.txt');
@@ -10,8 +10,10 @@ dataBaseTxtPath = fullfile(currentPath,'Path.txt');
 if exist(dataBaseTxtPath, 'file')
 	fid = fopen(dataBaseTxtPath);
 	databasePath = fgetl(fid);
+	fclose(fid);
 else
-	newDatabasePath = fullfile(currentPath , dataBaseDirectoryName);%cambiare con quello specifico
+	dataBaseDirectoryName = 'DataBase'; %cambiare con una finestra di dialogo
+	newDatabasePath = fullfile(currentPath , dataBaseDirectoryName);
 	databasePath = NewNIRSDataBase(newDatabasePath, currentPath);
 end
 

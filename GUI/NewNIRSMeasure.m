@@ -249,11 +249,12 @@ function	LoadDatatoNewMeasureGUI(~ ,~ ,StudyFigureHandle, MainHandle, DataBase)
 			
 		measureNote = StudyFigureHandle.Subject.Note.Value;
 		
-	close(StudyFigureHandle.MainFigure)
+	    close(StudyFigureHandle.MainFigure)
 
 		
-		%inserire controllo su;lla bonta' dei campi
-		%in futuro inserire un controllo sui vari tipi di estensioni
+		%inserire controllo sulla bonta' dei campi
+		%in futuro inserire un controllo sui vari tipi di estensioni e se
+		%e' stata cancellata lultima misura
 		if exist(selectedMeasurePath , 'file')	
 			
 			%create misure idx
@@ -279,13 +280,7 @@ function	LoadDatatoNewMeasureGUI(~ ,~ ,StudyFigureHandle, MainHandle, DataBase)
 			
  				%setIcon(Hmain.Tree.StudyNode(iStudy).NewMeasures.MainNode,measureIcon);%add the measure loading icon
 			
-			
-			
-			
-			
-			
-			
-			
+
 			%% creiamo e salviao il file dei dati
 			DataNIRS = LoadBOXYdata(selectedMeasurePath, [], [] , MainHandle.Tree.StudyNode(selectedStudyIdx).NewMeasures.MainNode ); %load all the data present in the file
  			
