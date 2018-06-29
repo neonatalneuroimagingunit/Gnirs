@@ -11,12 +11,12 @@ function DataBase = addmeasuredatabase(DataNIRSMeasure,DataBasePath)
 
 		%% create a new ID 
 		
-		selectedStudyIdx = contains({DataBase.Study(:).ID},DataNIRSMeasure.StudyID);
+		selectedStudyIdx = contains({DataBase.Study(:).id},DataNIRSMeasure.StudyID);
 		SelectedStudy = DataBase.Study(selectedStudyIdx);
 		
 		
 		newID = num2str(SelectedStudy.nMeasurePersistent,'%.3d');
-		DataNIRSMeasure.MeasureID = [SelectedStudy.ID, 'M', newID ]; 
+		DataNIRSMeasure.MeasureID = [SelectedStudy.id, 'M', newID ]; 
 		DataNIRSMeasure.AnalysisID = [DataNIRSMeasure.MeasureID, 'A000']; 
 		
 		
@@ -58,7 +58,7 @@ function DataBase = addmeasuredatabase(DataNIRSMeasure,DataBasePath)
 		
 		
 		%% save the measure
-		measurePath = fullfile(DataBasePath, SelectedStudy.ID, DataNIRSMeasure.MeasureID);
+		measurePath = fullfile(DataBasePath, SelectedStudy.id, DataNIRSMeasure.MeasureID);
 		mkdir(measurePath);
 		filepath = fullfile(measurePath, DataNIRSMeasure.AnalysisID);
 		save(filepath,'DataNIRSMeasure');	

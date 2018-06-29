@@ -1,4 +1,4 @@
-function Measure = LoadBOXYdata(location, ~, mode, LoadingBarHandle) 
+function Measure = LoadBOXYdata(location, mode, LoadingBarHandle) 
 % Load a BOXY file data 
 % Inputs: path of the boxy file and a NIRSMeasure data or []
 % 
