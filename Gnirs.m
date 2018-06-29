@@ -1,6 +1,6 @@
 
 close all
-%% Load database
+%% Load datab
 
 
 
