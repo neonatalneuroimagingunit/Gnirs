@@ -4,9 +4,9 @@ function DataBase = addstudydatabase(Study,databasePath)
 
 	DataBase = loadNIRSdb(databasePath);
 
+	% generate the new id
+	studyID = [DataBase.ID , 'S' ,num2str(DataBase.nStudyPersistent,'%.3d')]; 
 	
-	studyID = [DataBase.ID , 'S' ,num2str(DataBase.nStudyPersistent,'%.3d')]; % generate the new id
-		
 	DataBase.nStudy = DataBase.nStudy + 1;
 	DataBase.nStudyPersistent = DataBase.nStudyPersistent + 1;	 
 	

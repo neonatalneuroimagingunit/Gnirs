@@ -1,4 +1,4 @@
- classdef NIRSSubject
+ classdef NirsSubject
 %     This class hold NIRS Subject
 % 	Propreties:
 % 		name	|	[string]
@@ -13,14 +13,14 @@
 			
     
     properties
-		name
-		sname
-		bdate
-		age
-		ID
-		apgar1
-		apgar5
-		note     
+		id(1,:) char
+		name(1,:) char
+		surName(1,:) char
+		birthDate(1,1) datetime
+		Info(1,1) struct 
+		measureId(:,1) cell
+		note(1,:) char
+		template(1,1) logical
 	end
 	
 	
@@ -29,10 +29,9 @@
 		 
 		function obj = NIRSSubject(varargin)
 			%initialize all possible field of the class
-			%NIRSSubject
+			%NirsSubject
 			% To load a data insert first the name of the field and than
 			% the value.
-			% ATTENTION there is no check in the data type
 
 			if nargin ~= 0 
 				if isa(varargin{1},'NIRSSubject')
@@ -45,26 +44,23 @@
 						case 'name'
 							obj.name = varargin{i+1};
 
-						case 'sname'
+						case 'surName'
 							obj.sname = varargin{i+1};
 
-						case 'bdate'
+						case 'birthDate'
 							obj.bdate = varargin{i+1};
 
-						case 'age'
-							obj.age = varargin{i+1};
-
-						case 'ID'
+						case 'id'
 							obj.ID = varargin{i+1};
 						
-						case 'apgar1'
-							obj.apgar1 = varargin{i+1};
-
-						case 'apgar5'
-							obj.apgar5 = varargin{i+1};
+						case 'Info'
+							obj.Info = varargin{i+1};
 
 						case 'note'
 							obj.note = varargin{i+1};
+							
+						case 'template'
+							obj.template = varargin{i+1};
 					end
 				end
 			end
