@@ -7,7 +7,7 @@ function MeasureList = findmeasure(measureID,DataBase)
 	StudyArray = findstudy(studyID, DataBase);
 
 	for iStudy = 1 : length(StudyArray) % sistemare
-			CurrentStudy = DataBase.Study(iStudy);
+			CurrentStudy = StudyArray(iStudy);
 			MeasureList =CurrentStudy.Measure(contains({CurrentStudy.Measure.ID},measureID));
 	end
 end
