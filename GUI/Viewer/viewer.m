@@ -89,21 +89,21 @@ Hmain.menu.menuView_openTable = uimenu('Parent', Hmain.menu.menuView, ...
 
 
 %% Panels
-panellabels = {'Measure', 'Subject', 'Probe', 'Channel'};
+panellabels = {'Measure', 'Subject', 'Probe', 'Channels'};
 
 labels = {...
-          {'Measure ID', 'Duration', 'Samples', 'Sampling Rate', 'Type', 'sciao'}, ...
+          {'Measure ID', 'Duration', 'Samples', 'Sampling Rate', 'Type of Data'}, ...
           {'pippo', 'pluto'}, ...
           {'topolino', 'paperino', 'qui', 'quo', 'qua'}, ...
-          {'archimede'}, ...
+          {'archimede', 'Average', 'Average window'}, ...
          };
 
 	 
 values = {...
-          {DataNIRS.MeasureID, [num2str(DataNIRS.MeasureInfo.Duration) ' s'], num2str(height(DataNIRS.Data)), [num2str(DataNIRS.MeasureInfo.AqInfo.UpdateRate) ' Hz'], 'ciao', 'sciao'}, ...
+          {DataNIRS.MeasureID, [num2str(DataNIRS.MeasureInfo.Duration) ' s'], num2str(height(DataNIRS.Data)), [num2str(DataNIRS.MeasureInfo.AqInfo.UpdateRate) ' Hz'], 'DC'}, ...
           {'pippo', 'pluto'}, ...
           {'topolino', 'paperino', 'qui', 'quo', 'qua'}, ...
-          {'archimede'}, ...
+          {'archimede', '-', '-'}, ...
          }; 
 	 
 	 
@@ -157,6 +157,8 @@ for jj = 1:1:npanels
     end
 end
 
+
+
 %% Panel axes
 panelaxes_position = [stepW panelH+2*stepH panelaxesW panelaxesH];
 Hmain.plot.panel = uipanel('parent', Hmain.mainFigure,...
@@ -168,7 +170,7 @@ Hmain.plot.panel = uipanel('parent', Hmain.mainFigure,...
     'ShadowColor', [211 211 211]/255, ...
     'BorderType', 'line', ...
     'FontWeight', 'bold', ...
-    'FontSize', 6, ...
+    'FontSize', 8, ...
     'FontName', defaultFontName, ...
     'Visible', 'on', ...
     'Title', 'Time series');
@@ -288,8 +290,21 @@ Hmain.plot.buttonFw1 = uicontrol('Parent', Hmain.plot.panel, ...
 
 
 %% Main plot
-nirsdata = table2array(DataNIRS.Data(:,6:197));
-channelColors = lines(size(nirsdata, 2));
+channelNames = DataNIRS.Data.Properties.VariableNames;
+columns_AC = contains(channelNames,'AC');
+columns_DC = contains(channelNames,'DC');
+columns_Ph = contains(channelNames,'Ph');
+
+nirsdata = table2array(DataNIRS.Data(:,columns_DC));
+nsamples = height(DataNIRS.Data);
+timeline_milliseconds = table2array(DataNIRS.Data(:,1));
+timeline_samples = linspace(1, nsamples, nsamples);
+
+nchannels = size(nirsdata, 2);
+
+sortingmethod = 'wavelength';
+channelColors = sorting_colors(nchannels, sortingmethod);
+
 aa = 1;
 axes(Hmain.plot.bigaxes1)
 axis tight
@@ -300,17 +315,18 @@ for ii = 1:1:size(nirsdata,2)
     set(Hmain.plot.lines1(ii), 'Color', channelColors(ii,:));
     aa = aa+1;
 end
+%Hmain.plot.bigaxes1.Xlim = [];
 Hmain.plot.lines1_selection = findall(Hmain.plot.lines1, 'Type', 'Line');
-set(Hmain.plot.lines1_selection, 'buttonDownFcn', {@change_line_width, channelColors, get(Hmain.plot.lines1_selection(1), 'LineWidth'), 2})
+set(Hmain.plot.lines1_selection, 'buttonDownFcn', {@change_line_width, channelColors, get(Hmain.plot.lines1_selection(1), 'LineWidth'), 2, Hmain.plot, Hmain.metadata})
 Hmain.plot.bigaxes1.XLabel.String = 'Time (s)';
 Hmain.plot.bigaxes1.YLabel.String = 'Intensity (a.u.)';
 x2 = 1:1:size(nirsdata,1);
 %y2 = 1:1:size(nirsdata,1);
 y2 = DataNIRS.Data.reltime/DataNIRS.MeasureInfo.AqInfo.UpdateRate;
 line(x2, y2, 'Parent', Hmain.plot.bigaxes2, 'Color', 'none')
-%linkaxes([Hmain.plot.bigaxes1, Hmain.plot.bigaxes2], 'x')
 Hmain.plot.bigaxes2.XLabel.String = 'Time (samples)';
 Hmain.plot.bigaxes2.YTickLabel = [];
+Hmain.plot.bigaxes2.XLim = [timeline_samples(1) timeline_samples(end)];
 
 %% Overall plot
 axes(Hmain.plot.smallaxes)
