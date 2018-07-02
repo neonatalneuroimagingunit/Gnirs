@@ -49,13 +49,15 @@ Hmain.mainFigure = figure('Visible', 'off', ...
     'DockControls', 'off', ...
     'Renderer', 'OpenGL');
 
-
-
 Hmain = NIRSToolbar(Hmain);
+
+
+
+Hmain = NIRSDisplay(Hmain);
 
 Hmain = NIRSTree(Hmain,dbNIRS);
 
-Hmain = NIRSDisplay(Hmain,dbNIRS);
+
 
 Hmain.mainFigure.Visible = 'on';
 
