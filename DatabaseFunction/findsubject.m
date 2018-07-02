@@ -1,19 +1,62 @@
-function AnalysisList = findanalysis(analysisID,DataBase)
+function [SubjectList, index] = findsubject(field, value ,DataBase)
 
-%FINDAnalysis find a analysis in the database
-%argument the analysisID and the database
-%add feature for more complicate search
+%FINDSUBJECT find a Subject in the database
+%argument the Subject field and value, the database
 
+%DataBase load db
+% load all the database study
+SubjectList = DataBase.Study;
 
-	measureID = analysisID(1 : end - 4);
-	
-	
-	MeasureArray = findmeasure(measureID, DataBase);
+	for iSubject = 1 : Database.nSubject
+		CurretSubject = SubjectList(iSubject);
+		for iField = 1 : length(field)
 
-	for iMeasure = 1 : length(MeasureArray) % sistemare
-			CurrentMeasure = MeasureArray(iMeasure);
-			AnalysisList = CurrentMeasure.Analysis(contains({CurrentMeasure.Analysis.ID},analysisID));
+			%search all the field lower case 
+			switch lower(field{iField}) 
+				% if the value is not present delete the subject from
+				% array
+				case id
+					if ~contains(CurretSubject.id,value{iField})
+						SubjectList(iSubject) = []; 
+					end
+
+				case name
+					if ~contains(CurretSubject.name,value{iField})
+						SubjectList(iSubject) = []; 
+					end
+
+				case surname
+					if ~contains(CurretSubject.surName,value{iField})
+						SubjectList(iSubject) = []; 
+					end
+
+				case birthday
+					if ~(CurretSubject.birthDay == value{iField})
+						SubjectList(iSubject) = []; 
+					end
+
+				case note
+					if ~contains(CurretSubject.note,value{iField})
+						SubjectList(iSubject) = []; 
+					end
+
+				otherwise
+					if isfield(CurretSubject.Info, field{iField})
+						if ~(CurretSubject.Info.(field{iField}))
+								SubjectList(iSubject) = [];
+						end
+					else 
+						warning('field not found');
+					end
+			end
+		end
 	end
+	
+	if nargout > 1
+		index = ismember({DataBase.Study(:).id},{SubjectList(:).id});
+	end
+ 	
+	
 end
 
 

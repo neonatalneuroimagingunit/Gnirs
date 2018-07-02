@@ -13,7 +13,6 @@ function DataBase = addsubjectdatabase(Subject,dataBasePath)
 						'template', false...
 						);
 					
-	saveDBPath = fullfile(databasePath ,'NIRSDataBase.mat');
-	save(saveDBPath,'DataBase');
+	savedatabase(DataBase,databasePath)
 end
 

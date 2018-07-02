@@ -6,6 +6,7 @@ function savedatabase(DataBase,databasePath)
 		saveDBPath = fullfile(databasePath ,'NIRSDataBase.mat');
 		save(saveDBPath,'DataBase');
 	else 
-		
+		error('Database is empty')
+	end
 end
 
