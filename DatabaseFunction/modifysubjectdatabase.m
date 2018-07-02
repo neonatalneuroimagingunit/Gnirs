@@ -5,7 +5,7 @@ function DataBase = modifysubjectdatabase(NewSubject,dataBasePath)
 	% found the right study
 	subjectId = Subject.id;
 	
-	[OldSubject, index] = findsubject(subjectId, DataBase);
+	[OldSubject, index] = findsubject('id', subjectId, DataBase);
 	
 	%template and measure value cannot be change
 	NewSubject.template = OldSubject.template;
@@ -44,8 +44,14 @@ function DataBase = modifysubjectdatabase(NewSubject,dataBasePath)
 	% search and change all the analysis of the subject
 	for iMeasure = 1 : length(OldSubject.measureId)
 		currentMeasureId = OldSubject.measureId(iMeasure);
-		analysisPath = fullfile(databasePath, currentMeasureId )
+		studyID = id2studyid(currentMeasureId);
 		
+		ListAnalysis = findanalysis('measureid',currentMeasureId,DataBase);
+		
+		for iAnalysis = 1 : length(ListAnalysis)
+			analysisPath = fullfile(databasePath, currentMeasureId )
+			
+		end
 	end
 	
 	
