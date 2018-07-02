@@ -3,7 +3,10 @@ function [SubjectList, index] = findsubject(field, value ,DataBase)
 %FINDSUBJECT find a Subject in the database
 %argument the Subject field and value, the database
 
-%DataBase load db
+%if the 
+if ischar(DataBase)
+	DataBase = loadNIRSdb(DataBase);
+end
 % load all the database study
 SubjectList = DataBase.Study;
 
@@ -37,6 +40,11 @@ SubjectList = DataBase.Study;
 
 				case note
 					if ~contains(CurretSubject.note,value{iField})
+						SubjectList(iSubject) = []; 
+					end
+					
+				case template
+					if ~contains(CurretSubject.template,value{iField})
 						SubjectList(iSubject) = []; 
 					end
 

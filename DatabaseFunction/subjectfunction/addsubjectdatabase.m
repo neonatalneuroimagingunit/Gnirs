@@ -1,6 +1,9 @@
-function DataBase = addsubjectdatabase(Subject,dataBasePath)
+function DataBase = addsubjectdatabase(Subject,DataBase)
 %ADDMODIFYSUBJECT add or modify a subject present in the database
-	DataBase = loadNIRSdb(dataBasePath);
+
+	if ischar(DataBase)
+		DataBase = loadNIRSdb(DataBase);
+	end
 	
 	% generate the new id
 	subjectId = [DataBase.ID , 'U' ,num2str(DataBase.nSubjectPersistent,'%.3d')]; 
@@ -13,6 +16,6 @@ function DataBase = addsubjectdatabase(Subject,dataBasePath)
 						'template', false...
 						);
 					
-	savedatabase(DataBase,databasePath)
+	savedatabase(DataBase,DataBase.databasePath)
 end
 
