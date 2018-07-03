@@ -25,8 +25,8 @@ function DataBase = modifysubjectdatabase(NewSubject,DataBase)
 		Subject.surName = OldSubject.surName;
 	end
 	
-	if isempty(NewSubject.birthDate)
-		Subject.birthDate = OldSubject.birthDate;
+	if isempty(NewSubject.birthDay)
+		Subject.birthDay = OldSubject.birthDay;
 	end
 	
 	if isempty(NewSubject.note)

@@ -21,8 +21,8 @@ function DataBase = anonymize(Subject, DataBase, field)
 		Subject.surName = [];
 	end
 	
-	if any(strcmpi(field,'birthdate'))
-		Subject.birthDate = [];
+	if any(strcmpi(field,'birthday'))
+		Subject.birthDay = [];
 	end
 	
 	if any(strcmpi(field,'note'))

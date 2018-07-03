@@ -13,7 +13,7 @@
 		id(1,:) char
 		name(1,:) char
 		surName(1,:) char
-		birthDate(1,1) datetime
+		birthDay(1,1) datetime
 		Info(1,1) struct 
 		measureId(:,1) cell
 		note(1,:) char
@@ -44,8 +44,8 @@
 						case 'surname'
 							obj.surName = varargin{i+1};
 
-						case 'birthdate'
-							obj.birthDate = varargin{i+1};
+						case 'birthday'
+							obj.birthDay = varargin{i+1};
 
 						case 'id'
 							obj.id = varargin{i+1};
