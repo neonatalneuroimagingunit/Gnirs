@@ -27,37 +27,32 @@ positiveMatch = boolean(ones(size(DataBase.Subject)));
 				% if the value is not present delete the subject from
 				% array
 				case 'id'
-					if ~regexp(CurretSubject.id,value{iField},'once')
-
+					if isempty(regexp(CurretSubject.id,value{iField},'once'))
 						positiveMatch(iSubject) = 0; 
 					end
 
 				case 'name'
-					if ~regexp(CurretSubject.name,value{iField},'once')
-
+					if isempty(regexp(CurretSubject.name,value{iField},'once'))
 						positiveMatch(iSubject) = 0; 
 					end
 
 				case 'surname'
-					if ~regexp(CurretSubject.surName,value{iField},'once')
-
+					if isempty(regexp(CurretSubject.surName,value{iField},'once'))
 						positiveMatch(iSubject) = 0; 
 					end
 
 				case 'birthday'
-					if (CurretSubject.birthDay == value{iField})
-
+					if ~(CurretSubject.birthDay == value{iField})
 						positiveMatch(iSubject) = 0; 
 					end
 
 				case 'note'
-					if ~regexp(CurretSubject.note,value{iField},'once')
-
+					if isempty(regexp(CurretSubject.note,value{iField},'once'))
 						positiveMatch(iSubject) = 0; 
 					end
 					
 				case 'template'
-					if ~regexp(CurretSubject.template,value{iField},'once')
+					if ~(CurretSubject.template == value{iField})
 
 						positiveMatch(iSubject) = 0; 
 					end
