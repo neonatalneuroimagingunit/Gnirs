@@ -1,4 +1,4 @@
-function dirFullPath =  NewNIRSDataBase(pathDataBase, pathGnirs)
+function dirFullPath =  newdatabase(pathDataBase, pathGnirs)
 %Create a new NIRS database and assign it a new ID on the new path
 
 %% Create a new ID
@@ -23,18 +23,20 @@ DataBase.ID = ID;
 DataBase.nStudy = 0;
 DataBase.nProbe = 0;
 DataBase.nAnatomy = 0;
+DataBase.nSubject = 0;
 
 DataBase.nStudyPersistent = 0;  %%don't change after a deletion
 DataBase.nProbePersistent = 0;
 DataBase.nAnatomyPersistent = 0;
+DataBase.nSubjectPersistent = 0;
 
-DataBase.Study = [];
-DataBase.Probe = [];
-DataBase.Anatomy = [];
-
+% DataBase.Study = [];
+% DataBase.Probe = [];
+% DataBase.Anatomy = [];
+% DataBase.Anatomy = [];
 %% save all
 
-DataBase.Path = dirFullPath;
+DataBase.dataBasePath = dirFullPath;
 filefullPath = fullfile(dirFullPath, 'NIRSDataBase');
 
 save(filefullPath,'DataBase');

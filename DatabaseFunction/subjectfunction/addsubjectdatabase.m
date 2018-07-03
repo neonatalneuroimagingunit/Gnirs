@@ -11,11 +11,11 @@ function DataBase = addsubjectdatabase(Subject,DataBase)
 	DataBase.nSubject = DataBase.nSubject + 1;
 	DataBase.nSubjectPersistent = DataBase.nSubjectPersistent + 1;	
 	
-	DataBase.Subject = NirsSubject(Subject,...
+	DataBase.Subject(DataBase.nSubject) = NirsSubject(Subject,...
 						'id', subjectId,...
 						'template', false...
 						);
 					
-	savedatabase(DataBase,DataBase.databasePath)
+	savedatabase(DataBase,DataBase.dataBasePath)
 end
 

@@ -33,16 +33,16 @@ function DataBase = modifysubjectdatabase(NewSubject,DataBase)
 		Subject.note = OldSubject.note;
 	end
 	
-	if isempty(NewSubject.info)
-		Subject.info = OldSubject.info;
+	if isempty(NewSubject.Info)
+		Subject.Info = OldSubject.Info;
 	else
 		% check all the field of the new and assign to the old
-		oldFieldNames = fieldnames(OldSubject.info);
-		newFieldNames = fieldnames(NewSubject.info);
+		oldFieldNames = fieldnames(OldSubject.Info);
+		newFieldNames = fieldnames(NewSubject.Info);
 
 		oldFieldNames2Save = oldFieldNames(~ismember(oldFieldNames , newFieldNames));
 		for iField = 1 : length(oldFieldNames2Save)
-			Subject.info.(oldFieldNames2Save{iField}) = OldSubject.info(oldFieldNames2Save{iField});
+			Subject.Info.(oldFieldNames2Save{iField}) = OldSubject.Info(oldFieldNames2Save{iField});
 		end
 	end
 	
@@ -70,6 +70,6 @@ function DataBase = modifysubjectdatabase(NewSubject,DataBase)
 	DataBase.Subject(index) = Subject;
 	
 	%save the database
-	savedatabase(DataBase,databasePath)
+	savedatabase(DataBase,DataBase.dataBasePath)
 end
 

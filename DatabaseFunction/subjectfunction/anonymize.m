@@ -33,11 +33,11 @@ function DataBase = anonymize(Subject, DataBase, field)
 		Subject.info = [];
 	else
 		% check all the field of the study to erase
-		fieldNames = fieldnames(Subject.info);
+		fieldNames = fieldnames(Subject.Info);
 
 		fieldNames2Erase = fieldNames(~ismember(fieldNames , field));
 		for iField = 1 : length(fieldNames2Erase)
-			Subject.info.(fieldNames2Erase{iField}) = [];
+			Subject.Info.(fieldNames2Erase{iField}) = [];
 		end
 	end
 	
@@ -65,5 +65,5 @@ function DataBase = anonymize(Subject, DataBase, field)
 	DataBase.Subject(index) = Subject;
 	
 	%save the database
-	savedatabase(DataBase,DataBase.databasePath)
+	savedatabase(DataBase,DataBase.dataBasePath)
 end
