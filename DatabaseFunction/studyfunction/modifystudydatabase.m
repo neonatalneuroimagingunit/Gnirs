@@ -12,28 +12,17 @@ function DataBase = modifystudydatabase(NewStudy,DataBase)
 	
 	Study = NewStudy;
 	
-	%value that cannot be changed
-	Study.Measure = OldStudy.Measure ;
-	Study.Groups = OldStudy.Groups;
-	Study.dateFirstMeasure = OldStudy.dateFirstMeasure;
-	Study.dateLastMeasure = OldStudy.dateLastMeasure;
-	Study.nMeasurePersistent = OldStudy.nMeasurePersistent;
-    Study.nGroupsPersistent = OldStudy.nGroupsPersistent;
-	Study.dateFirstAnalysis = OldStudy.dateFirstAnalysis;
-    Study.dateLastAnalysis = OldStudy.dateLastAnalysis;
+
 	
 	
 	% assign all nonspecify value to the old value
-	if isempty(NewStudy.name)
-		Study.name = OldStudy.name;
-	end
-
-	if isempty(NewStudy.date)
-		Study.date = OldStudy.date;
-	end
+	studyFieldName = fieldnames(NewStudy);
+	for iFieldName = 1 : length(studyFieldName)
 	
-	if isempty(NewStudy.note)
-		Study.note = OldStudy.note;
+		if isempty(NewStudy.(studyFieldName{iFieldName}))
+			Study.(studyFieldName{iFieldName}) = OldStudy.(studyFieldName{iFieldName});
+		end
+
 	end
 	
 	

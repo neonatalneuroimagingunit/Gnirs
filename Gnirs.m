@@ -5,6 +5,7 @@ close all
 
 
 currentPath = fileparts(which(mfilename));
+addpath(genpath(currentPath));
 dataBaseTxtPath = fullfile(currentPath,'Path.txt');
 
 if exist(dataBaseTxtPath, 'file')

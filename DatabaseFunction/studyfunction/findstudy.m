@@ -1,7 +1,7 @@
 function [StudyList, positiveMatch] = findstudy(field, value ,DataBase)
 %FINDSTUDY find a study in the database
-%argument the StudyID and the database
-%add feature for more complicate search
+
+
 	
 	%if the databse was a link load it
 	if ischar(DataBase)
@@ -45,6 +45,8 @@ function [StudyList, positiveMatch] = findstudy(field, value ,DataBase)
 					if isempty(regexp(CurrentStudy.note,value{iField},'once'))
 						positiveMatch(iStudy) = 0; 
 					end	
+				otherwise
+					warning('field %s is not present it will not be used in the search', field{iField});
 
 			end
 		end

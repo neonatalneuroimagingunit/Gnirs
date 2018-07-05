@@ -23,7 +23,7 @@ classdef NirsStudy
 		dateFirstAnalysis(1,1) datetime = NaT
 		dateLastAnalysis(1,1) datetime = NaT
 		
- 		Measure(1,:) %NirsMeasure
+ 		Measure(1,:) NirsMeasure
  		Groups(1,:) %NirsGroup
 		
 		note(1,:) char				
