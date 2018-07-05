@@ -21,9 +21,16 @@ switch eventData.Source.String
     case '>>'
         xmin = hplot.bigaxes1.XLim(1) + 10;
         xmax = hplot.bigaxes1.XLim(2) + 10;
+    case 'F'
+        xmin = hplot.bigaxes1.Children(1).XData(1);
+        xmax = hplot.bigaxes1.XLim(2);
+    case 'L'
+        xmin = hplot.bigaxes1.XLim(1);
+        xmax = hplot.bigaxes1.Children(1).XData(end);
 end
 
 hrect.Position(1) = xmin;
+hrect.Position(3) = xmax - xmin;
 hplot.bigaxes1.XLim = [xmin xmax];
 hplot.bigaxes2.XLim = [xmin xmax]*fs;
 hplot.editmin.String = num2str(xmin);

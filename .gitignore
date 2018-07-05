@@ -1,5 +1,6 @@
 # Ignore matlab backup files
 *.*~
+*.asv
 
 # Ignore text file that stores path to database
 Path.txt
