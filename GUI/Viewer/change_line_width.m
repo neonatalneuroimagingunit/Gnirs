@@ -54,7 +54,7 @@ if get(hObject, 'Type') == 'line'
             set(all_lines, 'Color', [colorBackground alphaBackground])
             set(hObject, 'LineWidth', linewidthForeground)
             set(hObject, 'Color', [colorSelected alphaForeground])
-            hmetadata(4).value(3).String = num2str(1);
+            hmetadata(4).value(3).String = hObject.DisplayName;
             hmetadata(4).value(2).String = [num2str(round(10*mean(eventData.Source.YData))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData))/10)];
             hmetadata(4).value(1).String = [num2str(round(10*mean(eventData.Source.YData(start:stop)))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData(start:stop)))/10)];
             
@@ -71,7 +71,10 @@ if get(hObject, 'Type') == 'line'
             for ii = 1:1:n_lines
                 set(all_lines(ii), 'Color', [colorForeground(ii,:) 1]);
             end
-            hmetadata(4).value(1).String = num2str(2);
+            hmetadata(4).value(3).String = '-';
+            hmetadata(4).value(2).String = '-';
+            hmetadata(4).value(1).String = '-';
+            
         end
     else
         if get(hObject, 'LineWidth') == linewidthBackground
@@ -86,7 +89,9 @@ if get(hObject, 'Type') == 'line'
             for ii = 1:1:n_lines
                 set(all_lines(ii), 'Color', [colorForeground(ii,:) 1]);
             end
-            hmetadata(4).value(1).String = num2str(4);
+            hmetadata(4).value(3).String = '-';
+            hmetadata(4).value(2).String = '-';
+            hmetadata(4).value(1).String = '-';
         end
     end
 end
