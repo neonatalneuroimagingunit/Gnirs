@@ -15,7 +15,6 @@
 		surName(1,:) char
 		birthDay(1,1) datetime
 		Info(1,1) struct 
-		measureId(:,1) cell
 		note(1,:) char
 		template(1,1) logical
 	end

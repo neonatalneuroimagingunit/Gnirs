@@ -9,16 +9,6 @@
 		
 		id(1,:) char
 		
-		studyId(1,:) char
-		
-		subjectId(1,:) char
-		
-		probeId (1,:) char
-
-		Analysis(1,:) %NirsAnalysis
-		
-		Marker % aggiungere classe qunado e' pronta
-
 		date(1,1) datetime = NaT;
 	
 		timeLength(1,1) duration
@@ -32,17 +22,9 @@
 		note(1,:) char
 	end
 	
-	properties (Dependent)
-		nAnalysis
-	end
-	
     
     methods
-		
-		function nAnalysis = get.nAnalysis(obj)
-			nAnalysis = length(obj.analysisId);
-		end
-		
+
 		function obj = NirsMeasure(varargin)
 			%loadNIRS initialize all possible field of the class NIRSdata
 			% To load a data insert first the name of the field and than
@@ -58,21 +40,6 @@
 					switch lower(varargin{i})		
 						case 'id'
 							obj.id = varargin{i+1};
-							
-						case 'studyid'
-							obj.studyId = varargin{i+1};	
-
-						case 'subjectid'
-							obj.subjectId = varargin{i+1};
-
-						case 'probeid'
-							obj.probeId = varargin{i+1};
-
-						case 'analysisid'
-							obj.analysisId = varargin{i+1};
-
-						case 'marker'
-							obj.Marker = varargin{i+1};
 
 						case 'date'
 							obj.date = varargin{i+1};

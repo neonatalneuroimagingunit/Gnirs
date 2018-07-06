@@ -11,42 +11,23 @@ classdef NirsStudy
 		name(1,:) char
 		date(1,1) datetime 
 		SubjectTemplate(1,1) NirsSubject
-
-
-		nMeasurePersistent(1,1) uint16 
-		nGroupsPersistent(1,1) uint16 
-
-		
+	
 		dateFirstMeasure(1,1) datetime = NaT
 		dateLastMeasure(1,1) datetime = NaT
 		
 		dateFirstAnalysis(1,1) datetime = NaT
 		dateLastAnalysis(1,1) datetime = NaT
 		
- 		Measure(1,:) NirsMeasure
- 		Groups(1,:) %NirsGroup
-		
 		note(1,:) char				
 	end
 	
 	properties (Dependent)
-	   	nMeasure(1,1) uint16
-		nGroups(1,1) uint16 
-		
 		measureLength(1,1) duration
 		analysisLength(1,1) duration
 	end
 	
 	
 	methods
-		function nMeasure = get.nMeasure(obj)
-			nMeasure = length(obj.Measure);
-		end
-		
-		function nGroups = get.nGroups(obj)
-			nGroups = length(obj.Groups);
-		end	
-		
 		function measureLength = get.measureLength(obj)
 			measureLength = obj.dateLastMeasure - obj.dateFirstMeasure;
 		end
@@ -79,18 +60,6 @@ classdef NirsStudy
 
 						case 'date'
 							obj.date = varargin{i+1};
-
-						case 'nMeasure'
-							obj.nMeasure = varargin{i+1};
-
-						case 'nGroups'
-							obj.nGroups = varargin{i+1};
-						
-						case 'nMeasurePersistent'
-							obj.nMeasurePersistent = varargin{i+1};
-
-						case 'nGroupsPersistent'
-							obj.nGroupsPersistent = varargin{i+1};			
 						
 						case 'measureLength'
 							obj.measureLength = varargin{i+1};
@@ -103,12 +72,6 @@ classdef NirsStudy
 
 						case 'analysisLength'
 							obj.analysisLength = varargin{i+1};
-
-						case 'Measure'
-							obj.Measure = varargin{i+1};
-						
-						case 'Groups'
-							obj.Groups = varargin{i+1};
 
 						case 'note'
 							obj.note = varargin{i+1};

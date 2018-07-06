@@ -5,15 +5,11 @@ classdef NirsAnalysis
 	properties
 		id(1,:) char
 		
-		measureId(1,:) char
-		
-		studyId(1,:) char
-		
 		date(1,1) datetime = NaT;
 		
 		analysis
 		
-		Data
+		SimplyData
 		
 		note(1,:) char
 	end
@@ -35,18 +31,13 @@ methods
 				for i = 1:2:(nargin-1)
 
 					switch lower(varargin{i})		
-						case 'measureid'
-							obj.measureId = varargin{i+1};
-
-						case 'studyid'
-							obj.studyId = varargin{i+1};
-
-						case 'date'
-							obj.date = varargin{i+1};
 
 						case 'id'
 							obj.id = varargin{i+1};
-						
+							
+						case 'date'
+							obj.date = varargin{i+1};
+
 						case 'analysis'
 							obj.analysis = varargin{i+1};
 
