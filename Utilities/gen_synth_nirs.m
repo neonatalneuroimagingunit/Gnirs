@@ -1,4 +1,4 @@
-function [s, tline] = gen_synth_nirs(nsamples, nchannels, fs)
+function [Measure] = gen_synth_nirs(nsamples, nchannels, fs)
 
 % Create a synthetic fNIRS signal as from Scholkmann et al. 2010
 
@@ -7,7 +7,7 @@ function [s, tline] = gen_synth_nirs(nsamples, nchannels, fs)
 plot_output = 0; % suppress plotting
 
 x = 1:1:nsamples;
-tline = x / fs;
+tline = (x / fs);
 
 f = [1 0.25 0.1 0.04];
 w = [0.6 0.2 0.9 1];
@@ -22,7 +22,7 @@ temp = zeros(nsamples, nfrequencies);
 
 if plot_output
     figure
-    p1 = subplot(1,2,1);
+    pMeasure1 = subplot(1,2,1);
     hold(p1, 'on');
     p2 = subplot(1,2,2);
     hold(p2, 'on');
@@ -37,7 +37,7 @@ for cc = 1:1:nchannels
     
     temp = sum(temp,2);
     
-    temp = awgn(temp, morenoise);
+%    temp = awgn(temp, morenoise);
     
     s(:,cc) = temp;
     
@@ -46,9 +46,39 @@ for cc = 1:1:nchannels
     fline = (0:n-1)*(fs/n);           % frequency range
     power = abs(spectrum).^2/n;   % power of the DFT
  
-    if plot_output
-        plot(p1, tline, temp)
-        plot(p2, fline, power)
-    end
+	if plot_output
+		plot(p1, tline, temp)
+		plot(p2, fline, power)
+	end
+	
 end
+
+
+tline = tline';
+
+
+
+Aquisitioninfo.UpdateRate = fs;
+
+ColumnName = cellstr([repmat('ch',[nchannels,1]),num2str([1:nchannels]','%.2d')]);
+
+
+
+Mdata = array2table(s,'VariableNames',ColumnName(1:end));  %save all
+Mdata.reltime = tline-min(tline);
+
+Measure = NIRSMeasure (...
+				'MeasureInfo.Date', datetime, ...
+				'MeasureInfo.Duration',(max(tline)-min(tline)), ...
+				'MeasureInfo.AqInfo', Aquisitioninfo,...
+				'Data', Mdata);
+
+
+
+
+
+
+
+
+
 end
