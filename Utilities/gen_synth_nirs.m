@@ -1,8 +1,10 @@
-function [s, tline] = gen_synth_nirs(nsamples, nchannels, fs, plot_output)
+function [s, tline] = gen_synth_nirs(nsamples, nchannels, fs)
 
 % Create a synthetic fNIRS signal as from Scholkmann et al. 2010
 
 % Written by Matteo Caffini, Rovereto 06/07/2018
+
+plot_output = 0; % suppress plotting
 
 x = 1:1:nsamples;
 tline = x / fs;
