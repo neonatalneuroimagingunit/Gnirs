@@ -1,5 +1,5 @@
 function DataBase = modifystudydatabase(NewStudy,DataBase)
-%ADDMODIFYSUBJECT add or modify a subject present in the database
+%ADDMODIFYSTUDY modify a study present in the database
 
 	% if is a link load it
 	if ischar(DataBase)
@@ -28,16 +28,18 @@ function DataBase = modifystudydatabase(NewStudy,DataBase)
 	
  	% search and change all the analysis of the study and save it
 	for iMeasure = 1 : OldStudy.nMeasure
-		currentMeasureId = OldStudy.Measure(iMeasure).id;
+		if ~(OldStudy.Measure(iMeasure).id == Study.Measure(iMeasure).id)
+			currentMeasureId = OldStudy.Measure(iMeasure).id;
 		
-		ListAnalysis = findanalysis('measureid',currentMeasureId,DataBase);
-		
-		for iAnalysis = 1 : length(ListAnalysis)
-			analysisPath = fullfile(databasePath,...
-									Study.id,...	
-									currentMeasureId,...
-									ListAnalysis(iAnalysis));
-			save(analysisPath,'Study');
+			ListAnalysis = findanalysis('measureid',currentMeasureId,DataBase);
+
+			for iAnalysis = 1 : length(ListAnalysis)
+				analysisPath = fullfile(databasePath,...
+										Study.id,...	
+										currentMeasureId,...
+										ListAnalysis(iAnalysis));
+				save(analysisPath,'Study');
+			end
 		end
 	end
 	

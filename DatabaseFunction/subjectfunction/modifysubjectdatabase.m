@@ -12,15 +12,19 @@ function DataBase = modifysubjectdatabase(NewSubject,DataBase)
 	
 	Subject = NewSubject;
 	
-	%template and measure value cannot be change
+	%value cannot be change
 	Subject.template = OldSubject.template;
-	Subject.measureId = OldSubject.measureId;
 	
 	
 	% assign all nonspecify value to the old value
+	if isempty(NewSubject.measureId)
+		Subject.measureId = OldSubject.measureId;
+	end
+	
 	if isempty(NewSubject.name)
 		Subject.name = OldSubject.name;
 	end
+	
 	if isempty(NewSubject.surName)
 		Subject.surName = OldSubject.surName;
 	end
@@ -46,21 +50,7 @@ function DataBase = modifysubjectdatabase(NewSubject,DataBase)
 		end
 	end
 	
-	% search and change all the analysis of the subject and saveit
-	for iMeasure = 1 : length(OldSubject.measureId)
-		currentMeasureId = OldSubject.measureId(iMeasure);
-		studyID = id2studyid(currentMeasureId);
-		
-		ListAnalysis = findanalysis('measureid',currentMeasureId,DataBase);
-		
-		for iAnalysis = 1 : length(ListAnalysis)
-			analysisPath = fullfile(databasePath,...
-									studyID,...	
-									currentMeasureId,...
-									ListAnalysis(iAnalysis));
-			save(analysisPath,'Subject');
-		end
-	end
+
 	
 	
 	
