@@ -11,9 +11,7 @@ tline = (x / fs);
 
 f = [1 0.25 0.1 0.04];
 w = [0.6 0.2 0.9 1];
-g = 100*[0.01 0.01 0.01 0.05];
-
-morenoise = 5;
+g = 10*[0.01 0.01 0.01 0.05];
 
 nfrequencies = length(f);
 s = zeros(nsamples, nchannels);
@@ -36,8 +34,6 @@ for cc = 1:1:nchannels
     end
     
     temp = sum(temp,2);
-    
-%    temp = awgn(temp, morenoise);
     
     s(:,cc) = temp;
     

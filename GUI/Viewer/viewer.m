@@ -529,15 +529,18 @@ columns_AC = contains(channelNames,'AC');
 columns_DC = contains(channelNames,'DC');
 columns_Ph = contains(channelNames,'Ph');
 
-nirsdata = table2array(DataNIRS.Data(:,columns_DC));
+columns = logical(ones([length(channelNames) 1]));
+columns(end) = 0;
+
+nirsdata = table2array(DataNIRS.Data(:,columns));  % channel selection from table must be smarter
 nsamples = height(DataNIRS.Data);
-timeline_milliseconds = table2array(DataNIRS.Data(:,1));
+timeline_milliseconds = DataNIRS.Data.reltime;
 timeline_samples = linspace(1, nsamples, nsamples);
 
 nchannels = size(nirsdata, 2);
-channelLabels = channelNames(columns_DC);
+channelLabels = channelNames(columns);
 
-sortingmethod = 'wavelength';
+sortingmethod = 'sortnomo';
 channelColors = sorting_colors(nchannels, sortingmethod);
 
 %% Time plot
