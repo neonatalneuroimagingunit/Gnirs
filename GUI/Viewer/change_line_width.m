@@ -7,6 +7,7 @@ function change_line_width(hObject, eventData, channelColors, linewidthCurrent, 
 % on July, 14th 2017 in Rovereto (TN)
 %
 
+cla(hplot.spectrumaxes);
 all_lines = findall(gca,'Type','line');
 n_lines = length(all_lines);
 nchannels = size(channelColors, 1);
@@ -59,9 +60,8 @@ if get(hObject, 'Type') == 'line'
             hmetadata(4).value(1).String = [num2str(round(10*mean(eventData.Source.YData(start:stop)))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData(start:stop)))/10)];
             
             %hplot.avg1 = plot(xdataavg, ydataavg, 'Color', [1 0 0], 'LineWidth', 6);
-            %plot(f,  power, 'Parent', hplot.spectrumaxes)
-            plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', [1 0 0], 'LineWidth', 1)
-            hplot.spectrumaxes.XLim = [0 5];
+            spectrumline = plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', colorSelected, 'LineWidth', 2);
+            hplot.spectrumaxes.XLim = [0 2];
             hplot.spectrumaxes.YLim = [0 0.1];
             hplot.spectrumaxes.Color = [1 1 1 0];
             hplot.spectrumaxes.Box = 'off';
@@ -74,7 +74,7 @@ if get(hObject, 'Type') == 'line'
             hmetadata(4).value(3).String = '-';
             hmetadata(4).value(2).String = '-';
             hmetadata(4).value(1).String = '-';
-            
+            hplot.spectrumaxes.Visible = 'off';
         end
     else
         if get(hObject, 'LineWidth') == linewidthBackground
@@ -83,7 +83,15 @@ if get(hObject, 'Type') == 'line'
             set(all_lines, 'Color', [colorBackground alphaBackground])
             set(hObject, 'LineWidth', linewidthForeground)
             set(hObject, 'Color', [colorSelected alphaForeground])
-            hmetadata(4).value(1).String = num2str(3);
+            hmetadata(4).value(3).String = hObject.DisplayName;
+            hmetadata(4).value(2).String = [num2str(round(10*mean(eventData.Source.YData))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData))/10)];
+            hmetadata(4).value(1).String = [num2str(round(10*mean(eventData.Source.YData(start:stop)))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData(start:stop)))/10)];
+            plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', colorSelected, 'LineWidth', 2);
+            hplot.spectrumaxes.XLim = [0 2];
+            hplot.spectrumaxes.YLim = [0 0.1];
+            hplot.spectrumaxes.Color = [1 1 1 0];
+            hplot.spectrumaxes.Box = 'off';
+            hplot.spectrumaxes.Visible = 'on';
         else
             set(all_lines, 'LineWidth', linewidthBackground)
             for ii = 1:1:n_lines
@@ -92,6 +100,7 @@ if get(hObject, 'Type') == 'line'
             hmetadata(4).value(3).String = '-';
             hmetadata(4).value(2).String = '-';
             hmetadata(4).value(1).String = '-';
+            hplot.spectrumaxes.Visible = 'off';
         end
     end
 end
