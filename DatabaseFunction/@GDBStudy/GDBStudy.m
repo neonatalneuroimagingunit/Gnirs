@@ -2,12 +2,13 @@ classdef GDBStudy
 
 
 	
-	properties
+	properties (SetAccess = immutable)
 		id
+	end
 		
-		Measures(:,1) GDBMeasures
+	properties
 		
-		dataBaseId
+		Measure(:,1) GDBMeasure
 		
 		phantomId
 	end
@@ -23,6 +24,11 @@ classdef GDBStudy
 			nMeasures = length(obj.Measures);
 		end
 
+		function obj = GDBStudy(varargin)
+			if (nargin >0 )
+				obj.id = varargin{1};
+			end
+		end
 	end
 end
 
