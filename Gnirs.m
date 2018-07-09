@@ -1,9 +1,13 @@
-
+%% only for test
 close all
-%% Load datab
+clear all %#ok<CLALL>
+clc
 
 
 
+
+
+%% Load database 
 currentPath = fileparts(which(mfilename));
 addpath(genpath(currentPath));
 dataBaseTxtPath = fullfile(currentPath,'Path.txt');
@@ -12,19 +16,19 @@ if exist(dataBaseTxtPath, 'file')
 	fid = fopen(dataBaseTxtPath);
 	databasePath = fgetl(fid);
 	fclose(fid);
-else
-	dataBaseDirectoryName = 'DataBase'; %cambiare con una finestra di dialogo
-	newDatabasePath = fullfile(currentPath , dataBaseDirectoryName);
-	databasePath = NewNIRSDataBase(newDatabasePath, currentPath);
+	
+	DataBase = GDataBase.load(databasePath);
+else 
+	%% create it if not exist
+	
+	DataBase = newdatabasewindow;
 end
 
-dbNIRS = loadNIRSdb(databasePath);
-%% Create the widget
-Hmain.dataBasePath = dbNIRS.Path;
+%%  load Setings color theme
+Hmain.dataBasePath = DataBase.path;
 Hmain.screenSize = get(0,'ScreenSize');
-feature('DefaultCharacterSet', 'UTF8');
 
-% Set color theme
+
 Hmain.theme = 'dark';
 switch Hmain.theme
     case 'classic'
@@ -36,9 +40,12 @@ switch Hmain.theme
         foregroundColor = 'w';
         panelColor = [92 92 92]/255;
 end
+%% create a loading figure
+Hmain.LoadingFigure = imshow('loading.jpg','InitialMagnification','fit');
 
+%% create the mean figure
 Hmain.mainFigure = figure('Visible', 'off', ...
-	'position', Hmain.screenSize,...
+	'position', Hmain.screenSize.*(3/4),...
     'Resize', 'on',...
     'Name', 'Raw Explorer', ...
     'Numbertitle', 'off', ...
@@ -50,16 +57,14 @@ Hmain.mainFigure = figure('Visible', 'off', ...
     'DockControls', 'off', ...
     'Renderer', 'OpenGL');
 
-Hmain = NIRSToolbar(Hmain);
+% Hmain = NIRSToolbar(Hmain);
+% 
+% Hmain = NIRSDisplay(Hmain);
+% 
+% Hmain = NIRSTree(Hmain,dbNIRS);
 
-
-
-Hmain = NIRSDisplay(Hmain);
-
-Hmain = NIRSTree(Hmain,dbNIRS);
-
-
-
+%% display the figure and close the loading figure
 Hmain.mainFigure.Visible = 'on';
 
+close(Hmain.LoadingFigure);
 
