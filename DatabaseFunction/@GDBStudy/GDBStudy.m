@@ -21,6 +21,19 @@ classdef GDBStudy
 		nMeasure
 	end
 	
+		%%	method
+	methods
+		 [measureId, Study] = newmeasure(Study)
+		 Study = load(DBStudy)
+		 DBStudy = modify(DBStudy,NewStudy)
+		 DBStudy = substitute(DBStudy,Study)
+	end
+	%% Static method
+	methods(Static)
+		studyId = id2studyid(id)
+		postFix = id2studypostfix(id)
+	end	
+	
 	methods
 		
 		function nMeasure = get.nMeasure(obj)
@@ -45,13 +58,6 @@ classdef GDBStudy
 			end
 		end
 	end
-	%%	method
-	methods
-		 [measureId, Study] = newmeasure(Study)
-	end
-	%% Static method
-	methods(Static)
-		studyId = id2studyid(id)
-	end
+
 end
 

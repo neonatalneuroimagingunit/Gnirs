@@ -5,11 +5,9 @@ function DBStudy = modify(DBStudy,NewStudy)
 	if (strcmp(DBStudy.id,NewStudy.id) || isempty(NewStudy.id))
 	
 		OldStudy = DBStudy.load;
-	
 
 		Study = NewStudy;
-
-
+		
 		% assign all nonspecify value to the old value
 		studyFieldName = fieldnames(NewStudy);
 		for iFieldName = 1 : length(studyFieldName)
@@ -19,26 +17,8 @@ function DBStudy = modify(DBStudy,NewStudy)
 			end
 
 		end
-
-
-		% search and change all the analysis of the study and save it
-		for iMeasure = 1 : OldStudy.nMeasure
-			if ~(OldStudy.Measure(iMeasure).id == Study.Measure(iMeasure).id)
-				currentMeasureId = OldStudy.Measure(iMeasure).id;
-
-				ListAnalysis = findanalysis('measureid',currentMeasureId,DataBase);
-
-				for iAnalysis = 1 : length(ListAnalysis)
-					analysisPath = fullfile(databasePath,...
-											Study.id,...	
-											currentMeasureId,...
-											ListAnalysis(iAnalysis));
-					save(analysisPath,'Study');
-				end
-			end
-		end
 		
-		save(DBStudy.path,'Subject');
+		save(DBStudy.path,'Study');
 		
 	else 
 		error('id not match')
