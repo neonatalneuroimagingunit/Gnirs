@@ -21,8 +21,15 @@
 	
 	
 	 methods
+		 DataBase = add(Subject,DataBase)
+		 DataBase = addtemplate(SubjectTemplate, DataBase)
+	 end
+	 
+	 methods(Static)
 		 
-		 
+	 end
+	 
+	 methods	 
 		function obj = NirsSubject(varargin)
 			%initialize all possible field of the class
 			%NirsSubject

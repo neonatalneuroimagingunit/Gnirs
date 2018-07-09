@@ -1,8 +1,8 @@
-function [studyId, DataBase] = newstudy(DataBase)
+function [studyId, DataBase] = newstudy(DataBase, varargin)
 	
 
 	% generate the new id
-	studyPostFix = ['U' ,num2str(DataBase.nSStudy,'%.3d')];
+	studyPostFix = ['S' ,num2str(DataBase.nSStudy,'%.3d')];
 	studyId = [DataBase.id , studyPostFix ]; 
 	DataBase.nSStudy = DataBase.nSStudy+1;
 	
@@ -13,11 +13,12 @@ function [studyId, DataBase] = newstudy(DataBase)
 	pathStudyMeasure = fullfile(DataBase.path,'Study',[studyPostFix,'Measure']);
 	mkdir(pathStudyMeasure)
 	
-	DataBase.Study(posNewStud) = GDBStudy(studyId,pathStudyMeasure);
 	
-	DataBase.save;
-	
-	
-	
+
+	if  (nargin == 2)
+		DataBase.Study(posNewStud) = GDBStudy('id',studyId,'path',pathStudyMeasure,'tag',varargin{1});
+	else
+		DataBase.Study(posNewStud) = GDBStudy('id',studyId,'path',pathStudyMeasure);
+	end
 end
 

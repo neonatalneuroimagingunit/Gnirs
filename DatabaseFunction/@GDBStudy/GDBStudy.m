@@ -10,6 +10,7 @@ classdef GDBStudy
 		Measure(:,1) GDBMeasure
 		phantomId
 		path
+		tag
 	end
 	
 	properties (SetAccess = private)
@@ -27,10 +28,19 @@ classdef GDBStudy
 		end
 
 		function obj = GDBStudy(varargin)
-			if (nargin >0 )
-				obj.id = varargin{1};
-				if (nargin >1 )
-					obj.path = varargin{2};
+			for iArgIn = 1 : 2 : nargin
+				switch varargin{iArgIn}
+					case 'id'		
+						obj.id = varargin{iArgIn + 1};
+
+					case 'tag'
+						obj.tag = varargin{iArgIn + 1};
+						
+					case 'path'
+						obj.path = varargin{iArgIn + 1};
+						
+					otherwise
+						warning('%s not a valid GDBStudy field', varargin{iArgIn})			
 				end
 			end
 		end

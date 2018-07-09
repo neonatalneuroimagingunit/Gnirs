@@ -5,23 +5,37 @@ classdef GDBProbe
 	end
 		
 	properties
-		Measures
+		measureId
+		tag
+		path
 	end
 	
 	
 	properties (Dependent)
-		nMeasures
+		nMeasure
 	end
 	
 	methods
 		
-		function nMeasures = get.nMeasures(obj)
-			nMeasures = size(obj.Measures, 1);
+		function nMeasure = get.nMeasure(obj)
+			nMeasure = size(obj.measureId, 1);
 		end
 	
 		function obj = GDBProbe(varargin)
-			if (nargin >0 )
-				obj.id = varargin{1};
+			for iArgIn = 1 : 2 : nargin
+				switch varargin{iArgIn}
+					case 'id'		
+						obj.id = varargin{iArgIn + 1};
+						
+					case 'tag'
+						obj.tag = varargin{iArgIn + 1};
+						
+					case 'path'
+						obj.path = varargin{iArgIn + 1};
+						
+					otherwise
+						warning('%s not a valid GDBMeasure field', varargin{iArgIn})			
+				end
 			end
 		end
 	end

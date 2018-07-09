@@ -1,8 +1,8 @@
-function studyId = id2studyid(id)
-lengthStudyId = 11;
+function measureId = id2measureid(id)
+lengthMeasureId = 15;
 
-	if (ischar(id) && length(id)>=lengthStudyId)
-		studyId = id(1:lengthStudyId);
+	if (ischar(id) && length(id)>=lengthMeasureId)
+		measureId = id(1:lengthMeasureId);
 	end
 end
 

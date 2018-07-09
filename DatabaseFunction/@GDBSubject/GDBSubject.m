@@ -9,13 +9,28 @@ classdef GDBSubject
 	end
 	
 	properties
-		Measures
+		tag
+		MeasureId
+		path
 	end
 	
 	
 	properties (Dependent)
 		nMeasures
 	end
+	
+	
+	methods
+		Subject = load(DBSubject)
+		anonymize(DBSubject, field)
+		substitute(DBSubject, Subject)
+	end
+	
+	methods(Static)
+			subjectpostfix = id2subjectpostfix(id);
+	end
+
+		
 	
 	methods
 		
@@ -24,18 +39,25 @@ classdef GDBSubject
 		end
 		
 		function obj = GDBSubject(varargin)
-			if (nargin >0 )
-				
-				obj.id = varargin{1};
-				if (nargin >1 )
-					if (varargin{2} == 't')
-						obj.template = true;
-					else
-						obj.template = false;
-					end
+			for iArgIn = 1 : 2 : nargin
+				switch varargin{iArgIn}
+					case 'id'		
+						obj.id = varargin{iArgIn + 1};
+					case 'tag'
+						obj.tag = varargin{iArgIn + 1};
+					case 'path'
+						obj.path = varargin{iArgIn + 1};
+					case 'template'
+						if varargin{iArgIn + 1}
+							obj.template = true;
+						else
+							obj.template = false;
+						end
+					otherwise
+						warning('%s not a valid GDBSubject field', varargin{iArgIn})			
 				end
 			end
 		end
-		
 	end
+	
 end

@@ -36,8 +36,26 @@ classdef GDataBase
 		nStudy
 	end
 	
+	%%	method
 	methods
+	save(DataBase)
+	Find = findid(DataBase, id)
+	[subjecttemplateId, DataBase] = newsubjecttemplate(DataBase, varargin)
+	[subjectId, DataBase] = newsubject(DataBase, varargin)
+	[probeId, DataBase] = newprobe(DataBase, varargin)
+	[atlasId, DataBase] = newatlas(DataBase, varargin)
+	[studyId, DataBase] = newstudy(DataBase, varargin)
+	end
+	
+%% static method
+	methods(Static)
+		DataBase = create(pathDataBase, pathGnirs)
+		DataBase = load(pathDataBase)
+		idDatabase = id2databaseid(id)
+	end
+	
 	%% methods for the dependent propr
+	methods
 		function nProbe = get.nProbe(obj)
 			nProbe = length(obj.Probe);
 		end
@@ -64,20 +82,6 @@ classdef GDataBase
 			end
 		end
 		
-	end
-%%	method
-	methods
-	save(DataBase)
-	[subjectId, DataBase] = newsubject(DataBase)
-	[probeId, DataBase] = newprobe(DataBase)
-	[atlasId, DataBase] = newatlas(DataBase)
-	[studyId, DataBase] = newstudy(DataBase)
-	end
-%% static method
-	methods(Static)
-		DataBase = create(pathDataBase, pathGnirs)
-		DataBase = load(pathDataBase)
-		idDatabase = id2databaseid(id)
 	end
 end
 

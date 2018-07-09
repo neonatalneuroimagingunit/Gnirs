@@ -1,20 +1,18 @@
-function [analysisId, Measure] = newanalysis(Measure)
+function [analysiId, Measure] = newanalysis(Measure, varargin)
 	
 
 	% generate the new id
-	analysisPostFix = ['M' ,num2str(Measure.nSAnalisis,'%.3d')];
-	analysisId = [Measure.id , analysisPostFix ]; 
-	Measure.nSAnalisis = Measure.nSAnalisis+1;
+	analysisPostFix = ['A' ,num2str(Measure.nSAnalysis,'%.3d')];
+	analysiId = [Measure.id , analysisPostFix ]; 
+	Measure.nSAnalysis = Measure.nSAnalysis+1;
 	
-	posNewMeas = Measure.nMeasure + 1;
-	Measure.Measure(posNewMeas) = GDBMeasure(measureId);
-% 	
-% 	%create the new directory
-% 	pathStudyMeasure = fullfile(DataBase.path,'Study',[measurePostFix,'Measure']);
-% 	mkdir(pathStudyMeasure)
+	posNewAn = Measure.nAnalysis + 1;
 	
-	
-	
-	
+	Measure.Analysis(posNewAn) = GDBAnalysis('id',analysiId);
+	if  (nargin == 1)
+		Measure.Analysis(posNewAn) = GDBAnalysis('id',analysiId, 'tag',varargin{1});
+	else
+		Measure.Analysis(posNewAn) = GDBAnalysis('id',analysiId);
+	end
 end
 

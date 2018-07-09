@@ -1,16 +1,17 @@
-function [probeId, DataBase] = newprobe(DataBase)
+function [probeId, DataBase] = newprobe(DataBase,varargin)
 	
 
 	% generate the new id
-	probeId = [DataBase.id , 'U' ,num2str(DataBase.nSProbe,'%.3d')]; 
+	probeId = [DataBase.id , 'P' ,num2str(DataBase.nSProbe,'%.3d')]; 
 	DataBase.nSProbe = DataBase.nSProbe+1;
 	
 	posNewProb = DataBase.nProbe + 1;
-	DataBase.Probe(posNewProb) = GDBProbe(probeId);
-	
-	DataBase.save;
 	
 	
-	
+	if  (nargin == 1)
+		DataBase.Probe(posNewProb) = GDBProbe('id',probeId,'tag',varargin{1});
+	else
+		DataBase.Probe(posNewProb) = GDBProbe('id',probeId);
+	end
 end
 
