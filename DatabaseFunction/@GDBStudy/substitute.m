@@ -5,7 +5,7 @@ function DBStudy = substitute(DBStudy,Study)
 	end
 	
 	if  strcmp(DBStudy.id,Study.id) 
-		save(DBStudy.path,'Subject');
+		save(DBStudy.path,'Study');
 	else 
 		error('id not match')
 	end

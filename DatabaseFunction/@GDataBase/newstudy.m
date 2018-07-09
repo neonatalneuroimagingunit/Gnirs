@@ -10,8 +10,9 @@ function [DBStudy, DataBase] = newstudy(DataBase, varargin)
 	
 	
 	%create the new directory
-	pathStudy = fullfile(DataBase.path,'Study',[studyPostFix,'Measure']);
-	mkdir(pathStudy)
+	pathStudy = fullfile(DataBase.path,'Study',studyPostFix);
+	pathStudyMeasure = [pathStudy,'Measure'];
+	mkdir(pathStudyMeasure)
 	
 	
 

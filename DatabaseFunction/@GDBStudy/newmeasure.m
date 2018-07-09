@@ -1,4 +1,4 @@
-function [measureId, Study] = newmeasure(Study, varargin)
+function [DBMeasure, Study] = newmeasure(Study, varargin)
 	
 
 	% generate the new id
@@ -10,17 +10,18 @@ function [measureId, Study] = newmeasure(Study, varargin)
 	
 	
 	%create the new directory
-	pathMeasureAnalysis = fullfile(Study.path,[measurePostFix,'Analysis']);
+	pathMeasure = fullfile([Study.path,'Measure'],measurePostFix);
+	pathMeasureAnalysis = [pathMeasure,'Analysis'];
 	mkdir(pathMeasureAnalysis)
 	
 	Study.Measure(posNewMeas) = GDBMeasure('id',measureId,'path',pathMeasureAnalysis);
 	
 
 	if  (nargin == 1)
-		Study.Measure(posNewMeas) = GDBMeasure('id',measureId,'path',pathMeasureAnalysis, 'tag',varargin{1});
+		DBMeasure = GDBMeasure('id',measureId,'path',pathMeasure, 'tag',varargin{1});
 	else
-		Study.Measure(posNewMeas) = GDBMeasure('id',measureId,'path',pathMeasureAnalysis);
+		DBMeasure = GDBMeasure('id',measureId,'path',pathMeasure);
 	end
-	
+	Study.Measure(posNewMeas) = DBMeasure;
 end
 
