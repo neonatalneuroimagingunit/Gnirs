@@ -5,18 +5,20 @@ classdef GDataBase
 	properties (SetAccess = immutable)
 		id
 	end
+	properties
+		
+		Probe(:,1) GDBProbe
+		Subject(:,1) GDBSubject
+		Atlas(:,1) GDBAtlas	
+		Study(:,1) GDBStudy
+		
+	end
 	
 	properties (SetAccess = private)
-		Probe(:,1) GDBProbe
+		
 		nSProbe(1,1) int16
-		
-		Subject(:,1) GDBSubject
 		nSSubject(1,1) int16
-		
-		Atlas(:,1) GDBAtlas
 		nSAtlas(1,1) int16
-		
-		Study(:,1) GDBStudy
 		nSStudy(1,1) int16
 		
 		path
@@ -75,6 +77,7 @@ classdef GDataBase
 	methods(Static)
 		DataBase = create(pathDataBase, pathGnirs)
 		DataBase = load(pathDataBase)
+		idDatabase = id2databaseid(id)
 	end
 end
 

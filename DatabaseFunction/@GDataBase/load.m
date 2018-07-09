@@ -1,5 +1,6 @@
 function DataBase = load(pathDataBase)
-	 temp = load(pathDataBase ,'DataBase');
-	 DataBase = temp.DataBase;
+	pathDataBase = fullfile(pathDataBase, 'DataBase.mat');
+	temp = load(pathDataBase ,'DataBase');
+	DataBase = temp.DataBase;
 end
 

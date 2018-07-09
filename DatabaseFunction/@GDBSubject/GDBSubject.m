@@ -4,6 +4,7 @@ classdef GDBSubject
 	
 	properties(SetAccess = immutable)
 		id
+		databaseId
 		template(1,1) logical
 	end
 	
@@ -24,6 +25,7 @@ classdef GDBSubject
 		
 		function obj = GDBSubject(varargin)
 			if (nargin >0 )
+				
 				obj.id = varargin{1};
 				if (nargin >1 )
 					if (varargin{2} == 't')

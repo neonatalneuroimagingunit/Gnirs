@@ -7,11 +7,13 @@ function [studyId, DataBase] = newstudy(DataBase)
 	DataBase.nSStudy = DataBase.nSStudy+1;
 	
 	posNewStud = DataBase.nStudy + 1;
-	DataBase.Study(posNewStud) = GDBStudy(studyId);
+	
 	
 	%create the new directory
 	pathStudyMeasure = fullfile(DataBase.path,'Study',[studyPostFix,'Measure']);
 	mkdir(pathStudyMeasure)
+	
+	DataBase.Study(posNewStud) = GDBStudy(studyId,pathStudyMeasure);
 	
 	DataBase.save;
 	

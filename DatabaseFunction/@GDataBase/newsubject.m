@@ -8,6 +8,7 @@ function [subjectId, DataBase] = newsubject(DataBase)
 	posNewSubj = DataBase.nSubject + 1;
 	DataBase.Subject(posNewSubj) = GDBSubject(subjectId);
 	
+	
 	DataBase.save;
 	
 	
