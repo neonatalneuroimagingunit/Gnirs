@@ -10,7 +10,7 @@ classdef GDBSubject
 	
 	properties
 		tag
-		MeasureId
+		measureId
 		path
 	end
 	
@@ -22,8 +22,9 @@ classdef GDBSubject
 	
 	methods
 		Subject = load(DBSubject)
-		anonymize(DBSubject, field)
-		substitute(DBSubject, Subject)
+		DBSubject = anonymize(DBSubject, field)
+		DBSubject = substitute(DBSubject, Subject)
+		DBSubject = modifiy(DBSubject, Subject)
 	end
 	
 	methods(Static)

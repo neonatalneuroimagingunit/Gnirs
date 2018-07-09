@@ -1,4 +1,4 @@
-function [studyId, DataBase] = newstudy(DataBase, varargin)
+function [DBStudy, DataBase] = newstudy(DataBase, varargin)
 	
 
 	% generate the new id
@@ -10,15 +10,17 @@ function [studyId, DataBase] = newstudy(DataBase, varargin)
 	
 	
 	%create the new directory
-	pathStudyMeasure = fullfile(DataBase.path,'Study',[studyPostFix,'Measure']);
-	mkdir(pathStudyMeasure)
+	pathStudy = fullfile(DataBase.path,'Study',[studyPostFix,'Measure']);
+	mkdir(pathStudy)
 	
 	
 
 	if  (nargin == 2)
-		DataBase.Study(posNewStud) = GDBStudy('id',studyId,'path',pathStudyMeasure,'tag',varargin{1});
+		DBStudy = GDBStudy('id',studyId,'path',pathStudy,'tag',varargin{1});
 	else
-		DataBase.Study(posNewStud) = GDBStudy('id',studyId,'path',pathStudyMeasure);
+		DBStudy = GDBStudy('id',studyId,'path',pathStudy);
 	end
+	
+	DataBase.Study(posNewStud) = DBStudy;
+ 
 end
-

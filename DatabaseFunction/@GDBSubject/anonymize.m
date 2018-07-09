@@ -1,4 +1,4 @@
-function anonymize(DBSubject, field)
+function DBSubject = anonymize(DBSubject, field)
 %AanonimizeSUBJECT 
 
 	

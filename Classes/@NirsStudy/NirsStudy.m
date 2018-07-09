@@ -28,6 +28,12 @@ classdef NirsStudy
 	
 	
 	methods
+		DataBase = add(Study,DataBase)
+	end
+	
+	methods
+		
+		
 		function measureLength = get.measureLength(obj)
 			measureLength = obj.dateLastMeasure - obj.dateFirstMeasure;
 		end

@@ -1,10 +1,10 @@
-function DataBase = modify(DBSubject,NewSubject)
+function DBSubject = modify(DBSubject,NewSubject)
 %ADDMODIFYSUBJECT add or modify a subject present in the database
 
 
-	if strcmp(DBSubject.id,NewSubject.id)
+	if (strcmp(DBSubject.id,NewSubject.id) || isempty(NewSubject.id))
 	
-	OldSubject = DBSubject.load;
+		OldSubject = DBSubject.load;
 	
 
 		Subject = NewSubject;
@@ -12,14 +12,11 @@ function DataBase = modify(DBSubject,NewSubject)
 		%value cannot be change
 		Subject.template = OldSubject.template;
 
-
-		% assign all nonspecify value to the old value
-		if isempty(NewSubject.measureId)
-			Subject.measureId = OldSubject.measureId;
-		end
-
+		
 		if isempty(NewSubject.name)
 			Subject.name = OldSubject.name;
+		else
+			DBSubject.tag = NewSubject.name;
 		end
 
 		if isempty(NewSubject.surName)
