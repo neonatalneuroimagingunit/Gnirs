@@ -13,6 +13,15 @@ classdef GDBAnalysis
 	end
 	
 	methods
+		Analysis = load(DBAnalysis)
+		DBAnalysis = modify(DBAnalysis,NewAnalysis)
+		DBAnalysis = substitute(DBAnalysis,Analysis)
+	end
+	methods (Static)
+		postFix = id2studypostfix(id)
+	end
+	
+	methods
 		
 		function obj = GDBAnalysis(varargin)
 			for iArgIn = 1 : 2 : nargin

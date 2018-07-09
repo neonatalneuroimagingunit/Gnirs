@@ -1,6 +1,6 @@
 function Measure = load(DBMeasure)
 	
-	temp = load(DBMeasure.path,'Study');
-	Measure = temp.Study;
+	temp = load(DBMeasure.path,'Measure');
+	Measure = temp.Measure;
 end
 

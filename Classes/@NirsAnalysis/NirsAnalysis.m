@@ -15,6 +15,9 @@ classdef NirsAnalysis
 	end
 	
 methods
+	Measure = add(Analysis,Measure, varargin)
+end
+methods
 		 
 		 
 		function obj = NirsAnalysis(varargin)
