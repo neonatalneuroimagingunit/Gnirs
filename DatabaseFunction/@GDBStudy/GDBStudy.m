@@ -23,7 +23,7 @@ classdef GDBStudy
 	
 		%%	method
 	methods
-		 [measureId, Study] = newmeasure(Study)
+		 [measureId, Study] = newmeasure(Study, varargin)
 		 Study = load(DBStudy)
 		 DBStudy = modify(DBStudy,NewStudy)
 		 DBStudy = substitute(DBStudy,Study)

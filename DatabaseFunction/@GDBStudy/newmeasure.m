@@ -17,7 +17,7 @@ function [DBMeasure, Study] = newmeasure(Study, varargin)
 	Study.Measure(posNewMeas) = GDBMeasure('id',measureId,'path',pathMeasureAnalysis);
 	
 
-	if  (nargin == 1)
+	if  (nargin == 2)
 		DBMeasure = GDBMeasure('id',measureId,'path',pathMeasure, 'tag',varargin{1});
 	else
 		DBMeasure = GDBMeasure('id',measureId,'path',pathMeasure);

@@ -22,7 +22,10 @@
 		note(1,:) char
 	end
 	
-    
+    methods
+		Study = add(Measure,Study, varargin)
+	end
+	
     methods
 
 		function obj = NirsMeasure(varargin)
