@@ -184,9 +184,18 @@ end
 
 %% Tabs
 Hmain.tabs.group = uitabgroup(Hmain.mainFigure, 'Position',[stepW panelH+2*stepH panelaxesW panelaxesH]);
-Hmain.tabs.time = uitab(Hmain.tabs.group, 'Title', 'Time');
-Hmain.tabs.frequency = uitab(Hmain.tabs.group, 'Title', 'Spectrum');
-Hmain.tabs.timefrequency = uitab(Hmain.tabs.group, 'Title', 'Time-Frequency');
+Hmain.tabs.time = uitab('Parent', Hmain.tabs.group, ...
+    'Title', 'Time', ...
+    'BackgroundColor', [1 0 0], ...
+    'ForegroundColor', foregroundColor);
+Hmain.tabs.frequency = uitab(Hmain.tabs.group, ...
+    'Title', 'Spectrum', ...
+    'BackgroundColor', backgroundColor, ...
+    'ForegroundColor', foregroundColor);
+Hmain.tabs.timefrequency = uitab(Hmain.tabs.group, ...
+    'Title', 'Time-Frequency', ...
+    'BackgroundColor', backgroundColor, ...
+    'ForegroundColor', foregroundColor);
 
 %% Time tab
 %panelaxes_position = [stepW panelH+2*stepH panelaxesW panelaxesH];
@@ -595,6 +604,7 @@ aa = 1;
 
 xdata = DataNIRS.Data.reltime;
 ydata = nirsdata;
+
 spectrum = fft(ydata);
 n = length(xdata);          % number of samples
 f = (0:n-1)*(DataNIRS.MeasureInfo.AqInfo.UpdateRate/n);         % frequency range
