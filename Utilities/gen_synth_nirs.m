@@ -20,7 +20,7 @@ temp = zeros(nsamples, nfrequencies);
 
 if plot_output
     figure
-    pMeasure1 = subplot(1,2,1);
+    p1 = subplot(1,2,1);
     hold(p1, 'on');
     p2 = subplot(1,2,2);
     hold(p2, 'on');

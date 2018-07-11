@@ -34,12 +34,14 @@ xdata = all_lines.XData;
 xdata = xdata(start:stop);
 ydata = eventData.Source.YData(start:stop); % sample frequency (Hz)
 %t = 0:1/fs:10-1/fs;                      % 10 second span time vector
-spectrum = fft(ydata);
-n = length(xdata);          % number of samples
-f = (0:n-1)*(fs/n);     % frequency range
-power = abs(spectrum).^2/n;    % power of the DFT
-power = smooth(power, 500);
-power = power/max(power);
+% spectrum = fft(ydata);
+% n = length(xdata);          % number of samples
+% f = (0:n-1)*(fs/n);     % frequency range
+% power = abs(spectrum).^2/n;    % power of the DFT
+% power = smooth(power, 500);
+% power = power/max(power);
+
+[power, f] = pspectrum(ydata, fs);
 
 linewidthForeground = linewidthFactor*linewidthCurrent;
 linewidthBackground = linewidthCurrent;
@@ -60,9 +62,9 @@ if get(hObject, 'Type') == 'line'
             hmetadata(4).value(1).String = [num2str(round(10*mean(eventData.Source.YData(start:stop)))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData(start:stop)))/10)];
             
             %hplot.avg1 = plot(xdataavg, ydataavg, 'Color', [1 0 0], 'LineWidth', 6);
-            spectrumline = plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', colorSelected, 'LineWidth', 2);
-            hplot.spectrumaxes.XLim = [0 2];
-            hplot.spectrumaxes.YLim = [0 0.1];
+            plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', colorSelected, 'LineWidth', 1);
+            %hplot.spectrumaxes.XLim = [0 2];
+            %hplot.spectrumaxes.YLim = [0 0.1];
             hplot.spectrumaxes.Color = [1 1 1 0];
             hplot.spectrumaxes.Box = 'off';
             hplot.spectrumaxes.Visible = 'on';
@@ -86,9 +88,9 @@ if get(hObject, 'Type') == 'line'
             hmetadata(4).value(3).String = hObject.DisplayName;
             hmetadata(4).value(2).String = [num2str(round(10*mean(eventData.Source.YData))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData))/10)];
             hmetadata(4).value(1).String = [num2str(round(10*mean(eventData.Source.YData(start:stop)))/10) ' ' char(177) ' ' num2str(round(10*std(eventData.Source.YData(start:stop)))/10)];
-            plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', colorSelected, 'LineWidth', 2);
-            hplot.spectrumaxes.XLim = [0 2];
-            hplot.spectrumaxes.YLim = [0 0.1];
+            plot(f,  power, 'Parent', hplot.spectrumaxes, 'Color', colorSelected, 'LineWidth', 1);
+            %hplot.spectrumaxes.XLim = [0 2];
+            %hplot.spectrumaxes.YLim = [0 0.1];
             hplot.spectrumaxes.Color = [1 1 1 0];
             hplot.spectrumaxes.Box = 'off';
             hplot.spectrumaxes.Visible = 'on';
