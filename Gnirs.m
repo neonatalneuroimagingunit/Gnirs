@@ -22,6 +22,8 @@ end
 
 %% check if something go wrong
 if exist(dataBaseTxtPath, 'file') 
+	
+	
 	fid = fopen(dataBaseTxtPath);
 	databasePath = fgetl(fid);
 	fclose(fid);
@@ -46,8 +48,8 @@ if exist(dataBaseTxtPath, 'file')
 			panelColor = [92 92 92]/255;
 	end
 	%% create a loading figure
-	%%Hmain.LoadingFigure = imshow('loading.jpg','InitialMagnification','fit');
-
+	
+	Hmain = loadigfigure(Hmain);
 	%% create the mean figure
 	Hmain.mainFigure = figure('Visible', 'off', ...
 		'position', Hmain.figureSize,...
@@ -70,8 +72,7 @@ if exist(dataBaseTxtPath, 'file')
 	%% display the figure and close the loading figure
 	Hmain.mainFigure.Visible = 'on';
 
-%	close(Hmain.LoadingFigure);
-
+	close(Hmain.LoadingFigure.MainFigure);
 else
 	error('Database not found')
 end
