@@ -21,7 +21,7 @@ end
 
 
 %% check if something go wrong
-if ~exist(dataBaseTxtPath, 'file') 
+if exist(dataBaseTxtPath, 'file') 
 	fid = fopen(dataBaseTxtPath);
 	databasePath = fgetl(fid);
 	fclose(fid);
@@ -61,16 +61,16 @@ if ~exist(dataBaseTxtPath, 'file')
 		'DockControls', 'off', ...
 		'Renderer', 'OpenGL');
 
-	% Hmain = NIRSToolbar(Hmain);
+	 Hmain = toolbar(Hmain);
 	% 
 	% Hmain = NIRSDisplay(Hmain);
 	% 
-	% Hmain = NIRSTree(Hmain,dbNIRS);
+	Hmain = tree(Hmain, DataBase);
 
 	%% display the figure and close the loading figure
 	Hmain.mainFigure.Visible = 'on';
 
-	close(Hmain.LoadingFigure);
+%	close(Hmain.LoadingFigure);
 else
-	error('Database ')
+	error('Database not found')
 end
