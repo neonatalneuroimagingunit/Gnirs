@@ -5,22 +5,12 @@ classdef GDBMeasure
 		id
 		studyId
 	end
-	properties	
-		Analysis(:,1) GDBAnalysis
-		
+	properties		
 		subjectId
 		probeId
 		
 		tag
 		path
-	end
-	
-	properties (SetAccess = private)
-		nSAnalysis(1,1) int16
-	end
-	
-	properties (Dependent)
-		nAnalysis
 	end
 	
 	methods
@@ -31,8 +21,8 @@ classdef GDBMeasure
 					case 'id'		
 						obj.id = varargin{iArgIn + 1};
 						
-						studyId = GDBStudy.id2studyid(obj.id);
-						obj.studyId = studyId;
+					case 'studyid'
+						obj.studyId = varargin{iArgIn + 1};
 						
 					case 'tag'
 						obj.tag = varargin{iArgIn + 1};
@@ -45,16 +35,6 @@ classdef GDBMeasure
 				end
 			end
 		end
-
-		
-		function nAnalysis = get.nAnalysis(obj)
-			nAnalysis = length(obj.Analysis);
-		end
-		
-	end
-	
-	methods(Static)
-		measureId = id2measureid(id)
 	end
 end
 

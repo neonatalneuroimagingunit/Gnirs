@@ -11,6 +11,8 @@ classdef GDataBase
 		Subject(:,1) GDBSubject
 		Atlas(:,1) GDBAtlas	
 		Study(:,1) GDBStudy
+		Measure(:,1) GDBMeasure
+		Analysis(:,1) GDBAnalysis
 		
 	end
 	
@@ -20,6 +22,9 @@ classdef GDataBase
 		nSSubject(1,1) int16
 		nSAtlas(1,1) int16
 		nSStudy(1,1) int16
+		nSMeasure(1,1) int32
+		nSAnalysis(1,1) int32
+		
 		
 		path
 		
@@ -27,13 +32,12 @@ classdef GDataBase
 	
 	
 	properties (Dependent)
-		nProbe
-		
-		nSubject
-		
-		nAtlas
-		
-		nStudy
+		nProbe(1,1) int16
+		nSubject(1,1) int16
+		nAtlas(1,1) int16
+		nStudy (1,1) int16
+		nMeasure(1,1) int32
+		nAnalysis(1,1) int32
 	end
 	
 	%%	method
@@ -45,6 +49,8 @@ classdef GDataBase
 	[probeId, DataBase] = newprobe(DataBase, varargin)
 	[atlasId, DataBase] = newatlas(DataBase, varargin)
 	[studyId, DataBase] = newstudy(DataBase, varargin)
+	[analysisId, DataBase] = newanalysis(DataBase, varargin)
+	[measureId, DataBase] = newmeasure(DataBase, varargin)
 	end
 	
 %% static method
@@ -56,6 +62,14 @@ classdef GDataBase
 	
 	%% methods for the dependent propr
 	methods
+		function nMeasure = get.nMeasure(obj)
+			nMeasure = length(obj.Measure);
+		end
+		
+		function nAnalysis = get.nAnalysis(obj)
+			nAnalysis = length(obj.Analysis);
+		end
+		
 		function nProbe = get.nProbe(obj)
 			nProbe = length(obj.Probe);
 		end

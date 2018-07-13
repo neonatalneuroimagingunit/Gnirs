@@ -7,38 +7,21 @@ classdef GDBStudy
 	end
 		
 	properties
-		Measure(:,1) GDBMeasure
 		phantomId
 		path
 		tag
 	end
 	
-	properties (SetAccess = private)
-		nSMeasure(1,1) int16
-	end
-	
-	properties (Dependent)
-		nMeasure
-	end
 	
 		%%	method
 	methods
-		 [measureId, Study] = newmeasure(Study, varargin)
 		 Study = load(DBStudy)
 		 DBStudy = modify(DBStudy,NewStudy)
 		 DBStudy = substitute(DBStudy,Study)
 	end
 	%% Static method
-	methods(Static)
-		studyId = id2studyid(id)
-		postFix = id2studypostfix(id)
-	end	
 	
 	methods
-		
-		function nMeasure = get.nMeasure(obj)
-			nMeasure = length(obj.Measure);
-		end
 
 		function obj = GDBStudy(varargin)
 			for iArgIn = 1 : 2 : nargin
