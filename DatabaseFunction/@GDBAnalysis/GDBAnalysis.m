@@ -5,7 +5,6 @@ classdef GDBAnalysis
 	properties (SetAccess = immutable)
 		id
 		measureId
-		studyId
 	end
 	properties
 		tag
@@ -29,8 +28,8 @@ classdef GDBAnalysis
 					case 'id'		
 						obj.id = varargin{iArgIn + 1};
 						
+					case 'measureid'
 						obj.measureId = GDBMeasure.id2measureid(obj.id);
-						obj.studyId = GDBStudy.id2studyid(obj.id);
 						
 					case 'tag'
 						obj.tag = varargin{iArgIn + 1};

@@ -1,9 +1,9 @@
 function postFix = id2analysispostfix(id)
 lengthDataBaseId = 7;
-lengthStudyId = 11;
+lengthAnalysisId = 14;
 
-	if (ischar(id) && length(id)>=lengthStudyId)
-		postFix = id((lengthDataBaseId+1):lengthStudyId);
+	if (ischar(id) && length(id)>=lengthAnalysisId)
+		postFix = id((lengthDataBaseId+1):lengthAnalysisId);
 	end
 end
 

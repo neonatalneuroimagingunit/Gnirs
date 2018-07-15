@@ -71,6 +71,7 @@ if exist(dataBaseTxtPath, 'file')
 	Hmain.mainFigure.Visible = 'on';
 
 %	close(Hmain.LoadingFigure);
+
 else
 	error('Database not found')
 end

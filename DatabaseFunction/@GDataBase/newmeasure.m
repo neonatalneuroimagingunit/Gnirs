@@ -15,9 +15,14 @@ function [DBMeasure, DataBase] = newmeasure(DataBase, Study, varargin)
 	mkdir(pathMeasureAnalysis)
 	
 	if  (nargin == 3)
-		DBMeasure = GDBMeasure('id',measureId,'path',pathMeasure, 'tag',varargin{1});
+		DBMeasure = GDBMeasure('id',measureId,...
+								'path',pathMeasure,...
+								'studyid',Study.id,...
+								'tag',varargin{1});
 	else
-		DBMeasure = GDBMeasure('id',measureId,'path',pathMeasure);
+		DBMeasure = GDBMeasure('id',measureId,...
+								'path',pathMeasure,...
+								'studyid',Study.id);
 	end
 	DataBase.Measure(posNewMeas) = DBMeasure;
 end
