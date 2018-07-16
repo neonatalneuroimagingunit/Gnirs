@@ -3,20 +3,19 @@ classdef GDBSubject
 
 	
 	properties(SetAccess = immutable)
-		id
-		databaseId
+		id(1,:) char
 		template(1,1) logical
 	end
 	
 	properties
-		tag
-		measureId
-		path
+		tag(1,:) char
+		measureId char
+		path(1,:) char
 	end
 	
 	
 	properties (Dependent)
-		nMeasures
+		nMeasure (1,1) int16
 	end
 	
 	
@@ -37,8 +36,8 @@ classdef GDBSubject
 	
 	methods
 		
-		function nMeasures = get.nMeasures(obj)
-			nMeasures = size(obj.Measures, 1);
+		function nMeasure = get.nMeasure(obj)
+			nMeasure = size(obj.measureId, 1);
 		end
 		
 		function obj = GDBSubject(varargin)

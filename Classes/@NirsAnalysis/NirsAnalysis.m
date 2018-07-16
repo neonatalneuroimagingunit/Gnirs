@@ -5,6 +5,8 @@ classdef NirsAnalysis
 	properties
 		id(1,:) char
 		
+		measureId(1,:) char
+		
 		date(1,1) datetime = NaT;
 		
 		analysis
@@ -37,6 +39,9 @@ methods
 
 						case 'id'
 							obj.id = varargin{i+1};
+													
+						case 'measureid'
+							obj.measureId = varargin{i+1};
 							
 						case 'date'
 							obj.date = varargin{i+1};
@@ -47,8 +52,8 @@ methods
 						case 'note'
 							obj.note = varargin{i+1};
 							
-						case 'data'
-							obj.Data = varargin{i+1};
+						case 'simplydata'
+							obj.SimplyData = varargin{i+1};
 							
 						otherwise
 							warning('the %s field is not a valid field',varargin{i});

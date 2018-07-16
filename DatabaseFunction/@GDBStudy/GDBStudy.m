@@ -3,14 +3,14 @@ classdef GDBStudy
 
 	
 	properties (SetAccess = immutable)
-		id
+		id (1,:) char
 	end
 		
 	properties
-		measureId
-		phantomId
-		path
-		tag
+		measureId char
+		phantomId (1,:) char
+		path(1,:) char
+		tag(1,:) char
 	end
 	
 	properties (Dependent)
@@ -31,7 +31,7 @@ classdef GDBStudy
 	methods
 		
 		function nMeasure = get.nMeasure(obj)
-			nMeasure = length(obj.measureId);
+			nMeasure = size(obj.measureId, 1);
 		end
 		
 		function obj = GDBStudy(varargin)

@@ -3,12 +3,12 @@ classdef GDBAnalysis
 	%   Detailed explanation goes here
 	
 	properties (SetAccess = immutable)
-		id
-		measureId
+		id(1,:) char
+		measureId(1,:) char
 	end
 	properties
-		tag
-		path
+		tag(1,:) char
+		path(1,:) char
 	end
 	
 	methods
@@ -29,7 +29,7 @@ classdef GDBAnalysis
 						obj.id = varargin{iArgIn + 1};
 						
 					case 'measureid'
-						obj.measureId = GDBMeasure.id2measureid(obj.id);
+						obj.measureId = varargin{iArgIn + 1};
 						
 					case 'tag'
 						obj.tag = varargin{iArgIn + 1};

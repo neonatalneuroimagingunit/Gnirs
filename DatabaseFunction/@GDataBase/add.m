@@ -11,8 +11,8 @@ function DataBase = add(DataBase, Object2Add, tag)
 					template = '';
 				end
 			
-				if (nargin < 2)
-					if ~isempty(Subject.name)
+				if (nargin < 3)
+					if ~isempty(Object2Add.name)
 						[DBObject, DataBase] = DataBase.newsubject(...
 															Object2Add.name,...
 															template);
@@ -41,19 +41,28 @@ function DataBase = add(DataBase, Object2Add, tag)
 				
 			case 'NirsMeasure'
 				varName = 'Measure';
+				
+				if ~isempty(Object2Add.subjectId)
+					subjectId = Object2Add.subjectId;	
+				else
+					subjectId = '';
+				end
+				
 				if (nargin < 2)  
 					[DBObject, DataBase] = DataBase.newmeasure(...
-													Object2Add.StudyId,...
+													Object2Add.studyId,...
+													'subjectId',subjectId,...
 													'tag',tag);
+
 				else
-					[DBObject, DataBase] = DataBaseDataBase.newmeasure(...
-													Object2Add.StudyId);
+					[DBObject, DataBase] = DataBase.newmeasure(...
+													Object2Add.studyId,...
+													'subjectId',subjectId);
 				end
 
-				
-			case NirsStudy
+			case 'NirsStudy'
 				varName = 'Study';
-				if ~isempty(Study.name)
+				if ~isempty(Object2Add.name)
 					[DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.name);
 				else
 					if (nargin < 2) 
@@ -73,7 +82,9 @@ function DataBase = add(DataBase, Object2Add, tag)
 	
 	
 	Object2Add.id = DBObject.id;
-	save(DBObject.path, varName);
-
+	
+	S.(varName) = Object2Add; %#ok
+	save(DBObject.path, '-struct', 'S') 
+	DataBase.save;
 end
 

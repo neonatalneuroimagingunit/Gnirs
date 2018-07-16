@@ -9,6 +9,10 @@
 		
 		id(1,:) char
 		
+		subjectId(1,:) char
+		
+		studyId(1,:) char
+		
 		date(1,1) datetime = NaT;
 	
 		timeLength(1,1) duration
@@ -44,6 +48,12 @@
 					switch lower(varargin{i})		
 						case 'id'
 							obj.id = varargin{i+1};
+							
+						case 'subjectid'
+							obj.subjectId = varargin{i+1};	
+							
+						case 'studyid'
+							obj.studyId = varargin{i+1};
 
 						case 'date'
 							obj.date = varargin{i+1};
@@ -64,7 +74,7 @@
 							obj.note = varargin{i+1};
 
 						otherwise 
-							warning('data not loaded')
+							warning('field %s dont exist', varargin{i})
 										
 					end
 				end

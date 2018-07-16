@@ -44,11 +44,6 @@ classdef NirsStudy
 		end
 		
 		function obj = NirsStudy(varargin)
-			%initialize all possible field of the class
-			%NIRSStudy
-			% To load a data insert first the name of the field and than
-			% the value.
-			% ATTENTION there is no check in the data type
 
 			if nargin ~= 0 
 				if isa(varargin{1},'NirsStudy')
@@ -57,7 +52,7 @@ classdef NirsStudy
 				end
 				for i = 1:2:(nargin-1)
 
-					switch varargin{i}		
+					switch lower(varargin{i})		
 
 						case 'id'
 							obj.id = varargin{i+1};						
@@ -67,18 +62,18 @@ classdef NirsStudy
 
 						case 'date'
 							obj.date = varargin{i+1};
-						
-						case 'measureLength'
-							obj.measureLength = varargin{i+1};
 							
-						case 'dateFistMeasure'
-							obj.measureLength = varargin{i+1};
+						case 'datefirstmeasure'
+							obj.dateFirstMeasure = varargin{i+1};
 							
-						case 'dateLastMeasure'
-							obj.measureLength = varargin{i+1};
-
-						case 'analysisLength'
-							obj.analysisLength = varargin{i+1};
+						case 'datelastmeasure'
+							obj.dateLastMeasure = varargin{i+1};
+							
+						case 'datelastanalysis'
+							obj.dateLastAnalysis = varargin{i+1};
+							
+						case 'datefirstanalysis'
+							obj.dateFirstAnalysis = varargin{i+1};
 
 						case 'note'
 							obj.note = varargin{i+1};

@@ -2,13 +2,13 @@ classdef GDBAtlas
 	
 
 	properties (SetAccess = immutable)
-		id
+		id(1,:) char
 	end
 		
 	properties
-		subjectId
-		tag
-		path
+		subjectId(1,:) char
+		tag(1,:) char
+		path(1,:) char
 	end
 	
 	methods

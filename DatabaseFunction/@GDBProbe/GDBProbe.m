@@ -1,18 +1,18 @@
 classdef GDBProbe
 	
 	properties (SetAccess = immutable)
-		id
+		id(1,:) char
 	end
 		
 	properties
-		measureId
-		tag
-		path
+		measureId char
+		tag(1,:) char
+		path(1,:) char
 	end
 	
 	
 	properties (Dependent)
-		nMeasure
+		nMeasure (1,1) int32
 	end
 	
 	methods

@@ -1,4 +1,4 @@
-function [subjectId, DataBase] = newsubject(DataBase, varargin)
+function [DBSubject, DataBase] = newsubject(DataBase, varargin)
 	
 
 	% generate the new id

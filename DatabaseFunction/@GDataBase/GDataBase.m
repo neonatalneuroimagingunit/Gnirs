@@ -26,7 +26,7 @@ classdef GDataBase
 		nSAnalysis(1,1) int32
 		
 		
-		path
+		path(1,:)char
 		
 	end
 	
@@ -43,15 +43,13 @@ classdef GDataBase
 	%%	method
 	methods
 	save(DataBase)
-	Find = findid(DataBase, id)
 	DataBase = add(DataBase, Object2Add, tag)
-	[subjecttemplateId, DataBase] = newsubjecttemplate(DataBase, varargin)
+	[DBMeasure, DataBase] = newmeasure(DataBase, studyId, varargin)
 	[subjectId, DataBase] = newsubject(DataBase, varargin)
 	[probeId, DataBase] = newprobe(DataBase, varargin)
 	[atlasId, DataBase] = newatlas(DataBase, varargin)
 	[studyId, DataBase] = newstudy(DataBase, varargin)
 	[analysisId, DataBase] = newanalysis(DataBase, varargin)
-	[measureId, DataBase] = newmeasure(DataBase, varargin)
 	end
 	
 %% static method

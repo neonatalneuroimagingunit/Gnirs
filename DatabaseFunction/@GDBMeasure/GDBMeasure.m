@@ -2,16 +2,16 @@ classdef GDBMeasure
 
 
 	properties (SetAccess = immutable)
-		id
-		studyId
+		id (1,:) char
+		studyId (1,:) char
 	end
 	properties		
-		subjectId
-		probeId
-		analysisId
+		subjectId (1,:) char
+		probeId (1,:) char
+		analysisId char
 		
-		tag
-		path
+		tag (1,:) char
+		path (1,:) char
 	end
 	
 	properties (Dependent)
@@ -29,7 +29,7 @@ classdef GDBMeasure
 	
 	methods
 		function nAnalysis = get.nAnalysis(obj)
-			nAnalysis = length(obj.analysisId);
+			nAnalysis = size(obj.analysisId, 1);
 		end
 		
 		function obj = GDBMeasure(varargin)
