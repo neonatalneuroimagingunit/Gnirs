@@ -11,8 +11,16 @@ classdef GDBAtlas
 		path
 	end
 	
-	
 	methods
+%		Atlas = load(DBAtlas)
+%		DBAtlas = modify(DBAtlas,NewAtlas)
+%		DBAtlas = substitute(DBAtlas,Atlas)
+	end
+	methods (Static)
+		postFix = id2atlaspostfix(id)
+	end
+	
+	 methods
 		function obj = GDBAtlas(varargin)
 			for iArgIn = 1 : 2 : nargin
 				switch varargin{iArgIn}

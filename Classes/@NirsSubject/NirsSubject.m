@@ -21,8 +21,8 @@
 	
 	
 	 methods
-		 DataBase = add(Subject,DataBase)
-		 DataBase = addtemplate(SubjectTemplate, DataBase)
+
+		 
 	 end
 	 
 	 methods(Static)

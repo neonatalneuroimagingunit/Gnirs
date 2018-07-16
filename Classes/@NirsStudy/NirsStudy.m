@@ -28,7 +28,8 @@ classdef NirsStudy
 	
 	
 	methods
-		DataBase = add(Study,DataBase)
+
+		
 	end
 	
 	methods

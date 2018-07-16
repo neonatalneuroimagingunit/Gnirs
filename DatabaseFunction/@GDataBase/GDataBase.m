@@ -44,6 +44,7 @@ classdef GDataBase
 	methods
 	save(DataBase)
 	Find = findid(DataBase, id)
+	DataBase = add(DataBase, Object2Add, tag)
 	[subjecttemplateId, DataBase] = newsubjecttemplate(DataBase, varargin)
 	[subjectId, DataBase] = newsubject(DataBase, varargin)
 	[probeId, DataBase] = newprobe(DataBase, varargin)

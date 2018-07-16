@@ -15,7 +15,7 @@ classdef NirsAnalysis
 	end
 	
 methods
-	Measure = add(Analysis,Measure, varargin)
+	
 end
 methods
 		 

@@ -16,6 +16,15 @@ classdef GDBProbe
 	end
 	
 	methods
+%		Probe = load(DBProbe)
+%		DBProbe = modify(DBProbe,NewProbe)
+%		DBProbe = substitute(DBProbe,Probe)
+	end
+	methods (Static)
+		postFix = id2postfix(id)
+	end
+	
+	methods
 		
 		function nMeasure = get.nMeasure(obj)
 			nMeasure = size(obj.measureId, 1);

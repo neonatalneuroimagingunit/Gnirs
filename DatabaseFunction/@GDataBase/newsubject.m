@@ -1,4 +1,4 @@
-function [DBSubject, DataBase] = newsubject(DataBase, varargin)
+function [subjectId, DataBase] = newsubject(DataBase, varargin)
 	
 
 	% generate the new id
@@ -10,12 +10,18 @@ function [DBSubject, DataBase] = newsubject(DataBase, varargin)
 	
 	subjectPath = fullfile(DataBase.path, 'Subject',subjectpostfix);
 	
-	if  (nargin == 2)
+	templateFlag = any(contains(varargin,'template','IgnoreCase',true));
+	 
+	idx = find(contains(varargin,'tag','IgnoreCase',true), 1);
+	if  ~isempty(idx)
 		DBSubject = GDBSubject('id',subjectId,...
-				'tag',varargin{1}, 'path',subjectPath);
+							'template',templateFlag,...
+							'path',subjectPath,...
+							'tag',varargin{idx+1});
 	else
 		DBSubject = GDBSubject('id',subjectId,...
-				'path',subjectPath);
+							'template',templateFlag,...
+							'path',subjectPath);
 	end
 	
 	DataBase.Subject(posNewSubj) = DBSubject;

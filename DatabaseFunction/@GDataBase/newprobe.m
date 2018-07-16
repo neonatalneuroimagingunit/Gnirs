@@ -8,8 +8,10 @@ function [probeId, DataBase] = newprobe(DataBase,varargin)
 	posNewProb = DataBase.nProbe + 1;
 	
 	
-	if  (nargin == 1)
-		DataBase.Probe(posNewProb) = GDBProbe('id',probeId,'tag',varargin{1});
+	idx = find(contains(varargin,'tag','IgnoreCase',true), 1);
+	if  ~isempty(idx)
+		DataBase.Probe(posNewProb) = GDBProbe('id',probeId,...
+											'tag',varargin{idx+1});
 	else
 		DataBase.Probe(posNewProb) = GDBProbe('id',probeId);
 	end

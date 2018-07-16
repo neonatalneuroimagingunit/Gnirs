@@ -8,12 +8,29 @@ classdef GDBMeasure
 	properties		
 		subjectId
 		probeId
+		analysisId
 		
 		tag
 		path
 	end
 	
+	properties (Dependent)
+		nAnalysis(1,1) int32
+	end
+	
 	methods
+		Measure = load(DBMeasure)
+		DBMeasure = modify(DBMeasure,NewMeasure)
+		DBMeasure = substitute(DBMeasure,Measure)
+	end
+	methods (Static)
+		postFix = id2postfix(id)
+	end
+	
+	methods
+		function nAnalysis = get.nAnalysis(obj)
+			nAnalysis = length(obj.analysisId);
+		end
 		
 		function obj = GDBMeasure(varargin)
 			for iArgIn = 1 : 2 : nargin

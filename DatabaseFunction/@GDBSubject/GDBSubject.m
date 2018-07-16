@@ -27,9 +27,11 @@ classdef GDBSubject
 		DBSubject = modifiy(DBSubject, Subject)
 	end
 	
-	methods(Static)
-			subjectpostfix = id2subjectpostfix(id);
+	%% Static method
+	methods (Static)
+		postFix = id2postfix(id)
 	end
+	
 
 		
 	

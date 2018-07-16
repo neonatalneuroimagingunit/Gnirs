@@ -16,10 +16,14 @@ function [DBStudy, DataBase] = newstudy(DataBase, varargin)
 	
 	
 
-	if  (nargin == 2)
-		DBStudy = GDBStudy('id',studyId,'path',pathStudy,'tag',varargin{1});
+	idx = find(contains(varargin,'tag','IgnoreCase',true), 1);
+	if  ~isempty(idx)
+		DBStudy = GDBStudy('id',studyId,...
+						'path',pathStudy,...
+						'tag',varargin{idx+1});
 	else
-		DBStudy = GDBStudy('id',studyId,'path',pathStudy);
+		DBStudy = GDBStudy('id',studyId,...
+						'path',pathStudy);
 	end
 	
 	DataBase.Study(posNewStud) = DBStudy;

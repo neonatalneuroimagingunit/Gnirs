@@ -1,4 +1,4 @@
-function postFix = id2measurepostfix(id)
+function postFix = id2postfix(id)
 lengthDataBaseId = 7;
 lengthMeasureId = 14;
 

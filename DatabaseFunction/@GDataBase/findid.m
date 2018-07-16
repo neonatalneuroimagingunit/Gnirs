@@ -1,8 +1,8 @@
-function Find = findid(DataBase, id)
+function [Find, idx] = findid(DataBase, id)
 	lengthDataBaseId = 7;
 	lengthStudyId = 11;
-	lengthMeasureId = 15;
-	lengthAnalysisId = 19;
+	lengthMeasureId = 14;
+	lengthAnalysisId = 14;
 	lengthSubjectId = 11;
 	lengthAtlasId = 11;
 	lengthProbeId = 11;
@@ -11,15 +11,15 @@ function Find = findid(DataBase, id)
 		case 'S'
 			idx = DataBase.Study(:).id == id(1:lengthStudyId);
 			Find = DataBase.Study(idx);
-			if length(id) > lengthStudyId
-				idx = Find.Measure(:).id == id(1:lengthMeasureId);
-				Find = Find.Measure(idx);
-				if length(id) > lengthMeasureId
-					idx = Find.Anlaysis(:).id == id(1:lengthAnalysisId);
-					Find =Find.Anlaysis(idx);
-				end
-			end
-				
+		case 'M'
+			
+			idx = DataBase.Measure(:).id == id(1:lengthMeasureId);
+			Find = DataBase.Measure(idx);
+		case 'A'
+			
+			idx = DataBase.Anlaysis(:).id == id(1:lengthAnalysisId);
+			Find =DataBase.Anlaysis(idx);
+
 		case 'U'
 			idx = DataBase.Subject(:).id == id(1:lengthSubjectId);
 			Find = DataBase.Subject(idx);

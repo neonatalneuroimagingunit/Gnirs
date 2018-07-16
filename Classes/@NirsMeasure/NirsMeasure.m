@@ -23,7 +23,8 @@
 	end
 	
     methods
-		Study = add(Measure,Study, varargin)
+
+		
 	end
 	
     methods

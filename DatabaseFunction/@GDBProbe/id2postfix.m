@@ -1,4 +1,4 @@
-function postFix = id2subjectpostfix(id)
+function postFix = id2postfix(id)
 lengthDataBaseId = 7;
 lengthStudyId = 11;
 
