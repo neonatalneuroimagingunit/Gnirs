@@ -17,7 +17,7 @@ classdef GDBAnalysis
 		DBAnalysis = substitute(DBAnalysis,Analysis)
 	end
 	methods (Static)
-		postFix = id2studypostfix(id)
+		postFix = id2postfix(id)
 	end
 	
 	methods

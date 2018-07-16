@@ -1,7 +1,7 @@
 function [Hmain] = tree(Hmain,DataBase)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
-
+databaseIdLength = 7;
 
 	Hmain.Tree.Main = uiw.widget.Tree(...
 		'Parent',Hmain.mainFigure,...
@@ -23,124 +23,187 @@ function [Hmain] = tree(Hmain,DataBase)
 
 	for iStudy = 1:DataBase.nStudy
 		
-			Hmain.Tree.StudyNode(iStudy).MainNode = uiw.widget.TreeNode(...
-				'Name', DataBase.Study(iStudy).tag,...
+			if ~isempty(DataBase.Study(iStudy).tag)
+				tag = DataBase.Study(iStudy).tag;
+			else
+				tag = GBDStudy.id2postfix(DataBase.Study(iStudy).id);
+			end
+			
+			Hmain.Tree.Study(iStudy).MainNode = uiw.widget.TreeNode(...
+				'Name', tag,...
 				'Parent', Hmain.Tree.Main.Root,...
 				'Value', DataBase.Study(iStudy).id...
 				); %create a node for each study
 			
-			setIcon(Hmain.Tree.StudyNode(iStudy).MainNode,studyIcon);  %set his icon
+			setIcon(Hmain.Tree.Study(iStudy).MainNode,studyIcon);  %set his icon
 			
-			Hmain.Tree.StudyNode(iStudy).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
-			uimenu(Hmain.Tree.StudyNode(iStudy).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
-			set(Hmain.Tree.StudyNode(iStudy).MainNode,'UIContextMenu',Hmain.Tree.StudyNode(iStudy).ContextMenu);
+			Hmain.Tree.Study(iStudy).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
+			set(Hmain.Tree.Study(iStudy).MainNode,'UIContextMenu',Hmain.Tree.Study(iStudy).ContextMenu);
+	end		
+	for iMeasure = 1:DataBase.nMeasure %for each measure in the study create a new branch
+			[~, idxStudy] = DataBase.findid(DataBase.Measure(iMeasure).studyId);
 			
-			for iMeasure = 1:DataBase.Study(iStudy).nMeasure %for each measure in the study create a new branch
-				
-				Hmain.Tree.StudyNode(iStudy).Measures(iMeasure).MainNode = uiw.widget.TreeNode(... 
-				'Name',DataBase.Study(iStudy).Measure(iMeasure).tag ,...
-				'Value', DataBase.Study(iStudy).Measure(iMeasure).ID,...
-				'Parent',Hmain.Tree.StudyNode(iStudy).MainNode...
+			if ~isempty(DataBase.Measure(iMeasure).tag)
+				tag = DataBase.Measure(iMeasure).tag;
+			else
+				tag = GDBMeasure.id2postfix(DataBase.Measure(iMeasure).id);
+			end
+			
+			Hmain.Tree.Measure(iMeasure).MainNode = uiw.widget.TreeNode(... 
+			'Name',tag ,...
+			'Value', DataBase.Measure(iMeasure).id,...
+			'Parent',Hmain.Tree.Study(idxStudy).MainNode...
 			);
 			
- 				setIcon(Hmain.Tree.StudyNode(iStudy).Measures(iMeasure).MainNode,measureIcon);%add the measure icon
-				
-				for iAnalysis = 1:(DataBase.Study(iStudy).Measure(iMeasure).nAnalysis + 1) %for each analysis plus the row one in the measure create a new branch
-					Hmain.Tree.StudyNode(iStudy).Measures(iMeasure).Analysis(iAnalysis).MainNode = uiw.widget.TreeNode(... 
-					'Name',DataBase.Study(iStudy).Measure(iMeasure).Analysis(iAnalysis).tag ,...
-					'Value',DataBase.Study(iStudy).Measure(iMeasure).Analysis(iAnalysis).ID ,...
-					'Parent',Hmain.Tree.StudyNode(iStudy).Measures(iMeasure).MainNode);
-				end
-			
-			end
-	end
+ 			setIcon(Hmain.Tree.Measure(iMeasure).MainNode, measureIcon);%add the measure icon
+	end				
 	
-%% clk sx for new study 	
-	% For the whole tree
-	
-	
-	Hmain.Tree.ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); 
-	uimenu(Hmain.Tree.ContextMenu,'Label','AddStudy','callback',{@NewNIRSStudy ,Hmain,DataBase});
-	set(Hmain.Tree.Main,'UIContextMenu',Hmain.Tree.ContextMenu)
-	
+	for iAnalysis = 1:(DataBase.nAnalysis) %for each analysis plus the row one in the measure create a new branch
+		[~, idxMeasure] = DataBase.findid(DataBase.Analysis(iAnalysis).measureId);			
 
-	Hmain.Tree.Main.MouseClickedCallback = {@clickcallback,Hmain,DataBase};
-
-end
-
-
-
-function clickcallback(Handle, Event, MainHandle ,NirsDataBase)
-	if ~isempty(Event.Nodes) % click on a node
-		switch Event.Nodes.Value(end-3) %position of the identifier of the IDtype
-			case 'S'%study
-				switch Event.SelectionType
-					case 'normal'
-						studyId = Event.Nodes.Value;
-						Study = findstudy(studyId, NirsDataBase);
-						displaystudy(Study, MainHandle.DisplayPannel);
-					case 'open'
-						%'doublestudy
-					case 'alt'
-						%'dxstudy
-				end
-			case 'M' %measure
-				switch Event.SelectionType
-					case 'normal'
-						measureId = Event.Nodes.Value;
-						Measure = findmeasure(measureId, NirsDataBase);
-						displaymeasure(Measure, MainHandle.DisplayPannel);
-					case 'open'
-						%sprintf('doublemeasure')
-					case 'alt'
-						%sprintf('dxmeasure')
-				end
-			case 'A'%Analysis
-				switch Event.SelectionType
-					case 'normal'
-						analysisId = Event.Nodes.Value;
-						measureId = analysisId(1:end-4);
-						Analysis = findanalysis(analysisId, NirsDataBase);
-						Measure = findmeasure(measureId, NirsDataBase);
-						displayanalysis(Measure, Analysis, MainHandle.DisplayPannel);
-					case 'open'
-						openanalysiswiewer(Event.Nodes.Value, MainHandle.dataBasePath);
-					case 'alt'
-						%sprintf('dxAnalysis')
-				end
-			case 'P' %probe
-				switch Event.SelectionType
-					case 'normal'
-						displayprobe(MainHandle.DisplayPannel,NirsDataBase)
-					case 'open'
-						openanprobewiewer()
-					case 'alt'
-						%sprintf('dxmprobe')
-				end
-			case 'G' %group
-				switch Event.SelectionType
-					case 'normal'
-						displaygoup(MainHandle.DisplayPannel,NirsDataBase)
-					case 'open'
-						%sprintf('doublegroup')
-					case 'alt'
-						%sprintf('dxgroup')
-				end
-			case 'Z' %anatomy
-				switch Event.SelectionType
-					case 'normal'
-						displayanatomy(MainHandle.DisplayPannel,NirsDataBase)
-					case 'open'
-						%sprintf('doubleanatomy')
-					case 'alt'
-						%sprintf('dxanatomy')
-				end
-			otherwise
-				% check
-			
-				
+		if ~isempty(DataBase.Analysis(iAnalysis).tag)
+			tag = DataBase.Analysis(iAnalysis).tag;
+		else
+			tag = GDBAnalysis.id2postfix(DataBase.Analysis(iAnalysis).id);
 		end
+		
+		Hmain.Tree.Analysis(iAnalysis).MainNode = uiw.widget.TreeNode(... 
+					'Name',tag ,...
+					'Value',DataBase.Analysis(iAnalysis).id ,...
+					'Parent',Hmain.Tree.Measure(idxMeasure).MainNode);
+				
+		setIcon(Hmain.Tree.Analysis(iAnalysis).MainNode, measureIcon);%add the measure icon	
+			
 	end
-end
+	
+		for iAtlas = 1:DataBase.nAtlas
+		
+			if ~isempty(DataBase.Atlas(iStudy).tag)
+				tag = DataBase.Atlas(iStudy).tag;
+			else
+				tag = GBDStudy.id2postfix(DataBase.Atlas(iStudy).id);
+			end
+			
+			Hmain.Tree.Atlas(iAtlas).MainNode = uiw.widget.TreeNode(...
+				'Name', tag,...
+				'Parent', Hmain.Tree.Main.Root,...
+				'Value', DataBase.Atlas(iAtlas).id...
+				); %create a node for each Atlas
+			
+			setIcon(Hmain.Tree.Atlas(iAtlas).MainNode,studyIcon);  %set his icon
+			
+			Hmain.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+			uimenu(Hmain.Tree.Atlas(iAtlas).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
+			set(Hmain.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',Hmain.Tree.Atlas(iAtlas).ContextMenu);
+	end	
 
+	for iProbe = 1:DataBase.nProbe
 
+		if ~isempty(DataBase.Probe(iProbe).tag)
+			tag = DataBase.Probe(iProbe).tag;
+		else
+			tag = GBDProbe.id2postfix(DataBase.Probe(iProbe).id);
+		end
+
+		Hmain.Tree.Probe(iProbe).MainNode = uiw.widget.TreeNode(...
+			'Name', tag,...
+			'Parent', Hmain.Tree.Main.Root,...
+			'Value', DataBase.Probe(iProbe).id...
+			); %create a node for each study
+
+		setIcon(Hmain.Tree.Probe(iProbe).MainNode,studyIcon);  %set his icon
+
+		Hmain.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+		uimenu(Hmain.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
+		set(Hmain.Tree.Probe(iProbe).MainNode,'UIContextMenu',Hmain.Tree.Probe(iProbe).ContextMenu);
+	end	
+% %% clk sx for new study 	
+% 	% For the whole tree
+% 	
+% 	
+% 	Hmain.Tree.ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); 
+% 	uimenu(Hmain.Tree.ContextMenu,'Label','AddStudy','callback',{@NewNIRSStudy ,Hmain,DataBase});
+% 	set(Hmain.Tree.Main,'UIContextMenu',Hmain.Tree.ContextMenu)
+% 	
+% 
+% 	Hmain.Tree.Main.MouseClickedCallback = {@clickcallback,Hmain,DataBase};
+% 
+ end
+% 
+% 
+% 
+% function clickcallback(Handle, Event, MainHandle ,NirsDataBase)
+% 	if ~isempty(Event.Nodes) % click on a node
+% 		switch Event.Nodes.Value(databaseIdLength + 1) %position of the identifier of the IDtype
+% 			case 'S'%study
+% 				switch Event.SelectionType
+% 					case 'normal'
+% 						studyId = Event.Nodes.Value;
+% 						Study = findstudy(studyId, NirsDataBase);
+% 						displaystudy(Study, MainHandle.DisplayPannel);
+% 					case 'open'
+% 						%'doublestudy
+% 					case 'alt'
+% 						%'dxstudy
+% 				end
+% 			case 'M' %measure
+% 				switch Event.SelectionType
+% 					case 'normal'
+% 						measureId = Event.Nodes.Value;
+% 						Measure = findmeasure(measureId, NirsDataBase);
+% 						displaymeasure(Measure, MainHandle.DisplayPannel);
+% 					case 'open'
+% 						%sprintf('doublemeasure')
+% 					case 'alt'
+% 						%sprintf('dxmeasure')
+% 				end
+% 			case 'A'%Analysis
+% 				switch Event.SelectionType
+% 					case 'normal'
+% 						analysisId = Event.Nodes.Value;
+% 						measureId = analysisId(1:end-4);
+% 						Analysis = findanalysis(analysisId, NirsDataBase);
+% 						Measure = findmeasure(measureId, NirsDataBase);
+% 						displayanalysis(Measure, Analysis, MainHandle.DisplayPannel);
+% 					case 'open'
+% 						openanalysiswiewer(Event.Nodes.Value, MainHandle.dataBasePath);
+% 					case 'alt'
+% 						%sprintf('dxAnalysis')
+% 				end
+% 			case 'P' %probe
+% 				switch Event.SelectionType
+% 					case 'normal'
+% 						displayprobe(MainHandle.DisplayPannel,NirsDataBase)
+% 					case 'open'
+% 						openanprobewiewer()
+% 					case 'alt'
+% 						%sprintf('dxmprobe')
+% 				end
+% 			case 'G' %group
+% 				switch Event.SelectionType
+% 					case 'normal'
+% 						displaygoup(MainHandle.DisplayPannel,NirsDataBase)
+% 					case 'open'
+% 						%sprintf('doublegroup')
+% 					case 'alt'
+% 						%sprintf('dxgroup')
+% 				end
+% 			case 'Z' %anatomy
+% 				switch Event.SelectionType
+% 					case 'normal'
+% 						displayanatomy(MainHandle.DisplayPannel,NirsDataBase)
+% 					case 'open'
+% 						%sprintf('doubleanatomy')
+% 					case 'alt'
+% 						%sprintf('dxanatomy')
+% 				end
+% 			otherwise
+% 				% check
+% 			
+% 				
+% 		end
+% 	end
+% end
+% 
+% 
