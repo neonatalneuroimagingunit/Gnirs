@@ -708,13 +708,13 @@ columns_Ph = contains(channelNames,'Ph');
 columns = logical(ones([length(channelNames) 1]));
 columns(end) = 0;
 
-nirsdata = table2array(DataNIRS.Data(:,columns));  % channel selection from table must be smarter
+nirsdata = table2array(DataNIRS.Data(:,columns_DC));  % channel selection from table must be smarter
 nsamples = height(DataNIRS.Data);
 timeline_milliseconds = DataNIRS.Data.reltime;
 timeline_samples = linspace(1, nsamples, nsamples);
 
 nchannels = size(nirsdata, 2);
-channelLabels = channelNames(columns);
+channelLabels = channelNames(columns_DC);
 
 sortingmethod = 'sortnomo';
 channelColors = sorting_colors(nchannels, sortingmethod);
@@ -842,11 +842,11 @@ ydata = nirsdata(:,1);
 % maxpower = max(power);
 [sp,fp,tp] = pspectrum(ydata, DataNIRS.MeasureInfo.AqInfo.UpdateRate, 'spectrogram');
 
-mesh(tp,fp,sp)
+surf(tp,fp,sp,sp)
 view(107,30)
 xlabel('Time (s)')
 ylabel('Frequency (Hz)')
-%rotate3d on
+rotate3d on
 
 % for ii = 1:1:nchannels
 %     %temp = smooth(power(:,ii), 5);
