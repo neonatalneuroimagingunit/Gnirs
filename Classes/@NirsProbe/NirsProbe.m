@@ -5,6 +5,8 @@ classdef NirsProbe
 	properties
 		id(1,:) char
 		
+		name(1,:) char
+		
 		source(:,2) double
 		
 		detector(:,2) double
@@ -39,6 +41,9 @@ methods
 
 						case 'id'
 							obj.id = varargin{i+1};
+							
+						case 'name'
+							obj.name = varargin{i+1};
 													
 						case 'source'
 							obj.source = varargin{i+1};

@@ -3,22 +3,56 @@ function [Hmain] = tree(Hmain,DataBase)
 %   Detailed explanation goes here
 databaseIdLength = 7;
 
-	Hmain.Tree.Main = uiw.widget.Tree(...
-		'Parent',Hmain.mainFigure,...
+
+
+	Hmain.Tree.TabGroup = uitabgroup(Hmain.mainFigure,'Position',[0 0 0.2 0.90]);
+	Hmain.Tree.StudyTab = uitab(Hmain.Tree.TabGroup,'Title','Study');
+	Hmain.Tree.ProbeTab = uitab(Hmain.Tree.TabGroup,'Title','Probe');
+	Hmain.Tree.AtlasTab = uitab(Hmain.Tree.TabGroup,'Title','Atlas');
+	
+
+	Hmain.Tree.StudyTree = uiw.widget.Tree(...
+		'Parent',Hmain.Tree.StudyTab,...
 		'Label','Database:', ...
 		'LabelLocation','top',...
 		'LabelHeight',18,...
 		'Units', 'normalized', ...
-		'Position', [0 0 0.2 0.90],...
+		'Position', [0 0 1 1],...
+		'RootVisible', 'false'...
+		);
+	
+	Hmain.Tree.ProbeTree = uiw.widget.Tree(...
+		'Parent',Hmain.Tree.ProbeTab,...
+		'Label','Database:', ...
+		'LabelLocation','top',...
+		'LabelHeight',18,...
+		'Units', 'normalized', ...
+		'Position', [0 0 1 1],...
+		'RootVisible', 'false'...
+		);
+
+	Hmain.Tree.AtlasTree = uiw.widget.Tree(...
+		'Parent',Hmain.Tree.AtlasTab,...
+		'Label','Database:', ...
+		'LabelLocation','top',...
+		'LabelHeight',18,...
+		'Units', 'normalized', ...
+		'Position', [0 0 1 1],...
 		'RootVisible', 'false'...
 		);
 
 
 
 
-
 	studyIcon = fullfile(matlabroot,'toolbox','matlab','icons','pagesicon.gif');
 	measureIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
+	
+	
+	Hmain.Tree.ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new study right click
+	uimenu(Hmain.Tree.ContextMenu,'Label','AddStudy','callback',{@NewStudy, Hmain, DataBase});
+	set(Hmain.Tree.StudyTree,'UIContextMenu',Hmain.Tree.ContextMenu);
+	
+	
 
 
 	for iStudy = 1:DataBase.nStudy
@@ -31,14 +65,18 @@ databaseIdLength = 7;
 			
 			Hmain.Tree.Study(iStudy).MainNode = uiw.widget.TreeNode(...
 				'Name', tag,...
-				'Parent', Hmain.Tree.Main.Root,...
+				'Parent', Hmain.Tree.StudyTree.Root,...
 				'Value', DataBase.Study(iStudy).id...
 				); %create a node for each study
 			
 			setIcon(Hmain.Tree.Study(iStudy).MainNode,studyIcon);  %set his icon
 			
 			Hmain.Tree.Study(iStudy).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
-			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
+			
+			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','Add Measure','callback',{@NewMeasure ,Hmain,DataBase});
+			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','Modify','callback',{@ModifyStudy ,Hmain,DataBase});
+			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','Delete','callback',{@DeleteStudy ,Hmain,DataBase});
+			
 			set(Hmain.Tree.Study(iStudy).MainNode,'UIContextMenu',Hmain.Tree.Study(iStudy).ContextMenu);
 	end		
 	for iMeasure = 1:DataBase.nMeasure %for each measure in the study create a new branch
@@ -57,6 +95,15 @@ databaseIdLength = 7;
 			);
 			
  			setIcon(Hmain.Tree.Measure(iMeasure).MainNode, measureIcon);%add the measure icon
+			
+			Hmain.Tree.Measure(iMeasure).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+			
+			uimenu(Hmain.Tree.Measure(iMeasure).ContextMenu,'Label','Add Analysis','callback',{@Newalysis ,Hmain,DataBase});
+			uimenu(Hmain.Tree.Measure(iMeasure).ContextMenu,'Label','Modify','callback',{@ModifyMeasure ,Hmain,DataBase});
+			uimenu(Hmain.Tree.Measure(iMeasure).ContextMenu,'Label','Delete','callback',{@DeleteMeasure ,Hmain,DataBase});
+			
+			set(Hmain.Tree.Measure(iMeasure).MainNode,'UIContextMenu',Hmain.Tree.Measure(iMeasure).ContextMenu);
+			
 	end				
 	
 	for iAnalysis = 1:(DataBase.nAnalysis) %for each analysis plus the row one in the measure create a new branch
@@ -74,28 +121,35 @@ databaseIdLength = 7;
 					'Parent',Hmain.Tree.Measure(idxMeasure).MainNode);
 				
 		setIcon(Hmain.Tree.Analysis(iAnalysis).MainNode, measureIcon);%add the measure icon	
+		
+		Hmain.Tree.Analysis(iAnalysis).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+
+		uimenu(Hmain.Tree.Analysis(iAnalysis).ContextMenu,'Label','Modify','callback',{@ModifyAnalysis ,Hmain,DataBase});
+		uimenu(Hmain.Tree.Analysis(iAnalysis).ContextMenu,'Label','Delete','callback',{@DeleteAnalysis ,Hmain,DataBase});
+
+		set(Hmain.Tree.Analysis(iAnalysis).MainNode,'UIContextMenu',Hmain.Tree.Analysis(iAnalysis).ContextMenu);
 			
 	end
 	
-		for iAtlas = 1:DataBase.nAtlas
+	for iAtlas = 1:DataBase.nAtlas
 		
-			if ~isempty(DataBase.Atlas(iStudy).tag)
-				tag = DataBase.Atlas(iStudy).tag;
-			else
-				tag = GBDStudy.id2postfix(DataBase.Atlas(iStudy).id);
-			end
-			
-			Hmain.Tree.Atlas(iAtlas).MainNode = uiw.widget.TreeNode(...
-				'Name', tag,...
-				'Parent', Hmain.Tree.Main.Root,...
-				'Value', DataBase.Atlas(iAtlas).id...
-				); %create a node for each Atlas
-			
-			setIcon(Hmain.Tree.Atlas(iAtlas).MainNode,studyIcon);  %set his icon
-			
-			Hmain.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
-			uimenu(Hmain.Tree.Atlas(iAtlas).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
-			set(Hmain.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',Hmain.Tree.Atlas(iAtlas).ContextMenu);
+		if ~isempty(DataBase.Atlas(iAtlas).tag)
+			tag = DataBase.Atlas(iAtlas).tag;
+		else
+			tag = GBDStudy.id2postfix(DataBase.Atlas(iAtlas).id);
+		end
+
+		Hmain.Tree.Atlas(iAtlas).MainNode = uiw.widget.TreeNode(...
+			'Name', tag,...
+			'Parent', Hmain.Tree.AtlasTree.Root,...
+			'Value', DataBase.Atlas(iAtlas).id...
+			); %create a node for each Atlas
+
+		setIcon(Hmain.Tree.Atlas(iAtlas).MainNode,studyIcon);  %set his icon
+
+		Hmain.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+		uimenu(Hmain.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@NewNIRSMeasure ,Hmain,DataBase});
+		set(Hmain.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',Hmain.Tree.Atlas(iAtlas).ContextMenu);
 	end	
 
 	for iProbe = 1:DataBase.nProbe
@@ -108,7 +162,7 @@ databaseIdLength = 7;
 
 		Hmain.Tree.Probe(iProbe).MainNode = uiw.widget.TreeNode(...
 			'Name', tag,...
-			'Parent', Hmain.Tree.Main.Root,...
+			'Parent', Hmain.Tree.ProbeTree.Root,...
 			'Value', DataBase.Probe(iProbe).id...
 			); %create a node for each study
 
@@ -117,22 +171,12 @@ databaseIdLength = 7;
 		Hmain.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
 		uimenu(Hmain.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
 		set(Hmain.Tree.Probe(iProbe).MainNode,'UIContextMenu',Hmain.Tree.Probe(iProbe).ContextMenu);
+		
+		
+		
 	end	
-% %% clk sx for new study 	
-% 	% For the whole tree
-% 	
-% 	
-% 	Hmain.Tree.ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); 
-% 	uimenu(Hmain.Tree.ContextMenu,'Label','AddStudy','callback',{@NewNIRSStudy ,Hmain,DataBase});
-% 	set(Hmain.Tree.Main,'UIContextMenu',Hmain.Tree.ContextMenu)
-% 	
-% 
-% 	Hmain.Tree.Main.MouseClickedCallback = {@clickcallback,Hmain,DataBase};
-% 
  end
-% 
-% 
-% 
+
 % function clickcallback(Handle, Event, MainHandle ,NirsDataBase)
 % 	if ~isempty(Event.Nodes) % click on a node
 % 		switch Event.Nodes.Value(databaseIdLength + 1) %position of the identifier of the IDtype

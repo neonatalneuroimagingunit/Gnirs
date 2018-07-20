@@ -76,12 +76,12 @@ function DataBase = add(DataBase, Object2Add, tag)
 			case 'NirsProbe'
 				varName = 'Probe';
 				if ~isempty(Object2Add.name)
-					[DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.name);
+					[DBObject, DataBase] = DataBase.newprobe('tag',Object2Add.name);
 				else
 					if (nargin > 2) 
-						[DBObject, DataBase] = DataBase.newstudy('tag',tag);
+						[DBObject, DataBase] = DataBase.newprobe('tag',tag);
 					else
-						[DBObject, DataBase] = DataBase.newstudy;
+						[DBObject, DataBase] = DataBase.newprobe;
 					end
 				end
 				
@@ -97,7 +97,7 @@ function DataBase = add(DataBase, Object2Add, tag)
 	Object2Add.id = DBObject.id;
 	
 	S.(varName) = Object2Add; %#ok
-	save(DBObject.path, '-struct', 'S') 
+	save(DBObject.path, '-struct', 'S');
 	DataBase.save;
 end
 
