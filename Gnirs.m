@@ -68,10 +68,9 @@ if exist(dataBaseTxtPath, 'file')
 	% Hmain = NIRSDisplay(Hmain);
 	% 
 	Hmain = tree(Hmain, DataBase);
-
 	%% display the figure and close the loading figure
 	Hmain.mainFigure.Visible = 'on';
-
+	
 	close(Hmain.LoadingFigure.MainFigure);
 else
 	error('Database not found')
