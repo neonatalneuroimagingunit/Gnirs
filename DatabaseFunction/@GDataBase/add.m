@@ -11,25 +11,25 @@ function DataBase = add(DataBase, Object2Add, tag)
 					template = '';
 				end
 			
-				if (nargin < 3)
+				if (nargin > 2)
+					[DBObject, DataBase] = DataBase.newsubject(...
+														'tag',tag,...
+														template);
+				else
 					if ~isempty(Object2Add.name)
 						[DBObject, DataBase] = DataBase.newsubject(...
-															Object2Add.name,...
+															'tag',Object2Add.name,...
 															template);
 					else
 						[DBObject, DataBase] = DataBase.newsubject(...
 																	template);
-					end
-				else
-					[DBObject, DataBase] = DataBase.newsubject(...
-														'tag',tag,...
-														template);
+					end									
 				end
 				
 				
 			case 'NirsAnalysis'
 				varName = 'Analysis';
-				if (nargin < 2) 
+				if (nargin > 2) 
 					[DBObject, DataBase] = DataBase.newanalysis(...
 											Object2Add.measureId,...
 											'tag',tag);
@@ -48,7 +48,7 @@ function DataBase = add(DataBase, Object2Add, tag)
 					subjectId = '';
 				end
 				
-				if (nargin < 2)  
+				if (nargin > 2)  
 					[DBObject, DataBase] = DataBase.newmeasure(...
 													Object2Add.studyId,...
 													'subjectId',subjectId,...
@@ -65,16 +65,29 @@ function DataBase = add(DataBase, Object2Add, tag)
 				if ~isempty(Object2Add.name)
 					[DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.name);
 				else
-					if (nargin < 2) 
-						[DBObject, DataBase] = DataBase.newstudy;
-					else
+					if (nargin > 2) 
 						[DBObject, DataBase] = DataBase.newstudy('tag',tag);
+					else
+						[DBObject, DataBase] = DataBase.newstudy;
 					end
 				end
-
+				
+				
+			case 'NirsProbe'
+				varName = 'Probe';
+				if ~isempty(Object2Add.name)
+					[DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.name);
+				else
+					if (nargin > 2) 
+						[DBObject, DataBase] = DataBase.newstudy('tag',tag);
+					else
+						[DBObject, DataBase] = DataBase.newstudy;
+					end
+				end
+				
 			case 'NirsAtlas'
 
-			case 'NirsProbe'
+		
 
 			otherwise
 				error('type %s not reconized',objType)

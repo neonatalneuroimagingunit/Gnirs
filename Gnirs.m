@@ -69,6 +69,9 @@ if exist(dataBaseTxtPath, 'file')
 	% 
 	Hmain = tree(Hmain, DataBase);
 	%% display the figure and close the loading figure
+	
+	
+	
 	Hmain.mainFigure.Visible = 'on';
 	
 	close(Hmain.LoadingFigure.MainFigure);

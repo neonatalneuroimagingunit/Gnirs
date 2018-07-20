@@ -8,6 +8,7 @@ classdef GDBMeasure
 	properties		
 		subjectId (1,:) char
 		probeId (1,:) char
+		atlasId (1,:) char
 		analysisId char
 		
 		tag (1,:) char

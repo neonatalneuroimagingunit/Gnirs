@@ -5,14 +5,16 @@ classdef GDBProbe
 	end
 		
 	properties
+		name(1,:) char
 		measureId char
-		tag(1,:) char
+		altasId char
 		path(1,:) char
 	end
 	
 	
 	properties (Dependent)
 		nMeasure (1,1) int32
+		nAtlas (1,1) int32
 	end
 	
 	methods
@@ -25,6 +27,9 @@ classdef GDBProbe
 	end
 	
 	methods
+		function nAtlas = get.nAtlas(obj)
+			nAtlas = size(obj.altasId, 1);
+		end
 		
 		function nMeasure = get.nMeasure(obj)
 			nMeasure = size(obj.measureId, 1);
@@ -36,8 +41,8 @@ classdef GDBProbe
 					case 'id'		
 						obj.id = varargin{iArgIn + 1};
 						
-					case 'tag'
-						obj.tag = varargin{iArgIn + 1};
+					case 'name'
+						obj.name = varargin{iArgIn + 1};
 						
 					case 'path'
 						obj.path = varargin{iArgIn + 1};
