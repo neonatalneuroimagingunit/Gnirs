@@ -15,6 +15,8 @@ function  Handle = guidisp(Analysis, PannelHandle , editableField)
 	if ~exist('PannelHandle','var') || isempty(PannelHandle)
 		Handle.MainFigure = figure;
 		Handle.Pannel = uipanel('Parent',Handle.MainFigure);
+	else
+		Handle.Pannel = PannelHandle;
 	end
 	
 	% assign the title
