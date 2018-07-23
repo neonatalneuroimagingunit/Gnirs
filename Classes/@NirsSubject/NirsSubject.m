@@ -1,12 +1,6 @@
  classdef NirsSubject
 %     This class hold NIRS Subject
-% 	Propreties:
-% 		name	|	[string]
-%		sname	|	surname [string]
-%  		bdate	|	birthday [datetime]
-% 		ID		|	univocal identifier of the subject
-% 		note	|	[string] 
-% 		
+
 			
     
     properties
@@ -21,8 +15,7 @@
 	
 	
 	 methods
-
-		 
+		 FigureHandle = guidisp(Subject, PannelHandle , editableField)
 	 end
 	 
 	 methods(Static)

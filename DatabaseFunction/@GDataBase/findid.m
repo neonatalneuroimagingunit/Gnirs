@@ -11,14 +11,14 @@ function [Find, idx] = findid(DataBase, id)
 		case 'S'
 			idx = contains({DataBase.Study(:).id}, id(1:lengthStudyId));
 			Find = DataBase.Study(idx);
-		case 'M'
 			
+		case 'M'
 			idx = contains({DataBase.Measure(:).id}, id(1:lengthMeasureId));
 			Find = DataBase.Measure(idx);
-		case 'A'
 			
-			idx = contains({DataBase.Anlaysis(:).id}, id(1:lengthAnalysisId));
-			Find = DataBase.Anlaysis(idx);
+		case 'A'
+			idx = contains({DataBase.Analysis(:).id}, id(1:lengthAnalysisId));
+			Find = DataBase.Analysis(idx);
 
 		case 'U'
 			idx = contains({DataBase.Subject(:).id}, id(1:lengthSubjectId));

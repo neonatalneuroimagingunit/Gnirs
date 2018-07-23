@@ -50,6 +50,7 @@ classdef GDataBase
 	[atlasId, DataBase] = newatlas(DataBase, varargin)
 	[studyId, DataBase] = newstudy(DataBase, varargin)
 	[analysisId, DataBase] = newanalysis(DataBase, varargin)
+	[find, n] = finddependence(DataBase, id)
 	end
 	
 %% static method

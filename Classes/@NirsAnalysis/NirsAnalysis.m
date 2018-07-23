@@ -17,8 +17,9 @@ classdef NirsAnalysis
 	end
 	
 methods
-	
+	Handle = guidisp(Analysis, PannelHandle , editableField)
 end
+
 methods
 		 
 		 

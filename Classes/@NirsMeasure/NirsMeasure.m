@@ -27,8 +27,7 @@
 	end
 	
     methods
-
-		
+		Handle = guidisp(Measure, PannelHandle , editableField)
 	end
 	
     methods

@@ -28,8 +28,7 @@ classdef NirsStudy
 	
 	
 	methods
-
-		
+		Handle = guidisp(Study, PannelHandle , editableField)
 	end
 	
 	methods

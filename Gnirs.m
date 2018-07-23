@@ -63,10 +63,16 @@ if exist(dataBaseTxtPath, 'file')
 		'DockControls', 'off', ...
 		'Renderer', 'OpenGL');
 
-	 Hmain = toolbar(Hmain);
-	% 
-	% Hmain = NIRSDisplay(Hmain);
-	% 
+	Hmain = toolbar(Hmain);
+
+	Hmain.DisplayPannel	 = uipanel (...
+		'Title', '', ...
+		'Parent', Hmain.mainFigure,...
+		'Units', 'normalized',...
+		'Visible', 'on',...
+		'Position',[0.21 0.01 0.78 0.88]);
+
+	
 	Hmain = tree(Hmain, DataBase);
 	%% display the figure and close the loading figure
 	
