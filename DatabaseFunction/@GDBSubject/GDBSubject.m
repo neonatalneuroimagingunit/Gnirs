@@ -3,8 +3,8 @@ classdef GDBSubject
 
 	
 	properties(SetAccess = immutable)
-		id(1,:) char
-		template(1,1) logical
+		id
+		template
 	end
 	
 	properties

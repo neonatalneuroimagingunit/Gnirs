@@ -3,8 +3,8 @@ classdef GDBAnalysis
 	%   Detailed explanation goes here
 	
 	properties (SetAccess = immutable)
-		id(1,:) char
-		measureId(1,:) char
+		id
+		measureId
 	end
 	properties
 		tag(1,:) char

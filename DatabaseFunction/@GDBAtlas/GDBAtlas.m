@@ -2,7 +2,7 @@ classdef GDBAtlas
 	
 
 	properties (SetAccess = immutable)
-		id(1,:) char
+		id
 	end
 		
 	properties

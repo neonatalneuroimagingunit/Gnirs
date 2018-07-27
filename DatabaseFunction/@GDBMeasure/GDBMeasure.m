@@ -2,8 +2,8 @@ classdef GDBMeasure
 
 
 	properties (SetAccess = immutable)
-		id (1,:) char
-		studyId (1,:) char
+		id 
+		studyId
 	end
 	properties		
 		subjectId (1,:) char
