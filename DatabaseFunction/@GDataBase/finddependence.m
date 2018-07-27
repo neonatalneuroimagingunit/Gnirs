@@ -13,8 +13,8 @@ function [find, n] = finddependence(DataBase, id)
 			if ~isempty(DBMeasure.subjectId)
 				find = [find, {DBMeasure.subjectId}] ;
 			end
-			if (DBMeasure.nAnalysis ~= 0)
-				find = [find, {DBMeasure.analysisId(1,:)}] ;
+			if ~isempty(DBMeasure.probeId)
+				find = [find, {DBMeasure.probeId}] ;
 			end
 			
 		case 'A'
