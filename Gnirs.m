@@ -3,20 +3,25 @@ close all
 clear all %#ok<CLALL>
 clc
 
+figureScreenRatio = 0.75;
+
+
 
 %% create the main handle
 GHandle = GnirsHandle;
 
 
 %% Load database 
-GHandle.Preference.Path.currentPath = fileparts(which(mfilename));
-addpath(genpath(GHandle.Preference.Path.currentPath));
-GHandle.Preference.Path.preferenceTxt = fullfile(GHandle.Preference.Path.currentPath,'Path.txt');
+currentPath = fileparts(which(mfilename));
+GHandle.Preference.Path.currentPath = currentPath;
+addpath(genpath(currentPath));
+preferenceTxt = fullfile(currentPath,'Path.txt');
+GHandle.Preference.Path.preferenceTxt = preferenceTxt;
 
 %% create db if not exist
-if ~exist(GHandle.Preference.Path.preferenceTxt, 'file')
+if ~exist(preferenceTxt, 'file')
 	
- 	handleNewDatabase = newdatabasewindow(GHandle.Preference.Path.currentPath);
+ 	handleNewDatabase = newdatabasewindow(currentPath);
 	waitfor(handleNewDatabase.MainFigure);	
 end
 
@@ -25,7 +30,7 @@ end
 if exist(GHandle.Preference.Path.preferenceTxt, 'file') 
 	
 	%% open all the preference
-	fid = fopen(GHandle.Preference.Path.preferenceTxt);
+	fid = fopen(preferenceTxt);
 	databasePath = fgetl(fid);
 	fclose(fid);
 
@@ -37,14 +42,22 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	GHandle.Preference.Font.name = 'Helvetica';
 	set(0,'units','centimeters')
 	GHandle.Preference.Screen.sizeCm = get(0,'ScreenSize');
-	GHandle.Preference.Font.sizeS = floor(GHandle.Preference.Screen.sizeCm(4)/2.5);
-	GHandle.Preference.Font.sizeM = floor(GHandle.Preference.Screen.sizeCm(4)/2);
-	GHandle.Preference.Font.sizeL = floor(GHandle.Preference.Screen.sizeCm(4)/1.75);
+	fontSizeS = floor(GHandle.Preference.Screen.sizeCm(4)/2.5);
+	fontSizeM = floor(GHandle.Preference.Screen.sizeCm(4)/2);
+	fontSizeL = floor(GHandle.Preference.Screen.sizeCm(4)/1.75);
+	
+	GHandle.Preference.Font.sizeS = fontSizeS;
+	GHandle.Preference.Font.sizeM = fontSizeS;
+	GHandle.Preference.Font.sizeL = fontSizeL;
 	
 	set(0,'units','pixels')
 	GHandle.Preference.Path.dataBase = GHandle.DataBase.path;
 	GHandle.Preference.Screen.size = get(0,'ScreenSize');
-	GHandle.Preference.Figure.size = [GHandle.Preference.Screen.size(3:4).*0.125 , GHandle.Preference.Screen.size(3:4).*0.75 ];
+	
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatio)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatio;
+	figureSize = [edge, size];
+	GHandle.Preference.Figure.size = figureSize;
 
 	GHandle.Preference.Figure.theme = 'dark';
 	
@@ -62,38 +75,13 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	%% create a loading figure
 	
 	loadigfigure(GHandle);
-	%% create the mean figure
-	GHandle.Main.Figure = figure('Visible', 'off', ...
-		'position', GHandle.Preference.Figure.size,...
-		'Resize', 'on',...
-		'Name', 'GNirs', ...
-		'SizeChangedFcn',{@resizecheck,GHandle},...
-		'Numbertitle', 'off', ...
-		'Color', GHandle.Preference.Figure.backgroundColor, ...
-		'Toolbar', 'none', ...
-		'Menubar', 'none', ...
-		'DoubleBuffer', 'on', ...
-		'DockControls', 'off', ...
-		'Renderer', 'OpenGL');
-
-	toolbar(GHandle);
-
-	GHandle.Main.Display.Pannel = uipanel (...
-		'Title', '', ...
-		'Parent', GHandle.Main.Figure,...
-		'Units', 'normalized',...
-		'Visible', 'on',...
-		'Position',[0.21 0.01 0.78 0.88]);
-
 	
-	tree(GHandle);
-	%% display the figure and close the loading figure
-	
-	
-	
-	GHandle.Main.Figure.Visible = 'on';
+	%% create main gui 	
+	maingui(GHandle);
 	
 	close(GHandle.Loading.Figure);
 else
 	error('Database not found')
 end
+
+clearvars('-except','GHandle');
