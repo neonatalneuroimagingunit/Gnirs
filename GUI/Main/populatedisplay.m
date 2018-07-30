@@ -1,7 +1,7 @@
-function [MainHandle] = populatedisplay(id, DataBase, MainHandle)
+function populatedisplay(id, GHandle)
 	
 	
-	[find, nDisp] = finddependence(DataBase, id);
+	[find, nDisp] = finddependence(GHandle.DataBase, id);
 
 
 	nRow(2) = fix(nDisp / 2);
@@ -14,19 +14,20 @@ function [MainHandle] = populatedisplay(id, DataBase, MainHandle)
 	for iCol = 1 : nCol
 		for iRow = 1 : nRow(iCol)
 			height = 1 / nRow(iCol);
-			bottomPos = (nRow(iCol) - iRow) / nRow(iCol);
-			sxPos = (nCol - iCol) / nCol;
+			bottomPos =  (iRow - 1) / nRow(iCol);
+			sxPos =  (iCol - 1) / nCol;
 			
 			idx = idx + 1;
-			DBObject = DataBase.findid(find{idx});
+			DBObject = GHandle.DataBase.findid(find{idx});
 			Object = DBObject.load;
 			
-			MainHandle.Pannel(idx) = uipanel (...
-				'Parent', MainHandle.DisplayPannel,...
+			GHandle.Main.Display.SubPanel(idx).Panel = uipanel (...
+				'Parent', GHandle.Main.Display.Pannel,...
 				'Units', 'normalized',...
 				'Position',[sxPos bottomPos width height]);
 			
-			Object.guidisp(MainHandle.Pannel(idx));
+			GHandle.Garbage.idx = idx;
+			Object.guidisp(GHandle);
 
 			
 			

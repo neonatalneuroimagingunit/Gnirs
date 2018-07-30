@@ -1,32 +1,32 @@
-function [Hmain] = toolbar(Hmain)
+function toolbar(GHandle)
 
-	Hmain.Toolbar = uiw.widget.Toolstrip(...
-		'Parent',Hmain.mainFigure,... %Normally start with this empty, until later
+	GHandle.Main.Toolbar = uiw.widget.Toolstrip(...
+		'Parent',GHandle.Main.Figure,... %Normally start with this empty, until later
 		'Visible','on',... %Normally start with this 'off'
 		'Callback',@button,... %
 		'Units','normalized',...
 		'Position',[0 0.85 1 0.15]);
 
-	Hmain.Toolbar.addSection('FILES',2);
-	Hmain.Toolbar.addButton('folder_24.png','Folder');
-	Hmain.Toolbar.addButton('folder_file_24.png','FolderFile');
-	Hmain.Toolbar.addButton('folder_file_open_24.png','FolderFileOpen');
-	Hmain.Toolbar.addButton('save_24.png','Save');
-	Hmain.Toolbar.addButton('save_all_24.png','SaveAll');
-	Hmain.Toolbar.addButton('save_as_24.png','SaveAs');
+	GHandle.Main.Toolbar.addSection('FILES',2);
+	GHandle.Main.Toolbar.addButton('folder_24.png','Folder');
+	GHandle.Main.Toolbar.addButton('folder_file_24.png','FolderFile');
+	GHandle.Main.Toolbar.addButton('folder_file_open_24.png','FolderFileOpen');
+	GHandle.Main.Toolbar.addButton('save_24.png','Save');
+	GHandle.Main.Toolbar.addButton('save_all_24.png','SaveAll');
+	GHandle.Main.Toolbar.addButton('save_as_24.png','SaveAs');
 
 
-	Hmain.Toolbar.addSection('VISUALIZE',1); %Priority=1: lower gets space first
-	Hmain.Toolbar.addButton('play_24.png','Play');
-	Hmain.Toolbar.addButton('visualize_24.png','Plot');
+	GHandle.Main.Toolbar.addSection('VISUALIZE',1); %Priority=1: lower gets space first
+	GHandle.Main.Toolbar.addButton('play_24.png','Play');
+	GHandle.Main.Toolbar.addButton('visualize_24.png','Plot');
 
-	Hmain.Toolbar.addSection('LISTS',3);
-	Hmain.Toolbar.addButton('add_24.png','Add');
-	Hmain.Toolbar.addButton('check_24.png','Check');
-	Hmain.Toolbar.addButton('close_24.png','Close');
-	Hmain.Toolbar.addButton('delete_24.png','Delete');
-	Hmain.Toolbar.addButton('edit_24.png','Edit');
-	Hmain.Toolbar.addButton('report_24.png','Report');
+	GHandle.Main.Toolbar.addSection('LISTS',3);
+	GHandle.Main.Toolbar.addButton('add_24.png','Add');
+	GHandle.Main.Toolbar.addButton('check_24.png','Check');
+	GHandle.Main.Toolbar.addButton('close_24.png','Close');
+	GHandle.Main.Toolbar.addButton('delete_24.png','Delete');
+	GHandle.Main.Toolbar.addButton('edit_24.png','Edit');
+	GHandle.Main.Toolbar.addButton('report_24.png','Report');
 end
 
 function button(~ ,event)

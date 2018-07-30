@@ -1,8 +1,10 @@
 classdef GnirsHandle < handle
 
    properties
-      MainFigure
+      Main
 	  Viewer
+	  Loading
+	  
 	  DataBase
 	  Preference
 	  ActualMeasure

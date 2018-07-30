@@ -4,83 +4,96 @@ clear all %#ok<CLALL>
 clc
 
 
-
+%% create the main handle
+GHandle = GnirsHandle;
 
 
 %% Load database 
-currentPath = fileparts(which(mfilename));
-addpath(genpath(currentPath));
-dataBaseTxtPath = fullfile(currentPath,'Path.txt');
+GHandle.Preference.Path.currentPath = fileparts(which(mfilename));
+addpath(genpath(GHandle.Preference.Path.currentPath));
+GHandle.Preference.Path.preferenceTxt = fullfile(GHandle.Preference.Path.currentPath,'Path.txt');
 
 %% create db if not exist
-if ~exist(dataBaseTxtPath, 'file')
+if ~exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	
- 	handleNewDatabase = newdatabasewindow(currentPath);
+ 	handleNewDatabase = newdatabasewindow(GHandle.Preference.Path.currentPath);
 	waitfor(handleNewDatabase.MainFigure);	
 end
 
 
 %% check if something go wrong
-if exist(dataBaseTxtPath, 'file') 
+if exist(GHandle.Preference.Path.preferenceTxt, 'file') 
 	
-	
-	fid = fopen(dataBaseTxtPath);
+	%% open all the preference
+	fid = fopen(GHandle.Preference.Path.preferenceTxt);
 	databasePath = fgetl(fid);
 	fclose(fid);
 
-	DataBase = GDataBase.load(databasePath);
+	GHandle.DataBase = GDataBase.load(databasePath);
 
 
-	%%  load Setings color theme
-	Hmain.dataBasePath = DataBase.path;
-	Hmain.screenSize = get(0,'ScreenSize');
-	Hmain.figureSize = [Hmain.screenSize(3:4).*0.125 , Hmain.screenSize(3:4).*0.75 ];
+	%%  load and set Setings color theme
+	
+	GHandle.Preference.Font.name = 'Helvetica';
+	set(0,'units','centimeters')
+	GHandle.Preference.Screen.sizeCm = get(0,'ScreenSize');
+	GHandle.Preference.Font.sizeS = floor(GHandle.Preference.Screen.sizeCm(4)/2.5);
+	GHandle.Preference.Font.sizeM = floor(GHandle.Preference.Screen.sizeCm(4)/2);
+	GHandle.Preference.Font.sizeL = floor(GHandle.Preference.Screen.sizeCm(4)/1.75);
+	
+	set(0,'units','pixels')
+	GHandle.Preference.Path.dataBase = GHandle.DataBase.path;
+	GHandle.Preference.Screen.size = get(0,'ScreenSize');
+	GHandle.Preference.Figure.size = [GHandle.Preference.Screen.size(3:4).*0.125 , GHandle.Preference.Screen.size(3:4).*0.75 ];
 
-	Hmain.theme = 'dark';
-	switch Hmain.theme
+	GHandle.Preference.Figure.theme = 'dark';
+	
+	%% aggiungerlo come listener
+	switch GHandle.Preference.Figure.theme
 		case 'classic'
-			backgroundColor = get(0,'DefaultUicontrolBackgroundcolor');
-			foregroundColor = 'k';
-			panelColor = [211 211 211]/255;
+			GHandle.Preference.Figure.backgroundColor = get(0,'DefaultUicontrolBackgroundcolor');
+			GHandle.Preference.Figure.foregroundColor = 'k';
+			GHandle.Preference.Figure.panelColor = [211 211 211]/255;
 		case 'dark'
-			backgroundColor = [68 68 68]/255;
-			foregroundColor = 'w';
-			panelColor = [92 92 92]/255;
+			GHandle.Preference.Figure.backgroundColor = [68 68 68]/255;
+			GHandle.Preference.Figure.foregroundColor = 'w';
+			GHandle.Preference.Figure.panelColor = [92 92 92]/255;
 	end
 	%% create a loading figure
 	
-	Hmain = loadigfigure(Hmain);
+	loadigfigure(GHandle);
 	%% create the mean figure
-	Hmain.mainFigure = figure('Visible', 'off', ...
-		'position', Hmain.figureSize,...
+	GHandle.Main.Figure = figure('Visible', 'off', ...
+		'position', GHandle.Preference.Figure.size,...
 		'Resize', 'on',...
 		'Name', 'GNirs', ...
+		'SizeChangedFcn',{@resizecheck,GHandle},...
 		'Numbertitle', 'off', ...
-		'Color', backgroundColor, ...
+		'Color', GHandle.Preference.Figure.backgroundColor, ...
 		'Toolbar', 'none', ...
 		'Menubar', 'none', ...
 		'DoubleBuffer', 'on', ...
 		'DockControls', 'off', ...
 		'Renderer', 'OpenGL');
 
-	Hmain = toolbar(Hmain);
+	toolbar(GHandle);
 
-	Hmain.DisplayPannel	 = uipanel (...
+	GHandle.Main.Display.Pannel = uipanel (...
 		'Title', '', ...
-		'Parent', Hmain.mainFigure,...
+		'Parent', GHandle.Main.Figure,...
 		'Units', 'normalized',...
 		'Visible', 'on',...
 		'Position',[0.21 0.01 0.78 0.88]);
 
 	
-	Hmain = tree(Hmain, DataBase);
+	tree(GHandle);
 	%% display the figure and close the loading figure
 	
 	
 	
-	Hmain.mainFigure.Visible = 'on';
+	GHandle.Main.Figure.Visible = 'on';
 	
-	close(Hmain.LoadingFigure.MainFigure);
+	close(GHandle.Loading.Figure);
 else
 	error('Database not found')
 end

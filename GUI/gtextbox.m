@@ -2,7 +2,7 @@ function HandleTextBox= gtextbox(varargin)
 
  Position = [0 0 1 1];
 
- Text.BackgroundColor = [0.9400 0.9400 0.9400];
+ Text.BackgroundColor = [0.9000 0.9000 0.9000];
  Text.BusyAction = 'queue';
  Text.ButtonDownFcn = '';               
  Text.Callback = '';
@@ -11,12 +11,12 @@ function HandleTextBox= gtextbox(varargin)
  Text.Enable = 'on';
  Text.FontAngle = 'normal';
  Text.FontName = 'Helvetica';
- Text.FontSize = 1;
- Text.FontUnits = 'normalized';
+ Text.FontSize = 8;
+ Text.FontUnits = 'points';
  Text.FontWeight = 'normal';
  Text.ForegroundColor = [0 0 0];
  Text.HandleVisibility = 'on';
- Text.HorizontalAlignment = 'center';
+ Text.HorizontalAlignment = 'left';
  Text.Interruptible = 'on';
  Text.KeyPressFcn = '';
  Text.KeyReleaseFcn = '';
@@ -31,7 +31,7 @@ function HandleTextBox= gtextbox(varargin)
  Text.Visible = 'on';
  
  
- Title.BackgroundColor = [0.9400 0.9400 0.9400];
+ Title.BackgroundColor = [0.9200 0.9200 0.9200];
  Title.BusyAction = 'queue';
  Title.ButtonDownFcn = '';               
  Title.Callback = '';
@@ -40,12 +40,12 @@ function HandleTextBox= gtextbox(varargin)
  Title.Enable = 'on';
  Title.FontAngle = 'normal';
  Title.FontName = 'Helvetica';
- Title.FontSize = 1;
- Title.FontUnits = 'normalized';
+ Title.FontSize = 8;
+ Title.FontUnits = 'points';
  Title.FontWeight = 'normal';
  Title.ForegroundColor = [0 0 0];
  Title.HandleVisibility = 'on';
- Title.HorizontalAlignment = 'center';
+ Title.HorizontalAlignment = 'left';
  Title.Interruptible = 'on';
  Title.KeyPressFcn = '';
  Title.KeyReleaseFcn = '';
@@ -76,6 +76,8 @@ for iField = 1 : 2 : nargin
 	end
 end
 
+
+
 if any(Position)
 	nRow = sum(strfind(Text.String,'\n')) + 1; 
 	
@@ -85,9 +87,7 @@ if any(Position)
 	
 	Title.Position = [Position(1), (Position(2) + textHeight), Position(3), titleHeight];
 	Text.Position = [Position(1), Position(2), Position(3), textHeight];
-end
-
-
+end	
 
 HandleTextBox.Text = uicontrol('Parent',Text.Parent,...
 						'Style','text',...
@@ -119,7 +119,7 @@ HandleTextBox.Text = uicontrol('Parent',Text.Parent,...
 
 
 
-HandleTextBox.Text = uicontrol('Parent',Title.Parent,...
+HandleTextBox.Title = uicontrol('Parent',Title.Parent,...
 						'Style','text',...
 						'BackgroundColor',Title.BackgroundColor,...
 						'BusyAction',Title.BusyAction,...
@@ -146,6 +146,15 @@ HandleTextBox.Text = uicontrol('Parent',Title.Parent,...
 						'Position',Title.Position,...
 						'UserData',Title.UserData,...
 						'Visible', Title.Visible);
-
+					
+	
+					
+			
+					
+					
+					
+					
+	set(HandleTextBox.Text,{'FontUnits'},{'normalized'})
+	set(HandleTextBox.Title,{'FontUnits'},{'normalized'})
 end
 

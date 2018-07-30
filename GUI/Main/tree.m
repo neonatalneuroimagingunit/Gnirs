@@ -1,4 +1,4 @@
-function [Hmain] = tree(Hmain,DataBase)
+function tree(GHandle)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -12,14 +12,14 @@ probeIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 
 % create the tab
-	Hmain.Tree.TabGroup = uitabgroup(Hmain.mainFigure,'Position',position);
-	Hmain.Tree.StudyTab = uitab(Hmain.Tree.TabGroup,'Title','Study');
-	Hmain.Tree.ProbeTab = uitab(Hmain.Tree.TabGroup,'Title','Probe');
-	Hmain.Tree.AtlasTab = uitab(Hmain.Tree.TabGroup,'Title','Atlas');
+	GHandle.Main.Tree.TabGroup = uitabgroup(GHandle.Main.Figure,'Position',position);
+	GHandle.Main.Tree.StudyTab = uitab(GHandle.Main.Tree.TabGroup,'Title','Study');
+	GHandle.Main.Tree.ProbeTab = uitab(GHandle.Main.Tree.TabGroup,'Title','Probe');
+	GHandle.Main.Tree.AtlasTab = uitab(GHandle.Main.Tree.TabGroup,'Title','Atlas');
 
 % create the tree
-	Hmain.Tree.StudyTree = uiw.widget.Tree(...
-		'Parent',Hmain.Tree.StudyTab,...
+	GHandle.Main.Tree.StudyTree = uiw.widget.Tree(...
+		'Parent',GHandle.Main.Tree.StudyTab,...
 		'Label','Database:', ...
 		'LabelLocation','top',...
 		'LabelHeight',18,...
@@ -28,8 +28,8 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 		'RootVisible', 'false'...
 		);
 	
-	Hmain.Tree.ProbeTree = uiw.widget.Tree(...
-		'Parent',Hmain.Tree.ProbeTab,...
+	GHandle.Main.Tree.ProbeTree = uiw.widget.Tree(...
+		'Parent',GHandle.Main.Tree.ProbeTab,...
 		'Label','Database:', ...
 		'LabelLocation','top',...
 		'LabelHeight',18,...
@@ -38,8 +38,8 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 		'RootVisible', 'false'...
 		);
 
-	Hmain.Tree.AtlasTree = uiw.widget.Tree(...
-		'Parent',Hmain.Tree.AtlasTab,...
+	GHandle.Main.Tree.AtlasTree = uiw.widget.Tree(...
+		'Parent',GHandle.Main.Tree.AtlasTab,...
 		'Label','Database:', ...
 		'LabelLocation','top',...
 		'LabelHeight',18,...
@@ -48,169 +48,169 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 		'RootVisible', 'false'...
 		);
 
-	Hmain.Tree.StudyTree.MouseClickedCallback = {@clickcallback,Hmain,DataBase}; 
-	Hmain.Tree.ProbeTree.MouseClickedCallback = {@clickcallback,Hmain,DataBase}; 
-	Hmain.Tree.AtlasTree.MouseClickedCallback = {@clickcallback,Hmain,DataBase}; 
+	GHandle.Main.Tree.StudyTree.MouseClickedCallback = {@clickcallback,GHandle}; 
+	GHandle.Main.Tree.ProbeTree.MouseClickedCallback = {@clickcallback,GHandle}; 
+	GHandle.Main.Tree.AtlasTree.MouseClickedCallback = {@clickcallback,GHandle}; 
 	
 	% add the new study right click
-	Hmain.Tree.ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); 
-	uimenu(Hmain.Tree.ContextMenu,'Label','AddStudy','callback',{@NewStudy, Hmain, DataBase});
-	set(Hmain.Tree.StudyTree,'UIContextMenu',Hmain.Tree.ContextMenu);
+	GHandle.Main.Tree.ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
+	uimenu(GHandle.Main.Tree.ContextMenu,'Label','AddStudy','callback',{@NewStudy, GHandle});
+	set(GHandle.Main.Tree.StudyTree,'UIContextMenu',GHandle.Main.Tree.ContextMenu);
 	
 	
 
 	%create a node for each study
-	for iStudy = 1:DataBase.nStudy
+	for iStudy = 1:GHandle.DataBase.nStudy
 		
 			% check if htere is a tag 
-			if ~isempty(DataBase.Study(iStudy).tag)
-				tag = DataBase.Study(iStudy).tag;
+			if ~isempty(GHandle.DataBase.Study(iStudy).tag)
+				tag = GHandle.DataBase.Study(iStudy).tag;
 			else
-				tag = GBDStudy.id2postfix(DataBase.Study(iStudy).id);
+				tag = GBDStudy.id2postfix(GHandle.DataBase.Study(iStudy).id);
 			end
 			
-			Hmain.Tree.Study(iStudy).MainNode = uiw.widget.TreeNode(...
+			GHandle.Main.Tree.Study(iStudy).MainNode = uiw.widget.TreeNode(...
 				'Name', tag,...
-				'Parent', Hmain.Tree.StudyTree.Root,...
-				'Value', DataBase.Study(iStudy).id...
+				'Parent', GHandle.Main.Tree.StudyTree.Root,...
+				'Value', GHandle.DataBase.Study(iStudy).id...
 				); 
 			
 			%set his icon
-			setIcon(Hmain.Tree.Study(iStudy).MainNode,studyIcon); 
+			setIcon(GHandle.Main.Tree.Study(iStudy).MainNode,studyIcon); 
 			
 			% add right click callback
-			Hmain.Tree.Study(iStudy).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); 
+			GHandle.Main.Tree.Study(iStudy).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
 			
-			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','Add Measure','callback',{@NewMeasure ,Hmain,DataBase});
-			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','Modify','callback',{@ModifyStudy ,Hmain,DataBase});
-			uimenu(Hmain.Tree.Study(iStudy).ContextMenu,'Label','Delete','callback',{@DeleteStudy ,Hmain,DataBase});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Add Measure','callback',{@NewMeasure ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Modify','callback',{@ModifyStudy ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Delete','callback',{@DeleteStudy ,GHandle});
 			
-			set(Hmain.Tree.Study(iStudy).MainNode,'UIContextMenu',Hmain.Tree.Study(iStudy).ContextMenu);
+			set(GHandle.Main.Tree.Study(iStudy).MainNode,'UIContextMenu',GHandle.Main.Tree.Study(iStudy).ContextMenu);
 	end		
 	
 	
 	%create a node for each measure
-	for iMeasure = 1:DataBase.nMeasure %for each measure in the study create a new branch
-			[~, idxStudy] = DataBase.findid(DataBase.Measure(iMeasure).studyId);
+	for iMeasure = 1:GHandle.DataBase.nMeasure %for each measure in the study create a new branch
+			[~, idxStudy] = GHandle.DataBase.findid(GHandle.DataBase.Measure(iMeasure).studyId);
 			
 			% check if htere is a tag 
-			if ~isempty(DataBase.Measure(iMeasure).tag)
-				tag = DataBase.Measure(iMeasure).tag;
+			if ~isempty(GHandle.DataBase.Measure(iMeasure).tag)
+				tag = GHandle.DataBase.Measure(iMeasure).tag;
 			else
-				tag = GDBMeasure.id2postfix(DataBase.Measure(iMeasure).id);
+				tag = GDBMeasure.id2postfix(GHandle.DataBase.Measure(iMeasure).id);
 			end
 			
-			Hmain.Tree.Measure(iMeasure).MainNode = uiw.widget.TreeNode(... 
+			GHandle.Main.Tree.Measure(iMeasure).MainNode = uiw.widget.TreeNode(... 
 			'Name',tag ,...
-			'Value', DataBase.Measure(iMeasure).id,...
-			'Parent',Hmain.Tree.Study(idxStudy).MainNode...
+			'Value', GHandle.DataBase.Measure(iMeasure).id,...
+			'Parent',GHandle.Main.Tree.Study(idxStudy).MainNode...
 			);
 		
 			%set his icon
- 			setIcon(Hmain.Tree.Measure(iMeasure).MainNode, measureIcon);%add the measure icon
+ 			setIcon(GHandle.Main.Tree.Measure(iMeasure).MainNode, measureIcon);%add the measure icon
 			
 			% add right click callback
-			Hmain.Tree.Measure(iMeasure).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
+			GHandle.Main.Tree.Measure(iMeasure).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
 			
-			uimenu(Hmain.Tree.Measure(iMeasure).ContextMenu,'Label','Add Analysis','callback',{@Newalysis ,Hmain,DataBase});
-			uimenu(Hmain.Tree.Measure(iMeasure).ContextMenu,'Label','Modify','callback',{@ModifyMeasure ,Hmain,DataBase});
-			uimenu(Hmain.Tree.Measure(iMeasure).ContextMenu,'Label','Delete','callback',{@DeleteMeasure ,Hmain,DataBase});
+			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,'Label','Add Analysis','callback',{@Newalysis ,GHandle});
+			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,'Label','Modify','callback',{@ModifyMeasure ,GHandle});
+			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,'Label','Delete','callback',{@DeleteMeasure ,GHandle});
 			
-			set(Hmain.Tree.Measure(iMeasure).MainNode,'UIContextMenu',Hmain.Tree.Measure(iMeasure).ContextMenu);
+			set(GHandle.Main.Tree.Measure(iMeasure).MainNode,'UIContextMenu',GHandle.Main.Tree.Measure(iMeasure).ContextMenu);
 			
 	end	
 	
 	%create a node for each analysis
-	for iAnalysis = 1:(DataBase.nAnalysis) %for each analysis plus the row one in the measure create a new branch
-		[~, idxMeasure] = DataBase.findid(DataBase.Analysis(iAnalysis).measureId);			
+	for iAnalysis = 1:(GHandle.DataBase.nAnalysis) %for each analysis plus the row one in the measure create a new branch
+		[~, idxMeasure] = GHandle.DataBase.findid(GHandle.DataBase.Analysis(iAnalysis).measureId);			
 
 		% check if htere is a tag 
-		if ~isempty(DataBase.Analysis(iAnalysis).tag)
-			tag = DataBase.Analysis(iAnalysis).tag;
+		if ~isempty(GHandle.DataBase.Analysis(iAnalysis).tag)
+			tag = GHandle.DataBase.Analysis(iAnalysis).tag;
 		else
-			tag = GDBAnalysis.id2postfix(DataBase.Analysis(iAnalysis).id);
+			tag = GDBAnalysis.id2postfix(GHandle.DataBase.Analysis(iAnalysis).id);
 		end
 		
 		
-		Hmain.Tree.Analysis(iAnalysis).MainNode = uiw.widget.TreeNode(... 
+		GHandle.Main.Tree.Analysis(iAnalysis).MainNode = uiw.widget.TreeNode(... 
 					'Name',tag ,...
-					'Value',DataBase.Analysis(iAnalysis).id ,...
-					'Parent',Hmain.Tree.Measure(idxMeasure).MainNode);
+					'Value',GHandle.DataBase.Analysis(iAnalysis).id ,...
+					'Parent',GHandle.Main.Tree.Measure(idxMeasure).MainNode);
 		
 		%set his icon		
-		setIcon(Hmain.Tree.Analysis(iAnalysis).MainNode, analysisIcon);%add the anlysis icon	
+		setIcon(GHandle.Main.Tree.Analysis(iAnalysis).MainNode, analysisIcon);%add the anlysis icon	
 		
 		% add right click callback
-		Hmain.Tree.Analysis(iAnalysis).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); 
+		GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
 
-		uimenu(Hmain.Tree.Analysis(iAnalysis).ContextMenu,'Label','Modify','callback',{@modifyanalysis ,Hmain,DataBase});
-		uimenu(Hmain.Tree.Analysis(iAnalysis).ContextMenu,'Label','Delete','callback',{@deleteanalysis ,Hmain,DataBase});
-		uimenu(Hmain.Tree.Analysis(iAnalysis).ContextMenu,'Label','Develop','callback',{@developanalysis ,Hmain,DataBase});
+		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,'Label','Modify','callback',{@modifyanalysis ,GHandle});
+		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,'Label','Delete','callback',{@deleteanalysis ,GHandle});
+		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,'Label','Develop','callback',{@developanalysis ,GHandle});
 		
-		set(Hmain.Tree.Analysis(iAnalysis).MainNode,'UIContextMenu',Hmain.Tree.Analysis(iAnalysis).ContextMenu);
+		set(GHandle.Main.Tree.Analysis(iAnalysis).MainNode,'UIContextMenu',GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu);
 			
 	end
 	
 	%create a node for each Atlas
-	for iAtlas = 1:DataBase.nAtlas
+	for iAtlas = 1:GHandle.DataBase.nAtlas
 		
 		% check if there is a tag 
-		if ~isempty(DataBase.Atlas(iAtlas).tag)
-			tag = DataBase.Atlas(iAtlas).tag;
+		if ~isempty(GHandle.DataBase.Atlas(iAtlas).tag)
+			tag = GHandle.DataBase.Atlas(iAtlas).tag;
 		else
-			tag = GBDStudy.id2postfix(DataBase.Atlas(iAtlas).id);
+			tag = GBDStudy.id2postfix(GHandle.DataBase.Atlas(iAtlas).id);
 		end
 
-		Hmain.Tree.Atlas(iAtlas).MainNode = uiw.widget.TreeNode(...
+		GHandle.Main.Tree.Atlas(iAtlas).MainNode = uiw.widget.TreeNode(...
 			'Name', tag,...
-			'Parent', Hmain.Tree.AtlasTree.Root,...
-			'Value', DataBase.Atlas(iAtlas).id...
+			'Parent', GHandle.Main.Tree.AtlasTree.Root,...
+			'Value', GHandle.DataBase.Atlas(iAtlas).id...
 			); %create a node for each Atlas
 		
 		%set his icon
-		setIcon(Hmain.Tree.Atlas(iAtlas).MainNode,atlasIcon);  
+		setIcon(GHandle.Main.Tree.Atlas(iAtlas).MainNode,atlasIcon);  
 
 		% add right click callback
-		Hmain.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
-		uimenu(Hmain.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@NewNIRSMeasure ,Hmain,DataBase});
-		set(Hmain.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',Hmain.Tree.Atlas(iAtlas).ContextMenu);
+		GHandle.Main.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
+		uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@NewNIRSMeasure ,GHandle});
+		set(GHandle.Main.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',GHandle.Main.Tree.Atlas(iAtlas).ContextMenu);
 	end	
 
 	%create a node for each Atlas
-	for iProbe = 1:DataBase.nProbe
+	for iProbe = 1:GHandle.DataBase.nProbe
 
 		% check if there is a tag 
-		if ~isempty(DataBase.Probe(iProbe).tag)
-			tag = DataBase.Probe(iProbe).tag;
+		if ~isempty(GHandle.DataBase.Probe(iProbe).tag)
+			tag = GHandle.DataBase.Probe(iProbe).tag;
 		else
-			tag = GBDProbe.id2postfix(DataBase.Probe(iProbe).id);
+			tag = GBDProbe.id2postfix(GHandle.DataBase.Probe(iProbe).id);
 		end
 
 		
-		Hmain.Tree.Probe(iProbe).MainNode = uiw.widget.TreeNode(...
+		GHandle.Main.Tree.Probe(iProbe).MainNode = uiw.widget.TreeNode(...
 			'Name', tag,...
-			'Parent', Hmain.Tree.ProbeTree.Root,...
-			'Value', DataBase.Probe(iProbe).id...
+			'Parent', GHandle.Main.Tree.ProbeTree.Root,...
+			'Value', GHandle.DataBase.Probe(iProbe).id...
 			); %create a node for each study
 
 		%set his icon
-		setIcon(Hmain.Tree.Probe(iProbe).MainNode,probeIcon);  %set his icon
+		setIcon(GHandle.Main.Tree.Probe(iProbe).MainNode,probeIcon);  %set his icon
 
 		% add right click callback
-		Hmain.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',Hmain.mainFigure); % add the new measure right click
-		uimenu(Hmain.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,Hmain,DataBase});
-		set(Hmain.Tree.Probe(iProbe).MainNode,'UIContextMenu',Hmain.Tree.Probe(iProbe).ContextMenu);
+		GHandle.Main.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
+		uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,GHandle});
+		set(GHandle.Main.Tree.Probe(iProbe).MainNode,'UIContextMenu',GHandle.Main.Tree.Probe(iProbe).ContextMenu);
 		
 		
 		
 	end	
 end
 	
-function clickcallback(~, Event, MainHandle ,DataBase) 
+function clickcallback(~, Event, GHandle) 
 		if ~isempty(Event.Nodes) % click on a node 
 			switch Event.SelectionType 
 				case 'normal' 
-					populatedisplay(Event.Nodes.Value, DataBase, MainHandle);
+					populatedisplay(Event.Nodes.Value, GHandle);
 				case 'open' 
 					%'doublestudy 
 				case 'alt' 
