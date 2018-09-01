@@ -26,7 +26,7 @@ function populatedisplay(id, GHandle)
 				'Units', 'normalized',...
 				'Position',[sxPos bottomPos width height]);
 			
-			GHandle.Garbage.idx = idx;
+			GHandle.Temp.idx = idx;
 			Object.guidisp(GHandle);
 
 			

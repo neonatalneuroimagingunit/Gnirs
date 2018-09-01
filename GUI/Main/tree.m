@@ -54,7 +54,7 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 	
 	% add the new study right click
 	GHandle.Main.Tree.ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
-	uimenu(GHandle.Main.Tree.ContextMenu,'Label','AddStudy','callback',{@NewStudy, GHandle});
+	uimenu(GHandle.Main.Tree.ContextMenu,'Label','AddStudy','callback',{@newstudy, GHandle});
 	set(GHandle.Main.Tree.StudyTree,'UIContextMenu',GHandle.Main.Tree.ContextMenu);
 	
 	
@@ -81,9 +81,9 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 			% add right click callback
 			GHandle.Main.Tree.Study(iStudy).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
 			
-			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Add Measure','callback',{@NewMeasure ,GHandle});
-			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Modify','callback',{@ModifyStudy ,GHandle});
-			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Delete','callback',{@DeleteStudy ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Add Measure','callback',{@newmeasure ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Modify','callback',{@modifystudy ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Delete','callback',{@deletestudy ,GHandle});
 			
 			set(GHandle.Main.Tree.Study(iStudy).MainNode,'UIContextMenu',GHandle.Main.Tree.Study(iStudy).ContextMenu);
 	end		
@@ -172,7 +172,7 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 
 		% add right click callback
 		GHandle.Main.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
-		uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@NewNIRSMeasure ,GHandle});
+		uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@newmeasure ,GHandle});
 		set(GHandle.Main.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',GHandle.Main.Tree.Atlas(iAtlas).ContextMenu);
 	end	
 
@@ -198,7 +198,7 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 
 		% add right click callback
 		GHandle.Main.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
-		uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@NewNIRSMeasure ,GHandle});
+		uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@newmeasure ,GHandle});
 		set(GHandle.Main.Tree.Probe(iProbe).MainNode,'UIContextMenu',GHandle.Main.Tree.Probe(iProbe).ContextMenu);
 		
 		

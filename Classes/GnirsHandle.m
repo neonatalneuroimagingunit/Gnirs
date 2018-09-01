@@ -3,12 +3,12 @@ classdef GnirsHandle < handle
    properties
       Main
 	  Viewer
-	  Loading
+	  TempWindow
 	  
 	  DataBase
 	  Preference
 	  ActualMeasure
-	  Garbage
+	  Temp
    end
 
    methods

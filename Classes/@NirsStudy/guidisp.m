@@ -6,7 +6,7 @@ function  guidisp(Study, GHandle , editableField)
 	
 	textFontSize = GHandle.Preference.Font.sizeM;
 	
-	idx = GHandle.Garbage.idx;	
+	idx = GHandle.Temp.idx;
 
 	% create the figure and the editable field if is not specify
 	if ~exist('editableField','var')

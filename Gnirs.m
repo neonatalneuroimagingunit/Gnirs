@@ -3,7 +3,11 @@ close all
 clear all %#ok<CLALL>
 clc
 
-figureScreenRatio = 0.75;
+%% Start default settings
+figureScreenRatioLarge = 0.75;
+figureScreenRatioMedium = 0.5;
+figureScreenRatioSmall = 0.25;
+
 
 
 
@@ -18,7 +22,7 @@ addpath(genpath(currentPath));
 preferenceTxt = fullfile(currentPath,'Path.txt');
 GHandle.Preference.Path.preferenceTxt = preferenceTxt;
 
-%% create db if not exist
+% create db if not exist
 if ~exist(preferenceTxt, 'file')
 	
  	handleNewDatabase = newdatabasewindow(currentPath);
@@ -26,7 +30,7 @@ if ~exist(preferenceTxt, 'file')
 end
 
 
-%% check if something go wrong
+% check if something go wrong
 if exist(GHandle.Preference.Path.preferenceTxt, 'file') 
 	
 	%% open all the preference
@@ -42,9 +46,9 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	GHandle.Preference.Font.name = 'Helvetica';
 	set(0,'units','centimeters')
 	GHandle.Preference.Screen.sizeCm = get(0,'ScreenSize');
-	fontSizeS = floor(GHandle.Preference.Screen.sizeCm(4)/2.5);
-	fontSizeM = floor(GHandle.Preference.Screen.sizeCm(4)/2);
-	fontSizeL = floor(GHandle.Preference.Screen.sizeCm(4)/1.75);
+	fontSizeS = floor(GHandle.Preference.Screen.sizeCm(4)/2);
+	fontSizeM = floor(GHandle.Preference.Screen.sizeCm(4)/1.75);
+	fontSizeL = floor(GHandle.Preference.Screen.sizeCm(4)/1.5);
 	
 	GHandle.Preference.Font.sizeS = fontSizeS;
 	GHandle.Preference.Font.sizeM = fontSizeS;
@@ -54,11 +58,29 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	GHandle.Preference.Path.dataBase = GHandle.DataBase.path;
 	GHandle.Preference.Screen.size = get(0,'ScreenSize');
 	
-	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatio)./2;
-	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatio;
+	% Size Fullscreen windows
+	GHandle.Preference.Figure.sizeFull = GHandle.Preference.Screen.size;
+	
+	% Size large windows
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatioLarge)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatioLarge;
 	figureSize = [edge, size];
-	GHandle.Preference.Figure.size = figureSize;
+	GHandle.Preference.Figure.sizeLarge = figureSize;
 
+	% Size medium windows
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatioMedium)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatioMedium;
+	figureSize = [edge, size];
+	GHandle.Preference.Figure.sizeMedium = figureSize;
+	
+	
+	% Size small windows
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatioSmall)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatioSmall;
+	figureSize = [edge, size];
+	GHandle.Preference.Figure.sizeSmall = figureSize;
+	
+	
 	GHandle.Preference.Figure.theme = 'dark';
 	
 	%% aggiungerlo come listener
@@ -79,7 +101,7 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	%% create main gui 	
 	maingui(GHandle);
 	
-	close(GHandle.Loading.Figure);
+	close(GHandle.TempWindow.LoadingFigure);
 else
 	error('Database not found')
 end
