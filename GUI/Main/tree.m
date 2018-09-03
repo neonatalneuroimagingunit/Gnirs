@@ -209,10 +209,16 @@ end
 function clickcallback(~, Event, GHandle) 
 		if ~isempty(Event.Nodes) % click on a node 
 			switch Event.SelectionType 
+				
 				case 'normal' 
 					populatedisplay(Event.Nodes.Value, GHandle);
+					
 				case 'open' 
-					%'doublestudy 
+					if idtype(Event.Nodes.Value, 'Analysis')
+						makeanalysiscurrent(GHandle, Event.Nodes.Value);
+						viewer(GHandle);
+					end
+					
 				case 'alt' 
 					%'dxstudy	
 			end 

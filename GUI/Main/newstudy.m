@@ -19,7 +19,6 @@ function newstudy(~, ~, GHandle)
 	GHandle.TempWindow.NewStudyName = uiw.widget.EditableText(...      
     'Parent',GHandle.TempWindow.NewStudyFigure,...=
     'Value','Insert Name',...
-    'Callback',@(h,e)disp(e),...
     'Label','Study Name:',...
     'LabelLocation','top',...
     'LabelWidth',90,...
@@ -43,7 +42,7 @@ function newstudy(~, ~, GHandle)
     'LabelWidth',150,...
     'Units', 'normalize', ...
     'Position', [0.05 0.60 0.4 0.15],...	
-	'Callback',@(ObjectHandle, Event)foudfile(ObjectHandle, Event,StudyFigure)...
+	'Callback',@(ObjectHandle, Event)founddatafile(ObjectHandle, Event, GHandle)...
 	);
 
 	
@@ -54,15 +53,34 @@ function newstudy(~, ~, GHandle)
 	'String', 'Load',...
 	'Units', 'normalize', ...
 	'Position', [0.8 0.15 0.2 0.1],...
-	'Callback', {@AddStudytoDataBase ,GHandle}); 
-
-	
+	'Callback', {@loadstudy ,GHandle}...
+	); 
 
 	GHandle.TempWindow.NewStudyFigure.Visible = 'on';
 
+end
 
 
-	
+function loadstudy(~, ~, GHandle )
+
+
+
+
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

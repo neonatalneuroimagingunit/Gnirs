@@ -13,6 +13,7 @@ classdef GDBAnalysis
 	
 	methods
 		Analysis = load(DBAnalysis)
+		Data = loaddata(DBAnalysis)
 		DBAnalysis = modify(DBAnalysis,NewAnalysis)
 		DBAnalysis = substitute(DBAnalysis,Analysis)
 	end

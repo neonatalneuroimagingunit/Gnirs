@@ -102,8 +102,12 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	maingui(GHandle);
 	
 	close(GHandle.TempWindow.LoadingFigure);
+	
 else
 	error('Database not found')
 end
 
+% Take care of garbage 
+GHandle.TempWindow = [];
+GHandle.Temp = [];
 clearvars('-except','GHandle');
