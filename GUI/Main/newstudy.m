@@ -25,6 +25,16 @@ function newstudy(~, ~, GHandle)
     'Units','normalized',...
     'Position',[0.05 0.80 0.35 0.15]);
 
+	GHandle.TempWindow.NewStudyNote = uiw.widget.EditableText(...      
+    'Parent',GHandle.TempWindow.NewStudyFigure,...
+    'Value','Insert Note',...
+    'Label','Study Note:',...
+	'IsMultiLine', 1,...
+    'LabelLocation','top',...
+    'LabelWidth',90,...
+    'Units','normalized',...
+    'Position',[0.50 0.05 0.25 0.45]);
+
 	GHandle.TempWindow.NewStudyListBox = uicontrol(...
 			'Parent', GHandle.TempWindow.NewStudyFigure, ...
 			'Style','listbox',...
@@ -60,13 +70,43 @@ function newstudy(~, ~, GHandle)
 
 end
 
+function founddatafile( ~, Events, GHandle)
+
+	dataExtension = {'.txt', '.dat'};
+	
+	% find all the flie 
+	listing = dir(Events.NewValue);
+	
+	%filter only data file 
+	listIdx = contains({listing.name},dataExtension);
+	
+	% add it to the list box
+	if any(listIdx)
+		GHandle.TempWindow.NewStudyListBox.String = {listing(listIdx).name};
+	else
+		GHandle.TempWindow.NewStudyListBox.String = [];
+	end
+
+end
+
 
 function loadstudy(~, ~, GHandle )
+	%inserire il phantom del soggetto e le note
+	
+	studyName = GHandle.TempWindow.NewStudyName.Value;
+	note = GHandle.TempWindow.NewStudyNote.Value;
 
+	NewStudy = NirsStudy('name', studyName, 'date' ,datetime, 'note', note);
+	
+	DataBase = GHandle.DataBase.add(NewStudy);
+	if ~isempty(GHandle.TempWindow.NewStudyListBox.String)
+		%load measure
+	end
 
-
-
-
+	GHandle.DataBase = DataBase;
+		
+	tree(GHandle);
+	
 end
 
 
