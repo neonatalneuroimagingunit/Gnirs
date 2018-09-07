@@ -20,7 +20,7 @@ function  Handle = guidisp(Subject, GHandle , editableField)
 	end
 	
 	% assign the title
-	GHandle.Main.Display.SubPanel(idx).Panel.Title = 'Subject';
+	GHandle.Main.Display.SubPanel(idx).Panel.Title = 'Probe';
 	
 	% id
 	lowerPos = (0.3 +overunderEdge) + 3 *( 0.7 - overunderEdge)/4;

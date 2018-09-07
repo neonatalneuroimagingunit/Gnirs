@@ -1,16 +1,12 @@
-function Measure = LoadBOXYdata(location, mode, LoadingBarHandle) 
+function LoadBOXYdata(GHandle) 
 % Load a BOXY file data 
 % Inputs: path of the boxy file and a NIRSMeasure data or []
 % 
-fast = false; % default load all data
 
 
-if ~isempty(mode)
-	if contains(mode,'f')
-		fast = true;
-	end
-end
-	FILE_info = dir(location);
+fast = GHandle.Temp.fast; % default load all data
+FILE_info = dir(location);
+
 
 %% Preliminar check on file
 	FILE = fopen(location); %try to pen the boxy file
@@ -18,7 +14,6 @@ end
 	if (FILE == -1)    %check if exist
 		error('file not found')
 		
-	
 
 %% Metadata load	
 	else
