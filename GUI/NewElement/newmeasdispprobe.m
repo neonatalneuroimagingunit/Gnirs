@@ -5,8 +5,8 @@ function newmeasdispprobe(Subject, GHandle)
 	textBoxHeight = 0.12;
 	
 	textFontSize = GHandle.Preference.Font.sizeM;
-
-	
+	%gray out the pannel
+	delete(GHandle.TempWindow.ProbePannel.Children);
 	% id
 	lowerPos = (0.3 +overunderEdge) + 3 *( 0.7 - overunderEdge)/4;
 	GHandle.TempWindow.SubjectIdTextBox = gtextbox(...      

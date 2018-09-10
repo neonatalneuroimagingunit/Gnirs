@@ -7,7 +7,7 @@ classdef GnirsHandle < handle
 	  
 	  DataBase
 	  Preference
-	  ActualMeasure
+	  CurrentDataSet
 	  Temp
    end
 

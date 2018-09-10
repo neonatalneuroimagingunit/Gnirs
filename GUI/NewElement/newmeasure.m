@@ -1,6 +1,11 @@
-function newmeasure(~,~, GHandle)
+function newmeasure(~, ~, GHandle)
 %NEWMEASURE Summary of this function goes here
 %   Detailed explanation goes here\
+	
+
+	studyId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+	DBStudy = GHandle.DataBase.findid(studyId);
+	GHandle.CurrentDataSet.Study = DBStudy.load;
 
 	sxPos = [0.05 0.35 0.65 0.05 0.35 0.65];
 	bottomPos = [0.15 0.15 0.15 0.85 0.85 0.85];
@@ -9,8 +14,8 @@ function newmeasure(~,~, GHandle)
 	
 	ProbeList.tag = {GHandle.DataBase.Probe(:).tag};
 	ProbeList.id = {GHandle.DataBase.Probe(:).id};
-	SubjectList.tag = {GHandle.DataBase.Subject(:).tag};
-	SubjectList.id = {GHandle.DataBase.Subject(:).id};
+	SubjectList.tag = {'New Subject', GHandle.DataBase.Subject(:).tag};
+	SubjectList.id = {'000', GHandle.DataBase.Subject(:).id};
 	
 
 
@@ -55,10 +60,10 @@ function newmeasure(~,~, GHandle)
 			
 	  GHandle.TempWindow.MeasureWidget = uiw.widget.FileSelector(...
 			'Value', 'C:\matlab.mat', ...
-			'Pattern', {'*.mat','MATLAB MAT files (*.mat)'; '*.csv','CSV files (*.csv)'}, ...
+			'Pattern', {'*.mat','MATLAB MAT files (*.mat)';'*.txt','Text files (*.txt)'; '*.csv','CSV files (*.csv)'}, ...
 			'Parent',GHandle.TempWindow.NewMeasureFigure,...
 			'Units','normalized',...
-			'Callback',{@preload,GHandle},...
+			'Callback',@(Handle,Event)preload(Handle,Event,GHandle),...
 			'Position',[sxPos(4) bottomPos(4) width(4) height(4)]);    
 
 	 GHandle.TempWindow.SubjectWidget = uiw.widget.EditablePopup(...
@@ -91,8 +96,11 @@ end
 
 
 %% function 
-function preload(Handle, Event, GHandle)
-	
+function preload(~, Event, GHandle)
+	GHandle.Temp.fast = true;
+	GHandle.Temp.location = Event.NewValue;
+	boxyparser(GHandle);
+	newmeasdispmeasure(GHandle);
 end
 
 
@@ -106,7 +114,7 @@ function probewidgetcallback(Handle, Event, GHandle)
 		Probe = DBProbe.load;
 		newmeasdispprobe(Probe, GHandle);
 	end
-	% add option to new probe
+
 end
 
 function subjectwidgetcallback(Handle, Event, GHandle)
@@ -114,10 +122,21 @@ function subjectwidgetcallback(Handle, Event, GHandle)
 	if isempty(Event.NewSelectedIndex)
 			filterlist(Handle, Event);
 
-	else
+	elseif(strcmp(Event.NewValue, 'New Subject'))
+		if ~isempty(GHandle.CurrentDataSet.Study.SubjectTemplate)
+			Subject = GHandle.CurrentDataSet.Study.SubjectTemplate;
+		else 
+			Subject = NirsSubject;	
+		end
+		GHandle.CurrentDataSet.Subject = Subject;
+		newmeasmodsubject(GHandle);
+		
+	else	
 		DBSubject = GHandle.DataBase.Subject(Handle.SelectedIndex);
 		Subject = DBSubject.load;
-		newmeasdispsubject(Subject, GHandle);
+		GHandle.CurrentDataSet.Subject = Subject;
+		newmeasdispsubject(GHandle);
+	
 	end
 end
 
@@ -133,6 +152,8 @@ function loadmeasure( ~, ~,GHandle)
 %locate file 
 
 %open pharser
+
+%check if the subject exist
 
 %create the new variable
 

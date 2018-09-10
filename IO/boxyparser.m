@@ -1,13 +1,13 @@
-function LoadBOXYdata(GHandle) 
+function	boxyparser(GHandle) 
 % Load a BOXY file data 
 % Inputs: path of the boxy file and a NIRSMeasure data or []
 % 
 
-
+location = GHandle.Temp.location;
 fast = GHandle.Temp.fast; % default load all data
+GHandle.Temp = [];
+
 FILE_info = dir(location);
-
-
 %% Preliminar check on file
 	FILE = fopen(location); %try to pen the boxy file
 	
@@ -18,9 +18,7 @@ FILE_info = dir(location);
 %% Metadata load	
 	else
 
-			
-
-		date =  FILE_info.date; %use the date of the file for the measure data 
+		date =  datetime(FILE_info.datenum,'ConvertFrom','datenum'); %use the date of the file for the measure data 
 		Aquisitioninfo = [];
 		BOXYdata = [];
 		
@@ -196,7 +194,7 @@ FILE_info = dir(location);
 		
 		fgetl(FILE);
 		temptimedata = textscan(FILE,'%f %*[^\n]');
-		Mdata.time = temptimedata{1};
+		Mdata = table(temptimedata{:},'VariableNames',{'time'});
 		
 		
 		if fast == false
@@ -219,8 +217,8 @@ FILE_info = dir(location);
 				currentline = fgetl(FILE);
 				data(ii , :) = sscanf(currentline, '%f');
 				if any(checkPoint == ii)
-					progress = floor(10*ii/nSamples);
-					set(LoadingBarHandle, 'Name' , [repmat(char(9608),[1 progress]) repmat(' ',[1 10-progress])]);
+%					progress = floor(10*ii/nSamples);
+%					set(LoadingBarHandle, 'Name' , [repmat(char(9608),[1 progress]) repmat(' ',[1 10-progress])]);
 					drawnow;
 				end
 				
@@ -234,26 +232,36 @@ FILE_info = dir(location);
 		Duration = Mdata.time(end) - Mdata.time(1); %duration of the intair measure
 		Mdata.reltime = Mdata.time - Mdata.time(1); %create the column of relative time 
 
-		
-		
-		% non funziona nelle versione del 2017
-		%Mdata = movevars(Mdata,'reltime','Before','time');
-		
-		
+			
 		%%sampling frequency check
 		Aquisitioninfo.fscheck = abs(Aquisitioninfo.UpdateRate-1./mean(diff(Mdata.reltime)))./Aquisitioninfo.UpdateRate; %check if the frequency is correct (inserire una deviazione standard?)
 	
 %% Save all in a NIRS measure variable
-
-			Measure = NIRSMeasure (...
-				'MeasureInfo.Date', date, ...
-				'MeasureInfo.Duration',Duration, ...
-				'MeasureInfo.AqInfo', Aquisitioninfo,...
-				'MeasureInfo.OtherInfo', BOXYdata,...
-				'MeasureInfo.Calibration', CalibrationInfo,...
-				'MeasureInfo.Distance', Distance,...
-				'Data', Mdata);
+			Info = Aquisitioninfo;
+			Info.BOXY = BOXYdata;
+			Info.Calibration = CalibrationInfo;
+			Info.Distance = Distance;
+			
+			if (length(Mdata.reltime)>500)
+				idx = round(linspace(1,length(Mdata.reltime), 500));
+				SimplyData = Mdata(idx,:);
+			else
+				SimplyData = Mdata;
+			end
+			
+			GHandle.CurrentDataSet.Measure =  NirsMeasure(...
+				'date', date, ...
+				'timeLength',Duration, ...
+				'Info', Info ...                                              
+				);
 		
 
+			GHandle.CurrentDataSet.Analysis = NirsAnalysis(...
+				'date', date,...
+				'analysis', 'raw',...
+				'SimplyData', SimplyData...
+				);
+			
+			GHandle.CurrentDataSet.Data = Mdata;
 	end
 end	

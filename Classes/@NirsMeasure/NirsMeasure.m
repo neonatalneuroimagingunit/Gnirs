@@ -15,7 +15,7 @@
 		
 		date(1,1) datetime = NaT;
 	
-		timeLength(1,1) duration
+		timeLength(1,1) double
 		
 		updateRate(1,1) double
 
