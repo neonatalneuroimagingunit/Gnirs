@@ -132,7 +132,7 @@ function subjectwidgetcallback(Handle, Event, GHandle)
 		newmeasmodsubject(GHandle);
 		
 	else	
-		DBSubject = GHandle.DataBase.Subject(Handle.SelectedIndex);
+		DBSubject = GHandle.DataBase.Subject(Handle.SelectedIndex-1);
 		Subject = DBSubject.load;
 		GHandle.CurrentDataSet.Subject = Subject;
 		newmeasdispsubject(GHandle);
@@ -149,15 +149,97 @@ end
 
 
 function loadmeasure( ~, ~,GHandle)
-%locate file 
 
+%save the temp data
+	GHandle.Temp.location = GHandle.TempWindow.MeasureWidget.Value;
+	measureNote = GHandle.TempWindow.MeasureNoteEditableTextBox.Text.String;
+	
+	
+%check if the subject exist if not ad it
+	if (strcmp(GHandle.TempWindow.SubjectWidget.Value, 'New Subject'))
+		subjectName = GHandle.TempWindow.NameEditableTextBox.Text.String;
+		subjectSurname = GHandle.TempWindow.SurnameEditableTextBox.Text.String;
+		subjectBirthdate = datetime(GHandle.TempWindow.BirthdateEditableTextBox.Text.String,...
+							'InputFormat','dd/MM/yyyy');
+	%	subjectInfo
+		SubjectNote = GHandle.TempWindow.NoteEditableTextBox.Text.String;
+		NewSubject = NirsSubject('name', subjectName,...
+							'surname',subjectSurname,...
+							'birthday' ,subjectBirthdate,...
+							'note', SubjectNote);
+		
+		
+		DataBase = GHandle.DataBase.add(NewSubject);
+		GHandle.DataBase = DataBase;
+		
+		%modify this part
+		GHandle.CurrentDataSet.Subject.id = GHandle.DataBase.Subject(end).id; 
+	end
+
+%close the figure
+	close(GHandle.TempWindow.NewMeasureFigure)
+	GHandle.TempWindow = [];
+	
 %open pharser
-
-%check if the subject exist
-
+	GHandle.Temp.fast = false;
+	
+	boxyparser(GHandle);
+	
 %create the new variable
 
+	NewMeasure = NirsMeasure(GHandle.CurrentDataSet.Measure,...
+						'studyid',GHandle.CurrentDataSet.Study.id,...
+						'subjectid',GHandle.CurrentDataSet.Subject.id,...
+						'note', measureNote);
+					
+	DataBase = GHandle.DataBase.add(NewMeasure);
+	GHandle.DataBase = DataBase;
+	
+	
+	NewAnalysis = NirsAnalysis(GHandle.CurrentDataSet.Analysis,...
+							'measureid',GHandle.DataBase.Measure(end).id,...%modify this part
+							'date',GHandle.CurrentDataSet.Measure.date);
+						
+	DataBase = GHandle.DataBase.add(NewAnalysis);
+	GHandle.DataBase = DataBase;
+	
+	Data = GHandle.CurrentDataSet.Data;
+	path = GHandle.DataBase.Analysis(end).path;
+	save(path,'Data','-append')
 %add to the database
 
-%close the fugure
+
+	
+
+	
+	tree(GHandle);
+%clear temp vars
+	GHandle.Temp = [];
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

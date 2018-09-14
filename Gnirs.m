@@ -89,10 +89,12 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 			GHandle.Preference.Figure.backgroundColor = get(0,'DefaultUicontrolBackgroundcolor');
 			GHandle.Preference.Figure.foregroundColor = 'k';
 			GHandle.Preference.Figure.panelColor = [211 211 211]/255;
+			GHandle.Preference.Figure.highlightColor = [211 211 211]/255;
 		case 'dark'
 			GHandle.Preference.Figure.backgroundColor = [68 68 68]/255;
 			GHandle.Preference.Figure.foregroundColor = 'w';
 			GHandle.Preference.Figure.panelColor = [92 92 92]/255;
+			GHandle.Preference.Figure.highlightColor = [211 211 211]/255;
 	end
 	%% create a loading figure
 	

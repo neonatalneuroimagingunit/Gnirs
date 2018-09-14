@@ -1,6 +1,6 @@
 function Data = loaddata(DBAnalysis)
 	
-	temp = load(DBAnalysis.path,'Analysis');
+	temp = load(DBAnalysis.path,'Data');
 	Data = temp.Data;
 end
 

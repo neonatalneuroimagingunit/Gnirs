@@ -53,9 +53,14 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 	GHandle.Main.Tree.AtlasTree.MouseClickedCallback = {@clickcallback,GHandle}; 
 	
 	% add the new study right click
-	GHandle.Main.Tree.ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
-	uimenu(GHandle.Main.Tree.ContextMenu,'Label','AddStudy','callback',{@newstudy, GHandle});
-	set(GHandle.Main.Tree.StudyTree,'UIContextMenu',GHandle.Main.Tree.ContextMenu);
+	GHandle.Main.Tree.StudyContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
+	uimenu(GHandle.Main.Tree.StudyContextMenu,'Label','AddStudy','callback',{@newstudy, GHandle});
+	set(GHandle.Main.Tree.StudyTree,'UIContextMenu',GHandle.Main.Tree.StudyContextMenu);
+	
+	% add the new probe right click
+	GHandle.Main.Tree.ProbeContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
+	uimenu(GHandle.Main.Tree.ProbeContextMenu,'Label','AddProbe','callback',{@newprobe, GHandle});
+	set(GHandle.Main.Tree.ProbeTree,'UIContextMenu',GHandle.Main.Tree.ProbeContextMenu);
 	
 	
 

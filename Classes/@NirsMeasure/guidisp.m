@@ -99,7 +99,13 @@ function  Handle = guidisp(Measure, GHandle , editableField)
 	nInfo = length(infoList);
 	for iInfo = 1 : nInfo
 		field = infoList{iInfo};
-		fieldTextString = num2str(Measure.Info.(field));
+		
+		if ~isstruct(Measure.Info.(field))
+			fieldTextString = num2str(Measure.Info.(field));
+		else
+			fieldTextString = 'structvalue';
+		end
+		
 		
 		ypos = (1 - overunderEdge - textBoxHeight ) -  (iInfo-1)/nInfo;
 		xpos = 0.5;
