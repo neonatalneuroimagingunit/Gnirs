@@ -1,5 +1,16 @@
 function populatepanel(GHandle)
- 	 
+ 
+backgroundColor = GHandle.Preference.Figure.backgroundColor;
+foregroundColor = GHandle.Preference.Figure.foregroundColor;
+highlightColor = GHandle.Preference.Figure.highlightColor;
+defaultFontName = GHandle.Preference.Font.name;
+
+stepW = 0.02;
+stepH = 0.02;
+panelaxesH = 0.7;
+panelH = 1-panelaxesH-3*stepH;
+
+
 labels = GHandle.Temp.labels;
 values = GHandle.Temp.values;
 panellabels = GHandle.Temp.panellabels;
