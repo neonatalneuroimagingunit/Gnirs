@@ -1,4 +1,4 @@
-function set_time_window_min(~,event,Gnirs)
+function set_time_window_min(~,event,hplot, fs)
 
 xmin = str2double(event.Source.String);
 % if isnan(xmin)

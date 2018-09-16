@@ -1,15 +1,11 @@
-function set_time_window_min(~,event,Gnirs)
+function set_time_window_max(~,event,hplot,fs)
 
-xmin = str2double(event.Source.String);
-% if isnan(xmin)
-%     xmin = 0;
-% end
-if xmin < hplot.bigaxes1.XLim(2)
-    hplot.bigaxes1.XLim(1) = xmin;
-    hplot.bigaxes2.XLim(1) = xmin * fs;
+xmax = str2double(event.Source.String);
+if xmax > hplot.bigaxes1.XLim(1)
+    hplot.bigaxes1.XLim(2) = xmax;
+    hplot.bigaxes2.XLim(2) = xmax * fs;
     hrect = findall(hplot.smallaxes, 'Type', 'rectangle');
-    hrect.Position(3) = hplot.bigaxes1.XLim(2) - xmin;
-    hrect.Position(1) = xmin;
+    hrect.Position(3) = xmax - hrect.Position(1);
     temp = findall(hplot.smallaxes, 'Type', 'text');
     htxt_seconds = temp(2);
     htxt_samples = temp(1);
@@ -18,5 +14,5 @@ if xmin < hplot.bigaxes1.XLim(2)
     htxt_seconds.Position(1) = hrect.Position(1) + hrect.Position(3)/2;
     htxt_samples.Position(1) = hrect.Position(1) + hrect.Position(3)/2;
 else
-    msgbox('Invalid value - min must be smaller than max')
+    msgbox('Invalid value - max must be larger than min')
 end
