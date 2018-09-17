@@ -1,7 +1,7 @@
 function set_time_lim(~,evnt,GHandle)
 
 
-fs = 1000;
+fs = GHandle.CurrentDataSet.Measure.updateRate;
 timeLim = evnt.AffectedObject.timeLim;
 
 %main ax lim

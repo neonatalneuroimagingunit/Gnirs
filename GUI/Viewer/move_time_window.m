@@ -36,3 +36,4 @@ switch eventData.EventName
 end
 
  GHandle.Viewer.WatchList.timeLim = [xmin , xmax];
+end
