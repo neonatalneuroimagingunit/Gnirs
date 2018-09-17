@@ -15,14 +15,17 @@ function channelColors = sorting_colors(nchannels, sortingmethod)
 switch sortingmethod
     case 'wavelength'
         spam = lines(2);
-        channelColors = zeros(nchannels, 3);
-        channelColors(1:2:end,:) = repmat(spam(1,:),[nchannels/2 1]);
-        channelColors(2:2:end,:) = repmat(spam(2,:),[nchannels/2 1]);
+        channelColors = ones(nchannels, 4);
+        channelColors(1:2:end,1:3) = repmat(spam(1,:),[nchannels/2 1]);
+        channelColors(2:2:end,1:3) = repmat(spam(2,:),[nchannels/2 1]);
     case 'channel'
         spam = lines(nchannels/2);
-        channelColors = repmat(spam,[nchannels/2 1]);
+        channelColors(:,1:3) = repmat(spam,[nchannels/2 1]);
     case 'sortnomo'
-        channelColors = lines(nchannels);
+        channelColors(:,1:3) = lines(nchannels);
     case 'type' % not sure it's necessary (intended to sort by AC, DC, Ph)
-        channelColors = lines(nchannels);
+        channelColors(:,1:3) = lines(nchannels);
+end
+
+
 end

@@ -8,17 +8,16 @@ figureScreenRatioLarge = 0.75;
 figureScreenRatioMedium = 0.5;
 figureScreenRatioSmall = 0.25;
 
-
-
+%% set Path
+currentPath = fileparts(which(mfilename));
+addpath(genpath(currentPath));
 
 %% create the main handle
 GHandle = GnirsHandle;
 
 
 %% Load database 
-currentPath = fileparts(which(mfilename));
 GHandle.Preference.Path.currentPath = currentPath;
-addpath(genpath(currentPath));
 preferenceTxt = fullfile(currentPath,'Path.txt');
 GHandle.Preference.Path.preferenceTxt = preferenceTxt;
 
