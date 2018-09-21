@@ -1,35 +1,52 @@
 function [Find, idx] = findid(DataBase, id)
 	lengthDataBaseId = 7;
-	lengthStudyId = 11;
-	lengthMeasureId = 14;
-	lengthAnalysisId = 14;
-	lengthSubjectId = 11;
-	lengthAtlasId = 11;
-	lengthProbeId = 11;
 	
-	switch id(lengthDataBaseId + 1)
+	
+	
+	
+	
+	if iscell(id)
+		firstId = id{1};
+	else 
+		firstId = id;
+	end
+	if (length(firstId) > lengthDataBaseId)
+		typeIdentifier = firstId(lengthDataBaseId + 1);
+	else
+		typeIdentifier = firstId(1);
+	end
+	
+	switch typeIdentifier
+		case 'D'
+			if strcmp(DataBase.id,id)
+				idx = 1;
+				Find = DataBase;
+			else
+				idx = [];
+				Find = [];
+			end
+			
 		case 'S'
-			idx = contains({DataBase.Study(:).id}, id(1:lengthStudyId));
+			idx = contains({DataBase.Study(:).id}, id);
 			Find = DataBase.Study(idx);
 			
 		case 'M'
-			idx = contains({DataBase.Measure(:).id}, id(1:lengthMeasureId));
+			idx = contains({DataBase.Measure(:).id}, id);
 			Find = DataBase.Measure(idx);
 			
 		case 'A'
-			idx = contains({DataBase.Analysis(:).id}, id(1:lengthAnalysisId));
+			idx = contains({DataBase.Analysis(:).id}, id);
 			Find = DataBase.Analysis(idx);
 
 		case 'U'
-			idx = contains({DataBase.Subject(:).id}, id(1:lengthSubjectId));
+			idx = contains({DataBase.Subject(:).id}, id);
 			Find = DataBase.Subject(idx);
 			
 		case 'P'
-			idx = contains({DataBase.Probe(:).id}, id(1:lengthProbeId));
-			Find = DataBase.Probe(idx);
+			idx = contains({DataBase.Probe(:).id}, id);
 			
 		case 'T'
-			idx = contains({DataBase.Atlas(:).id}, id(1:lengthAtlasId));
+			idx = contains({DataBase.Atlas(:).id}, id);
 			Find = DataBase.Atlas(idx);
 			
 		otherwise
