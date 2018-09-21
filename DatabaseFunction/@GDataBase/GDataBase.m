@@ -43,6 +43,7 @@ classdef GDataBase
 	%%	method
 	methods
 	save(DataBase)
+	DataBase = delete(DataBase, id)
 	DataBase = add(DataBase, Object2Add, tag)
 	[DBMeasure, DataBase] = newmeasure(DataBase, studyId, varargin)
 	[subjectId, DataBase] = newsubject(DataBase, varargin)
