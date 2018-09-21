@@ -60,17 +60,17 @@ function newmeasure(~, ~, GHandle)
 			
 	  GHandle.TempWindow.MeasureWidget = uiw.widget.FileSelector(...
 			'Value', 'C:\matlab.mat', ...
-			'Pattern', {'*.mat','MATLAB MAT files (*.mat)';'*.txt','Text files (*.txt)'; '*.csv','CSV files (*.csv)'}, ...
+			'Pattern', {'*.txt','Text files (*.txt)'; '*.mat','MATLAB MAT files (*.mat)'; '*.csv','CSV files (*.csv)'}, ...
 			'Parent',GHandle.TempWindow.NewMeasureFigure,...
 			'Units','normalized',...
-			'Callback',@(Handle,Event)preload(Handle,Event,GHandle),...
+			'Callback',@(Handle,Event)pre_load(Handle,Event,GHandle),...
 			'Position',[sxPos(4) bottomPos(4) width(4) height(4)]);    
 
 	 GHandle.TempWindow.SubjectWidget = uiw.widget.EditablePopup(...
 			'Parent',GHandle.TempWindow.NewMeasureFigure,...
 			'Items', SubjectList.tag,...
 			'UserData', SubjectList,...
-			'Callback',@(Handle,Event)subjectwidgetcallback(Handle,Event,GHandle),...
+			'Callback',@(Handle,Event)subject_widget_callback(Handle,Event,GHandle),...
 			'Units','normalized',...
 			'Position',[sxPos(5) bottomPos(5) width(5) height(5)]);  
 	
@@ -78,17 +78,17 @@ function newmeasure(~, ~, GHandle)
 			'Parent',GHandle.TempWindow.NewMeasureFigure,...
 			'Items', ProbeList.tag ,...
 			'UserData', ProbeList,...
-			'Callback',@(Handle,Event)probewidgetcallback(Handle,Event,GHandle),...
+			'Callback',@(Handle,Event)probe_widget_callback(Handle,Event,GHandle),...
 			'Units','normalized',...
 			'Position',[sxPos(6) bottomPos(6) width(6) height(6)]); 
 		
 		
-	GHandle.TempWindow.NewStudyLoadButton = uicontrol('Style', 'pushbutton',...	
+	GHandle.TempWindow.NewMeasureLoadButton = uicontrol('Style', 'pushbutton',...	
 		'Parent', GHandle.TempWindow.NewMeasureFigure, ...
 		'String', 'Load',...
 		'Units', 'normalize', ...
 		'Position', [0.8 0.05 0.1 0.05],...
-		'Callback', {@loadmeasure ,GHandle}...
+		'Callback', {@load_measure ,GHandle}...
 	); 
 
 GHandle.TempWindow.NewMeasureFigure.Visible = 'on';
@@ -96,7 +96,7 @@ end
 
 
 %% function 
-function preload(~, Event, GHandle)
+function pre_load(~, Event, GHandle)
 	GHandle.Temp.fast = true;
 	GHandle.Temp.location = Event.NewValue;
 	boxyparser(GHandle);
@@ -104,10 +104,10 @@ function preload(~, Event, GHandle)
 end
 
 
-function probewidgetcallback(Handle, Event, GHandle)
+function probe_widget_callback(Handle, Event, GHandle)
 	
 	if isempty(Event.NewSelectedIndex)
-		filterlist(Handle, Event);
+		filter_list(Handle, Event);
 		
 	else
 		DBProbe = GHandle.DataBase.Probe(Handle.SelectedIndex);
@@ -117,10 +117,10 @@ function probewidgetcallback(Handle, Event, GHandle)
 
 end
 
-function subjectwidgetcallback(Handle, Event, GHandle)
+function subject_widget_callback(Handle, Event, GHandle)
 	
 	if isempty(Event.NewSelectedIndex)
-			filterlist(Handle, Event);
+			filter_list(Handle, Event);
 
 	elseif(strcmp(Event.NewValue, 'New Subject'))
 		if ~isempty(GHandle.CurrentDataSet.Study.SubjectTemplate)
@@ -140,7 +140,7 @@ function subjectwidgetcallback(Handle, Event, GHandle)
 	end
 end
 
-function filterlist( Handle, Event)
+function filter_list( Handle, Event)
 	idx = contains(Handle.UserData.tag, Event.NewString);
 	
 	Handle.Items = {Handle.UserData.tag{idx}};
@@ -148,11 +148,13 @@ function filterlist( Handle, Event)
 end
 
 
-function loadmeasure( ~, ~,GHandle)
 
+
+function load_measure(~, ~, GHandle)
+	
 %save the temp data
 	GHandle.Temp.location = GHandle.TempWindow.MeasureWidget.Value;
-	measureNote = GHandle.TempWindow.MeasureNoteEditableTextBox.Text.String;
+	GHandle.Temp.measureNote = GHandle.TempWindow.MeasureNoteEditableTextBox.Text.String;
 	
 	
 %check if the subject exist if not ad it
@@ -180,49 +182,8 @@ function loadmeasure( ~, ~,GHandle)
 	close(GHandle.TempWindow.NewMeasureFigure)
 	GHandle.TempWindow = [];
 	
-%open pharser
-	GHandle.Temp.fast = false;
-	
-	boxyparser(GHandle);
-	
-%create the new variable
-
-	NewMeasure = NirsMeasure(GHandle.CurrentDataSet.Measure,...
-						'studyid',GHandle.CurrentDataSet.Study.id,...
-						'subjectid',GHandle.CurrentDataSet.Subject.id,...
-						'note', measureNote);
-					
-	DataBase = GHandle.DataBase.add(NewMeasure);
-	GHandle.DataBase = DataBase;
-	
-	
-	NewAnalysis = NirsAnalysis(GHandle.CurrentDataSet.Analysis,...
-							'measureid',GHandle.DataBase.Measure(end).id,...%modify this part
-							'date',GHandle.CurrentDataSet.Measure.date);
-						
-	DataBase = GHandle.DataBase.add(NewAnalysis);
-	GHandle.DataBase = DataBase;
-	
-	Data = GHandle.CurrentDataSet.Data;
-	path = GHandle.DataBase.Analysis(end).path;
-	save(path,'Data','-append')
-%add to the database
-
-
-	
-
-	
-	tree(GHandle);
-%clear temp vars
-	GHandle.Temp = [];
+	loadmeasure(GHandle)
 end
-
-
-
-
-
-
-
 
 
 

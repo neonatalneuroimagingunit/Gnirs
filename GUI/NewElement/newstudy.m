@@ -63,7 +63,7 @@ function newstudy(~, ~, GHandle)
 	'String', 'Load',...
 	'Units', 'normalize', ...
 	'Position', [0.8 0.15 0.2 0.1],...
-	'Callback', {@loadstudy ,GHandle}...
+	'Callback', {@load_study ,GHandle}...
 	); 
 
 	GHandle.TempWindow.NewStudyFigure.Visible = 'on';
@@ -90,7 +90,7 @@ function founddatafile( ~, Events, GHandle)
 end
 
 
-function loadstudy(~, ~, GHandle )
+function load_study(~, ~, GHandle )
 	%inserire il phantom del soggetto e le note
 	
 	studyName = GHandle.TempWindow.NewStudyName.Value;
@@ -99,14 +99,35 @@ function loadstudy(~, ~, GHandle )
 	NewStudy = NirsStudy('name', studyName, 'date' ,datetime, 'note', note);
 	
 	DataBase = GHandle.DataBase.add(NewStudy);
-	if ~isempty(GHandle.TempWindow.NewStudyListBox.String)
-		%load measure
-	end
 
 	GHandle.DataBase = DataBase;
 		
 	tree(GHandle);
 	
+
+	for idxMeasure = 1 : length(GHandle.TempWindow.NewStudyListBox.Value)
+		fileName = GHandle.TempWindow.NewStudyListBox.String{GHandle.TempWindow.NewStudyListBox.Value(idxMeasure)};
+		filePath = fullfile(GHandle.TempWindow.NewStudySelector.Value, fileName);
+		% set the path of the measure 
+		GHandle.Temp.location = filePath;
+		GHandle.Temp.measureNote = 'Batch loaded';
+		% create the subject 
+		
+		NewSubject = NirsSubject('name', ['Subject' num2str(idxMeasure,'%.3d')],...
+							'surname','',...
+							'note', 'Auto loaded');
+		
+		DataBase = GHandle.DataBase.add(NewSubject);
+		GHandle.DataBase = DataBase;
+		
+		%modify this part
+		GHandle.CurrentDataSet.Subject.id = GHandle.DataBase.Subject(end).id; 
+		
+		GHandle.Main.Tree.StudyTree.SelectedNodes = GHandle.Main.Tree.Study(end).MainNode;
+		%cambiarlo che fara casino 
+		GHandle.CurrentDataSet.Study.id = GHandle.DataBase.Study(end).id;
+		loadmeasure(GHandle);
+	end
 end
 
 

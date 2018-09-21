@@ -5,7 +5,7 @@ function	boxyparser(GHandle)
 
 location = GHandle.Temp.location;
 fast = GHandle.Temp.fast; % default load all data
-GHandle.Temp = [];
+
 
 FILE_info = dir(location);
 %% Preliminar check on file
@@ -217,9 +217,7 @@ FILE_info = dir(location);
 				currentline = fgetl(FILE);
 				data(ii , :) = sscanf(currentline, '%f');
 				if any(checkPoint == ii)
-%					progress = floor(10*ii/nSamples);
-%					set(LoadingBarHandle, 'Name' , [repmat(char(9608),[1 progress]) repmat(' ',[1 10-progress])]);
-					drawnow;
+					GHandle.Temp.loadingBar.Observ1 = floor(10*ii/nSamples);					
 				end
 				
 			end
