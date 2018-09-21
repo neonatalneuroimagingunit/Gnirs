@@ -1,4 +1,4 @@
-function move_time_window(~, eventData, GHandle)
+function move_time_window(~, eventData, GHandle, vIdx)
 % Move rectangle in viewer overall plot
 %
 % Written by Matteo Caffini
@@ -12,43 +12,43 @@ switch eventData.EventName
 	case 'Action'
 	switch eventData.Source.Tag
 		case '<'
-			xmin = GHandle.Viewer.WatchList.timeLim(1) - small_step;
-			xmax = GHandle.Viewer.WatchList.timeLim(2) - small_step;
+			xmin = GHandle.Viewer(vIdx).WatchList.timeLim(1) - small_step;
+			xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) - small_step;
 			
 		case '>'
-			xmin = GHandle.Viewer.WatchList.timeLim(1) + small_step;
-			xmax = GHandle.Viewer.WatchList.timeLim(2) + small_step;
+			xmin = GHandle.Viewer(vIdx).WatchList.timeLim(1) + small_step;
+			xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) + small_step;
 			
 		case '<<'
-			xmin = GHandle.Viewer.WatchList.timeLim(1) - big_step;
-			xmax = GHandle.Viewer.WatchList.timeLim(2) - big_step;
+			xmin = GHandle.Viewer(vIdx).WatchList.timeLim(1) - big_step;
+			xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) - big_step;
 			
 		case '>>'
-			xmin = GHandle.Viewer.WatchList.timeLim(1) + big_step;
-			xmax = GHandle.Viewer.WatchList.timeLim(2) + big_step;
+			xmin = GHandle.Viewer(vIdx).WatchList.timeLim(1) + big_step;
+			xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) + big_step;
 			
 		case 'F'
 			xmin = GHandle.CurrentDataSet.Data.reltime(1);
-			xmax = GHandle.Viewer.WatchList.timeLim(2);
+			xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2);
 			
 		case 'L'
-			xmin = GHandle.Viewer.WatchList.timeLim(1);
+			xmin = GHandle.Viewer(vIdx).WatchList.timeLim(1);
 			xmax = GHandle.CurrentDataSet.Data.reltime(end);
 			
 		case 'max'
-			xmin = GHandle.Viewer.WatchList.timeLim(1);
+			xmin = GHandle.Viewer(vIdx).WatchList.timeLim(1);
 			xmax = str2double(eventData.Source.String);
-			if xmax > GHandle.Viewer.WatchList.timeLim(1)
-				GHandle.Viewer.WatchList.timeLim(2) = xmax;
+			if xmax > GHandle.Viewer(vIdx).WatchList.timeLim(1)
+				GHandle.Viewer(vIdx).WatchList.timeLim(2) = xmax;
 			else
 				msgbox('Invalid value - max must be larger than min')
 			end
 			
 		case 'min'
-			xmax = GHandle.Viewer.WatchList.timeLim(2);
+			xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2);
 			xmin = str2double(eventData.Source.String);
-			if xmin < GHandle.Viewer.WatchList.timeLim(2)
-				GHandle.Viewer.WatchList.timeLim(1) = xmin;
+			if xmin < GHandle.Viewer(vIdx).WatchList.timeLim(2)
+				GHandle.Viewer(vIdx).WatchList.timeLim(1) = xmin;
 			else
 				msgbox('Invalid value - min must be smaller than max')
 			end	
@@ -56,8 +56,24 @@ switch eventData.EventName
 	
 	case 'Hit'
 		xmin = eventData.IntersectionPoint(1);
-		xmax = GHandle.Viewer.WatchList.timeLim(2) - GHandle.Viewer.WatchList.timeLim(1) + xmin;
+		xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) - GHandle.Viewer(vIdx).WatchList.timeLim(1) + xmin;
+end
+if strcmp(GHandle.Viewer(vIdx).LockMultipleWiewer.State,'on')
+	for vIdx = 1 : length(GHandle.Viewer)
+		GHandle.Viewer(vIdx).WatchList.timeLim = [xmin , xmax];
+	end 
+else
+	GHandle.Viewer(vIdx).WatchList.timeLim = [xmin , xmax];
+end
+		
+
+
+
+
+
 end
 
- GHandle.Viewer.WatchList.timeLim = [xmin , xmax];
-end
+
+
+
+

@@ -1,4 +1,4 @@
-function line_callback(hObject, evnt, GHandle)
+function line_callback(hObject, evnt, GHandle, vIdx)
 
 % Change LineWidth in raw_explorer main plot
 %
@@ -7,13 +7,13 @@ function line_callback(hObject, evnt, GHandle)
 % on July, 14th 2017 in Rovereto (TN)
 % Modified by Nadir Pagno
 
-	lineIdx = GHandle.Viewer.timeplot.lines1 == hObject;
+	lineIdx = GHandle.Viewer(vIdx).timeplot.lines1 == hObject;
 
 
-	if lineIdx == GHandle.Viewer.WatchList.edvLine
-		GHandle.Viewer.WatchList.edvLine = ones(size(GHandle.Viewer.WatchList.edvLine));
+	if lineIdx == GHandle.Viewer(vIdx).WatchList.edvLine
+		GHandle.Viewer(vIdx).WatchList.edvLine = ones(size(GHandle.Viewer(vIdx).WatchList.edvLine));
 	else
-		GHandle.Viewer.WatchList.edvLine = lineIdx;
+		GHandle.Viewer(vIdx).WatchList.edvLine = lineIdx;
 	end
 
 end
