@@ -25,7 +25,8 @@ switch class(ObjToDelete)
 		% delete all measure
 		DataBase.Measure(idxMeasure) = [];
 		% delete the data in the study
-		rmdir(ObjToDelete.path, 's')
+		rmdir([ObjToDelete.path 'Measure'], 's')
+		delete([ObjToDelete.path '.mat'])
 		% delete the study
 		DataBase.Study(DataBase.Study == ObjToDelete) = [];
 		
@@ -40,9 +41,10 @@ switch class(ObjToDelete)
 		[~, idxAnalysis] = DataBase.findid(idAnalysis);
 		DataBase.Analysis(idxAnalysis) = [];
 		% delete the data in the measure
-		rmdir(ObjToDelete.path, 's')
+		rmdir([ObjToDelete.path 'Analysis'], 's')
+		delete([ObjToDelete.path '.mat'])
 		% delete the measure
-		DataBase.Measure(DataBase.Measure == ObjToDelete)
+		DataBase.Measure(DataBase.Measure == ObjToDelete) = [];
 		
 	case 'GDBAnalysis'
 		%  remothe the anlysis from the measure 
@@ -51,7 +53,7 @@ switch class(ObjToDelete)
 		idxAnalysis = strcmp(idAnalysis, id);
 		DataBase.Measure(idxMeasure).analysisId(idxAnalysis,:) = [];
 		% delete the data in the analysis 
-		rmdir(ObjToDelete.path, 's')
+		delete([ObjToDelete.path '.mat'])
 		% delete the anlysis 
 		DataBase.Analysis(DataBase.Analysis == ObjToDelete) = [];
 end

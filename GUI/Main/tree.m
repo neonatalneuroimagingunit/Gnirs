@@ -86,9 +86,16 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 			% add right click callback
 			GHandle.Main.Tree.Study(iStudy).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
 			
-			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Add Measure','callback',{@newmeasure ,GHandle});
-			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Modify','callback',{@modifystudy ,GHandle});
-			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,'Label','Delete','callback',{@deletestudy ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,...
+				'Label','Add Measure',....
+				'callback',{@newmeasure ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,...
+				'Label','Modify',...
+				'callback',{@modifystudy ,GHandle});
+			uimenu(GHandle.Main.Tree.Study(iStudy).ContextMenu,...
+				'Label','Delete',...
+				'tag', GHandle.DataBase.Study(iStudy).id,...
+				'callback',{@delete_callback ,GHandle});
 			
 			set(GHandle.Main.Tree.Study(iStudy).MainNode,'UIContextMenu',GHandle.Main.Tree.Study(iStudy).ContextMenu);
 	end		
@@ -117,9 +124,16 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 			% add right click callback
 			GHandle.Main.Tree.Measure(iMeasure).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
 			
-			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,'Label','Add Analysis','callback',{@Newalysis ,GHandle});
-			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,'Label','Modify','callback',{@ModifyMeasure ,GHandle});
-			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,'Label','Delete','callback',{@DeleteMeasure ,GHandle});
+			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
+				'Label','Add Analysis',...
+				'callback',{@Newalysis ,GHandle});
+			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
+				'Label','Modify',...
+				'callback',{@ModifyMeasure ,GHandle});
+			uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
+				'Label','Delete',...
+				'tag', GHandle.DataBase.Measure(iMeasure).id,...
+				'callback',{@delete_callback ,GHandle});
 			
 			set(GHandle.Main.Tree.Measure(iMeasure).MainNode,'UIContextMenu',GHandle.Main.Tree.Measure(iMeasure).ContextMenu);
 			
@@ -148,9 +162,15 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 		% add right click callback
 		GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
 
-		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,'Label','Modify','callback',{@modifyanalysis ,GHandle});
-		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,'Label','Delete','callback',{@deleteanalysis ,GHandle});
-		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,'Label','Develop','callback',{@developanalysis ,GHandle});
+		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,...
+			'Label','Modify','callback',{@modifyanalysis ,GHandle});
+		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,...
+			'Label','Delete',....
+			'tag', GHandle.DataBase.Analysis(iAnalysis).id,...
+			'callback',{@delete_callback ,GHandle});
+		uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,...
+			'Label','Develop',...
+			'callback',{@developanalysis ,GHandle});
 		
 		set(GHandle.Main.Tree.Analysis(iAnalysis).MainNode,'UIContextMenu',GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu);
 			
@@ -231,6 +251,11 @@ function clickcallback(~, Event, GHandle)
 
 end
  
+function delete_callback (handle, ~, GHandle)
 
+	id = handle.Tag;
+	GHandle.DataBase = GHandle.DataBase.delete(id);
+	tree(GHandle);
+end
 
 
