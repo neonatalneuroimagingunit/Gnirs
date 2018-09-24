@@ -1,9 +1,14 @@
 function viewer(GHandle)
+
 % create the viewer idx
 
-vIdx = length(GHandle.Viewer) + 1;
-
-%feature('DefaultCharacterSet', 'UTF8');
+if (isempty(GHandle.Viewer))
+	vIdx = 1;
+	GHandle.Temp.vIdxList = 1;
+else
+	vIdx = max(GHandle.Temp.vIdxList) + 1;
+	GHandle.Temp.vIdxList = [GHandle.Temp.vIdxList ; vIdx];
+end
 
 
 
@@ -951,7 +956,11 @@ end
 
 function close_reqest(Handle, ~, GHandle, vIdx)
 	delete(Handle);
-	GHandle.Viewer(vIdx) = [];
+	GHandle.Temp.vIdxList(GHandle.Temp.vIdxList == vIdx) = [];
+	%GHandle.Viewer(vIdx) = []; add a method to remove the garbage
+	if isempty (GHandle.Temp.vIdxList)
+		GHandle.Viewer = [];
+	end
 end
 
 
@@ -959,7 +968,7 @@ end
 
 function lockmultiplewiewer_callback(handle, ~, GHandle)
 	state = handle.State;
-	for idx = 1 : length(GHandle.Viewer)
+	for idx = GHandle.Temp.vIdxList'
 		GHandle.Viewer(idx).LockMultipleWiewer.State = state;
 	end
 end
