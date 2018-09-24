@@ -58,7 +58,7 @@ switch eventData.EventName
 end
 
 if strcmp(GHandle.Viewer(vIdx).LockMultipleWiewer.State,'on')
-	for vIdx = 1 : length(GHandle.Viewer)
+	for vIdx = GHandle.Temp.vIdxList'
 		GHandle.Viewer(vIdx).WatchList.freqLim = [xmin , xmax];
 	end
 else

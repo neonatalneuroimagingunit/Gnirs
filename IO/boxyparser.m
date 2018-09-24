@@ -2,6 +2,8 @@ function	boxyparser(GHandle)
 % Load a BOXY file data 
 % Inputs: path of the boxy file and a NIRSMeasure data or []
 % 
+dataType2Save = 'DC';
+
 
 location = GHandle.Temp.location;
 fast = GHandle.Temp.fast; % default load all data
@@ -239,13 +241,16 @@ FILE_info = dir(location);
 			Info.BOXY = BOXYdata;
 			Info.Calibration = CalibrationInfo;
 			Info.Distance = Distance;
-			
+				
+			channelNames = Mdata.Properties.VariableNames;
+			columns2Save = contains(channelNames,dataType2Save);			
 			if (length(Mdata.reltime)>500)
 				idx = round(linspace(1,length(Mdata.reltime), 500));
-				SimplyData = Mdata(idx,:);
+				SimplyData = Mdata(idx,columns2Save);
 			else
-				SimplyData = Mdata;
+				SimplyData = Mdata(:,columns2Save);
 			end
+			SimplyData.reltime = Mdata.reltime(idx);
 			
 			GHandle.CurrentDataSet.Measure =  NirsMeasure(...
 				'date', date, ...

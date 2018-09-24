@@ -6,11 +6,11 @@ switch class(ObjToDelete)
 	case 'GDataBase'
 		rmdir(ObjToDelete.path, 's');
 		% store the path
-		path = DataBase.path;
+		pathDataBase = fileparts(DataBase.path);
 		% reset the database 
-		DataBase = GDataBase;
-		DataBase.path = path;
-	
+		DataBase = GDataBase.create(pathDataBase);
+
+		
 	case 'GDBStudy'
 		% find all measure
 		idMeasure = cellstr(ObjToDelete.measureId);

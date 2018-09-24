@@ -59,7 +59,7 @@ switch eventData.EventName
 		xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) - GHandle.Viewer(vIdx).WatchList.timeLim(1) + xmin;
 end
 if strcmp(GHandle.Viewer(vIdx).LockMultipleWiewer.State,'on')
-	for vIdx = 1 : length(GHandle.Viewer)
+	for vIdx = GHandle.Temp.vIdxList'
 		GHandle.Viewer(vIdx).WatchList.timeLim = [xmin , xmax];
 	end 
 else

@@ -13,10 +13,10 @@ GHandle.Viewer(vIdx).timeplot.editmin.String = timeLim(1);
 GHandle.Viewer(vIdx).timeplot.editmax.String = timeLim(2);
 
 %modify rectangle
-rectangle_x = timeLim(1);
-rectangle_y = min(GHandle.CurrentDataSet.nirsdata(:));
-rectangle_w = timeLim(2)-timeLim(1);
-rectangle_h = max(GHandle.CurrentDataSet.nirsdata(:))-min(GHandle.CurrentDataSet.nirsdata(:));
+rectangle_x = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim(1);
+rectangle_y = GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(1);
+rectangle_w = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim(2) - rectangle_x;
+rectangle_h = GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(2) - rectangle_y;
 
 GHandle.Viewer(vIdx).timeplot.rectangle.Position = [rectangle_x rectangle_y rectangle_w rectangle_h];
 
