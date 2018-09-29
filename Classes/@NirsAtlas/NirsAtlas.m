@@ -10,8 +10,11 @@ classdef NirsAtlas
 		name(1,:) char
 		date(1,1) datetime 
 	
+		WhiteMatter struct
 		GreyMatter struct
 		Scalp  struct
+		
+		LandMarks struct
 		
 		flagVoxel logical = false;
 		flagHead logical = false;
