@@ -62,6 +62,10 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 	uimenu(GHandle.Main.Tree.ProbeContextMenu,'Label','AddProbe','callback',{@newprobe, GHandle});
 	set(GHandle.Main.Tree.ProbeTree,'UIContextMenu',GHandle.Main.Tree.ProbeContextMenu);
 	
+	% add the new atlas right click
+	GHandle.Main.Tree.AtlasContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); 
+	uimenu(GHandle.Main.Tree.AtlasContextMenu,'Label','AddAtlas','callback',{@newatlas, GHandle});
+	set(GHandle.Main.Tree.AtlasTree,'UIContextMenu',GHandle.Main.Tree.AtlasContextMenu);
 	
 
 	%create a node for each study
