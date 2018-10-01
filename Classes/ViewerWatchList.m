@@ -6,5 +6,7 @@ classdef ViewerWatchList < handle
 	  
 	  colorLine
 	  edvLine
+	  
+	  data2Plot
    end
 end
