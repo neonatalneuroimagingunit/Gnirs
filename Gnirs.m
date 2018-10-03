@@ -1,4 +1,7 @@
+function Gnirs()
+
 %% only for test
+
 close all
 clear all %#ok<CLALL>
 clc
@@ -112,3 +115,4 @@ end
 GHandle.TempWindow = [];
 GHandle.Temp = [];
 clearvars('-except','GHandle');
+end

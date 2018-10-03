@@ -793,16 +793,20 @@ GHandle.Viewer(vIdx).WatchList.colorLine = sorting_colors(20, sortingmethod);
 
 %% Time & Spectrum Plot
 % Main plot
-axes(GHandle.Viewer(vIdx).timeplot.bigaxes1)
-axis tight
-cla;
-hold on
+% axes(GHandle.Viewer(vIdx).timeplot.bigaxes1)
+% axis tight
+% cla;
+% hold on
 
-GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'data2Plot','PostSet',@(src,evnt)dataplot(src,evnt,GHandle, vIdx));
+GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'time2Plot','PostSet',@(src,evnt)timeplot(src,evnt,GHandle, vIdx));
+GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'spectrum2Plot','PostSet',@(src,evnt)spectrumplot(src,evnt,GHandle, vIdx));
+GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'timefreq2Plot','PostSet',@(src,evnt)timefreqplot(src,evnt,GHandle, vIdx));
 GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)change_width(src,evnt,GHandle, vIdx));
 GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'timeLim','PostSet',@(src,evnt)set_time_lim(src,evnt,GHandle, vIdx));
 
-GHandle.Viewer(vIdx).WatchList.data2Plot = GHandle.Viewer(vIdx).Data;
+GHandle.Viewer(vIdx).WatchList.time2Plot = GHandle.Viewer(vIdx).Data;
+
+[power, f] = pspectrum(ydata, GHandle.CurrentDataSet.Measure.updateRate);
 %% Time-Frequency plot
 % Main plot
 axes(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes1)
