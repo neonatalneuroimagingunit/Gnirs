@@ -1,5 +1,5 @@
-function DBProbe = modify(DBProbe,NewProbe
-)
+function DBProbe = modify(DBProbe,NewProbe)
+
 %ADDMODIFYSUBJECT add or modify a subject present in the database
 
 

@@ -7,6 +7,8 @@ classdef ViewerWatchList < handle
 	  colorLine
 	  edvLine
 	  
-	  data2Plot
+	  time2Plot
+	  spectrum2Plot
+	  timefreq2Plot
    end
 end
