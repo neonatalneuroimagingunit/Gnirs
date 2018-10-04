@@ -29,6 +29,7 @@ for lineIdx = 1 : length(edvLine)
 end
 if sum(edvLine) == 1
 	GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.Visible = 'on';	
+	cla(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes);
 	GHandle.Viewer(vIdx).timefrequencyplot.text.Visible = 'off';
  	GHandle.Viewer(vIdx).WatchList.timefreq2Plot = edvLine;
 	
@@ -40,7 +41,7 @@ if sum(edvLine) == 1
 	
 else
 	GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.Visible = 'off';
-	GHandle.Viewer(vIdx).timefrequencyplot.Surface.Visible = 'off';
+	cla(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes);
 	GHandle.Viewer(vIdx).timefrequencyplot.text.Visible = 'on';
 end
 
