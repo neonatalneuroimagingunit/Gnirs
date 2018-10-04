@@ -61,7 +61,7 @@ ColumnName = cellstr([repmat('ch',[nchannels,1]),num2str([1:nchannels]','%.2d')]
 
 
 Mdata = array2table(s,'VariableNames',ColumnName(1:end));  %save all
-Mdata.reltime = tline-min(tline);
+Mdata.Time = tline-min(tline);
 
 Measure = NIRSMeasure (...
 				'MeasureInfo.Date', datetime, ...

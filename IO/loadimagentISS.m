@@ -1,8 +1,11 @@
-function	boxyparser(GHandle) 
+function loadimagentISS(GHandle) 
 % Load a BOXY file data 
 % Inputs: path of the boxy file and a NIRSMeasure data or []
 % 
 dataType2Save = 'DC';
+
+datatype = {'AC','DC', 'Ph'};
+wavelength = [830, 690];
 
 
 location = GHandle.Temp.location;
@@ -230,12 +233,14 @@ FILE_info = dir(location);
 		
 		
 		Duration = Mdata.time(end) - Mdata.time(1); %duration of the intair measure
-		Mdata.reltime = Mdata.time - Mdata.time(1); %create the column of relative time 
+		reltime = array2table((Mdata.time - Mdata.time(1)),'VariableNames', {'Time'}); %create the column of relative time 
 
-			
+		variableIdx = contains(Mdata.Properties.VariableNames,datatype);
+		Mdata = [reltime, Mdata(:,variableIdx)];
 		%%sampling frequency check
-		Aquisitioninfo.fscheck = abs(Aquisitioninfo.UpdateRate-1./mean(diff(Mdata.reltime)))./Aquisitioninfo.UpdateRate; %check if the frequency is correct (inserire una deviazione standard?)
+		Aquisitioninfo.fscheck = abs(Aquisitioninfo.UpdateRate-1./mean(diff(reltime{:,1})))./Aquisitioninfo.UpdateRate; %check if the frequency is correct (inserire una deviazione standard?)
 	
+		channel = (size(Mdata,2) - 1) / (length(datatype)*length(wavelength));
 %% Save all in a NIRS measure variable
 			Info = Aquisitioninfo;
 			Info.BOXY = BOXYdata;
@@ -244,18 +249,21 @@ FILE_info = dir(location);
 				
 			channelNames = Mdata.Properties.VariableNames;
 			columns2Save = contains(channelNames,dataType2Save);			
-			if (length(Mdata.reltime)>500)
-				idx = round(linspace(1,length(Mdata.reltime), 500));
+			if (size(reltime,1)>500)
+				idx = round(linspace(1,size(reltime,1), 500));
 				SimplyData = Mdata(idx,columns2Save);
 			else
 				SimplyData = Mdata(:,columns2Save);
 			end
-			SimplyData.reltime = Mdata.reltime(idx);
+			SimplyData.Time = reltime(idx,:);
 			
 			GHandle.CurrentDataSet.Measure =  NirsMeasure(...
 				'date', date, ...
-				'timeLength',Duration, ...
-				'updaterate',Aquisitioninfo.UpdateRate,...
+				'timeLength', Duration, ...
+				'wavelength', wavelength,...
+				'datatype', datatype,...
+				'channel',channel,...
+				'updaterate', Aquisitioninfo.UpdateRate,...
 				'Info', Info ...                                              
 				);
 		
