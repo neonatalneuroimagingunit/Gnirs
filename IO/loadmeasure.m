@@ -12,7 +12,7 @@ function loadmeasure(GHandle)
 	addlistener(GHandle.Temp.loadingBar,'Observ1','PostSet',@(src,evnt)set_tree_name(src,evnt,GHandle));
 %open pharser
 	GHandle.Temp.fast = false;
-	boxyparser(GHandle);
+	loadimagentISS(GHandle);
 	
 %create the new variable
 

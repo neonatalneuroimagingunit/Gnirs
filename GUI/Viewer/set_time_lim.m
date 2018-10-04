@@ -28,6 +28,6 @@ GHandle.Viewer(vIdx).timeplot.txt_seconds.String = [num2str(timeLim(2)-timeLim(1
 GHandle.Viewer(vIdx).timeplot.txt_samples.Position = [txt_x, txt_y(2)];
 GHandle.Viewer(vIdx).timeplot.txt_samples.String = [num2str(round((timeLim(2)-timeLim(1))*GHandle.CurrentDataSet.Measure.updateRate)) ' samples'];
 
-
+GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.XLim = timeLim;
 end
 

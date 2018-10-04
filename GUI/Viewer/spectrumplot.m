@@ -6,54 +6,51 @@ foregroundColor = GHandle.Preference.Figure.foregroundColor;
 Data = eventData.AffectedObject.spectrum2Plot;
 lineLabels = Data.Properties.VariableNames(2:end);
 
-GHandle.CurrentDataSet.power = power;
-GHandle.CurrentDataSet.freq = f;
+nLines = size(Data,2) - 1;% one is the time column
 
-for ii = 1:1:nchannels
-    %temp = smooth(power(:,ii), 5);
-    temp = power(:,ii);
-    %temp = power(:,ii)/maxpower(ii);
-    GHandle.Viewer(vIdx).spectrumplot.lines1(ii) = plot(f, temp, 'LineWidth', 1, 'LineStyle', '-');
-    GHandle.Viewer(vIdx).spectrumplot.lines1(ii).Color = GHandle.Viewer(vIdx).WatchList.colorLine(ii,:);
-    GHandle.Viewer(vIdx).spectrumplot.lines1(ii).DisplayName = channelLabels{ii};
-    aa = aa+1;
+cla(GHandle.Viewer(vIdx).spectrumplot.bigaxes1);
+cla(GHandle.Viewer(vIdx).spectrumplot.smallaxes);
+
+
+for iLines = 1 : nLines 
+   GHandle.Viewer(vIdx).spectrumplot.lines1(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
+							'LineWidth', 1, 'LineStyle', '-',...
+							'buttonDownFcn', {@line_callback , GHandle, vIdx},...
+							'Color', GHandle.Viewer(vIdx).WatchList.colorLine(iLines,:),...
+							'DisplayName', lineLabels{iLines},...
+							'Tag', lineLabels{iLines},...
+							'Parent', GHandle.Viewer(vIdx).spectrumplot.bigaxes1);
+					
+    GHandle.Viewer(vIdx).spectrumplot.lines2(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
+						'LineWidth', 1, 'LineStyle', '-',...
+						'Color', GHandle.Viewer(vIdx).WatchList.colorLine(iLines,:),...
+						'HitTest', 'off',...
+						'Parent', GHandle.Viewer(vIdx).spectrumplot.smallaxes);
 end
-%GHandle.Viewer(vIdx).spectrumplot.bigaxes1.YAxis.Exponent = 0;
-GHandle.Viewer(vIdx).spectrumplot.lines1_selection = findall(GHandle.Viewer(vIdx).spectrumplot.lines1, 'Type', 'Line');
-set(GHandle.Viewer(vIdx).spectrumplot.lines1_selection, 'buttonDownFcn', {@line_callback, GHandle, vIdx})
+ GHandle.Viewer(vIdx).spectrumplot.lines1((nLines+1):end) = [];
+ GHandle.Viewer(vIdx).spectrumplot.lines2((nLines+1):end) = [];
+
 GHandle.Viewer(vIdx).spectrumplot.bigaxes1.XLabel.String = 'Frequency (Hz)';
 GHandle.Viewer(vIdx).spectrumplot.bigaxes1.YLabel.String = 'Power (%)';
-%GHandle.Viewer(vIdx).spectrumplot.bigaxes1.YLim = [0 0.1];
-% x2 = 1:1:size(nirsdata,1);
-% %y2 = 1:1:size(nirsdata,1);
-% y2 = DataNIRS.Data.reltime/GHandle.CurrentDataSet.Measure.updateRate;
-% line(x2, y2, 'Parent', GHandle.Viewer(vIdx).spectrumplot.bigaxes2, 'Color', 'none')
-% GHandle.Viewer(vIdx).spectrumplot.bigaxes2.XLabel.String = 'Time (samples)';
-% GHandle.Viewer(vIdx).spectrumplot.bigaxes2.YTickLabel = [];
-% GHandle.Viewer(vIdx).spectrumplot.bigaxes2.XLim = [timeline_samples(1) timeline_samples(end)];
-uistack(GHandle.Viewer(vIdx).spectrumplot.spectrumaxes,'top');
-% Overall plot
-axes(GHandle.Viewer(vIdx).spectrumplot.smallaxes)
-axis tight
-cla;
-hold on
-for ii = 1:1:size(nirsdata,2)
-    %temp = smooth(power(:,ii), 5);
-    temp = power(:,ii);
-    %temp = power(:,ii)/maxpower(ii);
-    GHandle.Viewer(vIdx).spectrumplot.lines2(ii) = plot(f, temp, 'LineWidth', 1, 'LineStyle', '-');
-    set(GHandle.Viewer(vIdx).spectrumplot.lines2(ii), 'Color', GHandle.Viewer(vIdx).WatchList.colorLine(ii,:));
-    aa = aa+1;
+
+GHandle.Viewer(vIdx).spectrumplot.rectangle = rectangle(GHandle.Viewer(vIdx).spectrumplot.smallaxes,...
+			'Curvature', [0 0],...
+			'EdgeColor', foregroundColor);
+
+GHandle.Viewer(vIdx).WatchList.freqLim = [Data{1,1},Data{end,1}];
+
 end
 
-GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'freqLim','PostSet',@(src,evnt)set_freq_lim(src, evnt, GHandle, vIdx));
 
-GHandle.Viewer(vIdx).spectrumplot.rectangle = rectangle('Curvature', [0 0], 'EdgeColor', foregroundColor);
+function line_callback(hObject, ~, GHandle, vIdx)
 
-GHandle.Viewer(vIdx).WatchList.freqLim = [f(1),...
-									f(end)];
+	lineIdx = GHandle.Viewer(vIdx).spectrumplot.lines1 == hObject;
+	
 
-GHandle.Viewer(vIdx).spectrumplot.lines2_selection = findall(GHandle.Viewer(vIdx).spectrumplot.lines2, 'Type', 'Line');
-set(GHandle.Viewer(vIdx).spectrumplot.lines2_selection, 'buttonDownFcn', {@move_spectrum_window, GHandle, vIdx});
+	if lineIdx == GHandle.Viewer(vIdx).WatchList.edvLine
+		GHandle.Viewer(vIdx).WatchList.edvLine = ones(size(GHandle.Viewer(vIdx).WatchList.edvLine));
+	else
+		GHandle.Viewer(vIdx).WatchList.edvLine = lineIdx;
+	end
+
 end
-
