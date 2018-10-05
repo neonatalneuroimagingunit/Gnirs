@@ -1,4 +1,4 @@
-function DataBase = add(DataBase, Object2Add, tag)
+function DataBase = add(DataBase, Object2Add, tag, Data2Save)
 
 	objType = class(Object2Add);
 		switch objType
@@ -85,9 +85,31 @@ function DataBase = add(DataBase, Object2Add, tag)
 					end
 				end
 				
+				
 			case 'NirsAtlas'
-
-		
+				varName = 'Atlas';
+				if ~isempty(Object2Add.name)
+					[DBObject, DataBase] = DataBase.newatlas('tag',Object2Add.name);
+				else
+					if (nargin > 2) 
+						[DBObject, DataBase] = DataBase.newatlas('tag',tag);
+					else
+						[DBObject, DataBase] = DataBase.newatlas;
+					end
+				end
+				
+				if Object2Add.flagVoxel
+					voxelPath = fullfile(DBObject.path, 'Voxel');
+					Voxel = Data2Save.Voxel;%#ok
+					save(voxelPath, 'Voxel')
+					
+				end
+					
+				if Object2Add.flagHead
+					headPath = fullfile(DBObject.path, 'HeadAtlas');
+					HeadAtlas = Data2Save.HeadAtlas;%#ok
+					save(headPath, 'HeadAtlas')
+				end
 
 			otherwise
 				error('type %s not reconized',objType)
