@@ -19,6 +19,7 @@ classdef NirsAtlas
 		flagVoxel logical = false;
 		flagHead logical = false;
 		
+		note (1,:) char
 	end
 	
 	methods
