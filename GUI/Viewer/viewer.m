@@ -14,7 +14,6 @@ sortingmethod = 'sortnomo';
 dataType = GHandle.CurrentDataSet.Measure.dataType;
 
 GHandle.Viewer(vIdx).Data = GHandle.CurrentDataSet.Data;
-
 % Set UI objects size
 
 

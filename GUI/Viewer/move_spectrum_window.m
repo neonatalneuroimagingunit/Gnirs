@@ -29,12 +29,12 @@ switch eventData.EventName
 			xmax = GHandle.Viewer(vIdx).WatchList.freqLim(2) + big_step;
 			
 		case 'F'
-			xmin = GHandle.CurrentDataSet.freq(1);
+			xmin = 0;
 			xmax = GHandle.Viewer(vIdx).WatchList.freqLim(2);
 			
 		case 'L'
 			xmin = GHandle.Viewer(vIdx).WatchList.freqLim(1);
-			xmax = GHandle.CurrentDataSet.freq(end);
+			xmax = GHandle.CurrentDataSet.Measure.updateRate/2;
 			
 		case 'max'
 			xmin = GHandle.Viewer(vIdx).WatchList.freqLim(1);
