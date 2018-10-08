@@ -78,10 +78,10 @@ function newprobe(~, ~, GHandle)
 		'Position',[0.5 0.3 0.4 0.4],...
 		'NextPlot','add',...
 		'Visible', 'off');
-	set(GHandle.TempWindow.NewProbeAxes,'CameraViewAngle',get(GHandle.TempWindow.NewProbeAxes,'CameraViewAngle'));
-	set(GHandle.TempWindow.NewProbeAxes,'PlotBoxAspectRatio',get(GHandle.TempWindow.NewProbeAxes,'PlotBoxAspectRatio'));
-	set(GHandle.TempWindow.NewProbeAxes,'DataAspectRatio',get(GHandle.TempWindow.NewProbeAxes,'DataAspectRatio'));
-	rotate3d(GHandle.TempWindow.NewProbeAxes, 'on');
+% 	set(GHandle.TempWindow.NewProbeAxes,'CameraViewAngle',get(GHandle.TempWindow.NewProbeAxes,'CameraViewAngle'));
+% 	set(GHandle.TempWindow.NewProbeAxes,'PlotBoxAspectRatio',get(GHandle.TempWindow.NewProbeAxes,'PlotBoxAspectRatio'));
+% 	set(GHandle.TempWindow.NewProbeAxes,'DataAspectRatio',get(GHandle.TempWindow.NewProbeAxes,'DataAspectRatio'));
+% 	rotate3d(GHandle.TempWindow.NewProbeAxes, 'on');
 	
 	GHandle.TempWindow.NewProbe2DAxes = axes(...      
 		'Parent',GHandle.TempWindow.NewProbeFigure,...
