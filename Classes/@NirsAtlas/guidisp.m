@@ -10,6 +10,10 @@ function  guidisp(Atlas, GHandle , editableField)
 	textFontSize = GHandle.Preference.Font.sizeM;
 	
 	idx = GHandle.Temp.idx;
+	fontName = 'Arial'; %'Lobster Two';
+	
+	
+	
 
 	% create the figure and the editable field if is not specify
 	if ~exist('editableField','var')
@@ -152,9 +156,10 @@ function  guidisp(Atlas, GHandle , editableField)
 		Atlas.LandMarks.coordinates(:,1),... 
 		Atlas.LandMarks.coordinates(:,2),... 
 		Atlas.LandMarks.coordinates(:,3),...
+		'MarkerSize',20,...
 		'LineStyle', 'none',...
-		'Visible', 'off',...
-		'Marker','.',...
+		'Visible', 'on',...
+		'Marker','none',...
 		'Color',landMarkColor,...
 		'Parent', GHandle.Main.Display.SubPanel(idx).Axes);
 
@@ -164,6 +169,9 @@ function  guidisp(Atlas, GHandle , editableField)
 		Atlas.LandMarks.coordinates(:,2),... 
 		Atlas.LandMarks.coordinates(:,3),...
 		Atlas.LandMarks.names,...
+		'FontName',fontName,...
+		'Color','g',...
+		'FontWeight','bold',...
 		'Visible', 'off');
 
 	GHandle.Main.Display.SubPanel(idx).LandMarkCheckBox = uicontrol(...
@@ -202,7 +210,7 @@ function landmarkcheckbox_callback(~, evnt, GHandle , idx)
 		
 	if (evnt.Source.Value)
 		GHandle.Main.Display.SubPanel(idx).LandMark.Marker = '.';
-		GHandle.Main.Display.SubPanel(idx).LandMark.Color = 'r';
+		GHandle.Main.Display.SubPanel(idx).LandMark.Color = 'g';
 	else
 		GHandle.Main.Display.SubPanel(idx).LandMark.Marker = 'none';
 	end
@@ -213,17 +221,15 @@ end
 function landmarktextcheckbox_callback(~, evnt, GHandle , idx)
 	nText = length (GHandle.Main.Display.SubPanel(idx).LandMarkText);
 	if (evnt.Source.Value)
-		for iText = 1 : nText
-			GHandle.Main.Display.SubPanel(idx).LandMarkText(iText).Visible = 'on';
-		end
+		set(GHandle.Main.Display.SubPanel(idx).LandMarkText, {'Visible'},...
+			repmat( {'on'},size(GHandle.Main.Display.SubPanel(idx).LandMarkText)));
 	else
-		for iText = 1 : nText
-			GHandle.Main.Display.SubPanel(idx).LandMarkText(iText).Visible = 'off';
-		end
+		set(GHandle.Main.Display.SubPanel(idx).LandMarkText, {'Visible'},...
+			repmat( {'off'}, size(GHandle.Main.Display.SubPanel(idx).LandMarkText)));
 	end
 
 end
-
+	
 function edvlistbox_callback(~, evnt, GHandle , idx)
 nameList = {'White', 'Gray',  'Scalp'};
 nameIdx = evnt.Source.Value;
