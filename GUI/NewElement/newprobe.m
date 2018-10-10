@@ -170,6 +170,9 @@ atlasScaleFactor = 0.98;
 scalpColor = [200 200 200]./255;
 selectedAtlas = Event.NewSelectedIndex;
 if any(selectedAtlas)
+	GHandle.TempWindow.SourceList.String = [];
+	GHandle.TempWindow.ChannelList.Data = {};
+	GHandle.TempWindow.DetectorList.String = [];
     if (selectedAtlas == 1)
         GHandle.TempWindow.NewProbeRotateButton.Visible = 'off';
         cla(GHandle.TempWindow.NewProbeAxes);
@@ -268,7 +271,9 @@ else
     nDet = size(GHandle.TempWindow.DetectorList.String,1);
     cc = 1;
     GHandle.TempWindow.ChannelList.Data = {};
-    delete(GHandle.TempWindow.Channels);
+	if isfield(GHandle.TempWindow,'Channels')
+		delete(GHandle.TempWindow.Channels);
+	end
     if isfield(GHandle.TempWindow,'Sources')
         delete(GHandle.TempWindow.Sources);
     end
