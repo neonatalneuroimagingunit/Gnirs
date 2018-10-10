@@ -2,7 +2,8 @@ function newprobe(~, ~, GHandle)
 
 figureSize = GHandle.Preference.Figure.sizeLarge;
 AtlasList = GHandle.DataBase.Atlas;
-axesBackgroundColor = 'k';
+axesBackgroundColor = 'w';
+GHandle.TempWindow.Zoom = false;
 
 GHandle.TempWindow.NewProbeFigure = figure(...
     'position', figureSize,...
@@ -14,8 +15,8 @@ GHandle.TempWindow.NewProbeFigure = figure(...
     'DoubleBuffer', 'on', ...
     'DockControls', 'off', ...
     'Renderer', 'OpenGL',...
-    'Visible', 'off' ...
-    );
+    'Visible', 'off', ...
+    'DeleteFcn', {@close_figure, GHandle});
 
 GHandle.TempWindow.NewProbeName = uiw.widget.EditableText(...
     'Parent',GHandle.TempWindow.NewProbeFigure,...=
@@ -66,7 +67,7 @@ GHandle.TempWindow.NewProbeZoomButton = uicontrol('Style', 'togglebutton',...
 GHandle.TempWindow.AtlasWidget = uiw.widget.EditablePopup(...
     'Parent',GHandle.TempWindow.NewProbeFigure,...
     'Items', ['2D Probe',{AtlasList.tag}],...
-    'UserData',[{'NoAtlas'}, {AtlasList}],...  % fix here, cat does not work properly
+    'UserData',[{'NoAtlas'}; num2cell(AtlasList)],...  % fix here, cat does not work properly
     'Label','Atlas',...
     'LabelLocation','top',...
     'Callback',@(Handle,Event)atlas_widget_callback(Handle,Event,GHandle),...
@@ -87,7 +88,7 @@ GHandle.TempWindow.DetectorListTitle = uicontrol('Style', 'text',...
     'Visible','on',...
     'Units', 'normalize', ...
     'HorizontalAlignment', 'left', ...
-    'Position', [0.38 0.9 0.08 0.02]);
+    'Position', [0.36 0.9 0.08 0.02]);
 
 GHandle.TempWindow.SourceList = uicontrol(...
     'Parent', GHandle.TempWindow.NewProbeFigure, ...
@@ -177,9 +178,44 @@ if any(selectedAtlas)
         GHandle.TempWindow.NewProbeRotateButton.Visible = 'off';
         cla(GHandle.TempWindow.NewProbeAxes);
         GHandle.TempWindow.NewProbeAxes.View = [0 90];
+        x = -50:1:50;
+        y = -50:1:50;
+        [X,Y] = meshgrid(x,y);
+        X1 = X(:);
+        Y1 = Y(:);
+        X2 = X(1:10:end,1:10:end);
+        Y2 = Y(1:10:end,1:10:end);
+        X2 = X2(:);
+        Y2 = Y2(:);
+        if isfield(GHandle.TempWindow, 'LandMark')
+            GHandle.TempWindow.LandMark(size(X2,1)+1:end) = [];
+        end
+        
+%         for iLandMark = 1:1:size(X1,1)
+%             GHandle.TempWindow.LandMark(iLandMark) = plot(X1(iLandMark),Y1(iLandMark), ...
+%                 'LineStyle', 'none',...
+%                 'Marker','.',...
+%                 'Color','g',...
+%                 'MarkerSize', 10, ...
+%                 'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
+%                 'Parent', GHandle.TempWindow.NewProbeAxes, ...
+%                 'Visible', 'off');
+%         end
+        for iLandMark = 1:1:size(X2,1)
+            GHandle.TempWindow.LandMark(iLandMark) = plot3(X2(iLandMark),Y2(iLandMark), 0, ...
+                'tag', [num2str(X2(iLandMark)) ',' num2str(Y2(iLandMark))],...
+                'LineStyle', 'none',...
+                'Marker','.',...
+                'Color','g',...
+                'MarkerSize', 20, ...
+                'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
+                'Parent', GHandle.TempWindow.NewProbeAxes, ...
+                'Visible', 'on');
+            %GHandle.TempWindow.LandMark.Tag{iLandMark} = [num2str(X2(iLandMark)) ',' num2str(Y2(iLandMark))];
+        end
     else
-        %Atlas = Handle.UserData{selectedAtlas}.load;
-        Atlas = Handle.UserData{2}(selectedAtlas-1).load; % temporary fix (see line 69, this file)
+        Atlas = Handle.UserData{selectedAtlas}.load;
+        %Atlas = Handle.UserData{2}(selectedAtlas-1).load; % temporary fix (see line 69, this file)
         
         GHandle.TempWindow.NewProbeRotateButton.Visible = 'on';
         GHandle.TempWindow.NewProbeZoomButton.Visible = 'on';
@@ -236,8 +272,8 @@ distanceThreshold = 30;
 
 colortextintable = @(colorintable,textintable) ['<html><font color=',colorintable,'>',textintable,'</font></html>'];
 
-if GHandle.TempWindow.NewProbeZoomButton.Value
-    
+%if GHandle.TempWindow.NewProbeZoomButton.Value
+if GHandle.TempWindow.Zoom
     GHandle.TempWindow.Temp.CameraTarget = GHandle.TempWindow.NewProbeAxes.CameraTarget;
     GHandle.TempWindow.Temp.CameraPosition = GHandle.TempWindow.NewProbeAxes.CameraPosition;
     GHandle.TempWindow.Temp.CameraViewAngle = GHandle.TempWindow.NewProbeAxes.CameraViewAngle;
@@ -246,13 +282,7 @@ if GHandle.TempWindow.NewProbeZoomButton.Value
     GHandle.TempWindow.NewProbeAxes.CameraPosition = 33.*Evnt.IntersectionPoint;
     GHandle.TempWindow.NewProbeAxes.CameraViewAngle = 1;
     
-%     n = 9;
-%     [xs, index] = sort(x);
-%     result      = x(sort(index(1:n)))
-    
-    
-    
-    
+    GHandle.TempWindow.Zoom = false;
 else
     if all(Handle.Color == markColor)
         Handle.Color = 'r';
@@ -273,15 +303,19 @@ else
     GHandle.TempWindow.ChannelList.Data = {};
 	if isfield(GHandle.TempWindow,'Channels')
 		delete(GHandle.TempWindow.Channels);
+        GHandle.TempWindow.Channels(2:end) = [];
 	end
     if isfield(GHandle.TempWindow,'Sources')
         delete(GHandle.TempWindow.Sources);
+        GHandle.TempWindow.Sources(2:end) = [];
     end
     if isfield(GHandle.TempWindow,'Detectors')
         delete(GHandle.TempWindow.Detectors);
+        GHandle.TempWindow.Detectors(2:end) = [];
     end
     if isfield(GHandle.TempWindow,'Chs')
         delete(GHandle.TempWindow.Chs);
+        GHandle.TempWindow.Chs(2:end) = [];
     end 
     activeMask = [];
     for ss = 1:1:nSrc
@@ -317,27 +351,34 @@ else
                 'LineWidth', 2, ...
                 'HitTest', 'off', ...
                 'Color', 'k');
-            GHandle.TempWindow.Sources(cc) = text(tempSrc(1), tempSrc(2), tempSrc(3), ['  ' num2str(ss)], ...
-                'FontWeight', 'bold', ...
-                'FontSize', 10, ...
-                'HitTest', 'off', ...
-                'Color', sourceColor);
-            GHandle.TempWindow.Detectors(cc) = text(tempDet(1), tempDet(2), tempDet(3), ['  ' num2str(dd)], ...
-                'FontWeight', 'bold', ...
-                'FontSize', 10, ...
-                'HitTest', 'off', ...
-                'Color', detectorColor);
-            GHandle.TempWindow.Chs(cc) = text(tempCh(1), tempCh(2), tempCh(3), ['  ' num2str(cc)], ...
-                'FontWeight', 'bold', ...
-                'FontSize', 10, ...
-                'HitTest', 'off', ...
-                'Color', 'k');
+%             GHandle.TempWindow.Sources(cc) = text(tempSrc(1), tempSrc(2), tempSrc(3), ['  ' num2str(ss)], ...
+%                 'FontWeight', 'bold', ...
+%                 'FontSize', 10, ...
+%                 'HitTest', 'off', ...
+%                 'Color', sourceColor);
+%             GHandle.TempWindow.Detectors(cc) = text(tempDet(1), tempDet(2), tempDet(3), ['  ' num2str(dd)], ...
+%                 'FontWeight', 'bold', ...
+%                 'FontSize', 10, ...
+%                 'HitTest', 'off', ...
+%                 'Color', detectorColor);
+%             GHandle.TempWindow.Chs(cc) = text(tempCh(1), tempCh(2), tempCh(3), ['  ' num2str(cc)], ...
+%                 'FontWeight', 'bold', ...
+%                 'FontSize', 10, ...
+%                 'HitTest', 'off', ...
+%                 'Color', 'k');
             cc = cc + 1;
         end
     end
-%     if cc > 1
-%         activeMask = ~logical(cell2mat(GHandle.TempWindow.ChannelList.Data(:,4)));
-%         C = cell(sum(activeMask),1);
+    %uistack(GHandle.TempWindow.Sources,'bottom');
+    %uistack(GHandle.TempWindow.Detectors,'bottom');
+    %uistack(GHandle.TempWindow.Chs,'bottom');
+    if any(isvalid(GHandle.TempWindow.Channels))
+        uistack(GHandle.TempWindow.Channels,'bottom');
+    end
+    %GHandle.TempWindow.Channels(~isvalid(GHandle.TempWindow.Channels)) = [];
+    %     if cc > 1
+    %         activeMask = ~logical(cell2mat(GHandle.TempWindow.ChannelList.Data(:,4)));
+    %         C = cell(sum(activeMask),1);
 %         C(:) = {'none'};
 %         set(GHandle.TempWindow.Channels(activeMask),{'LineStyle'}, C);
 %     end
@@ -355,17 +396,24 @@ end
 
 function zoom_Atlas(Handle, ~, GHandle)
 if Handle.Value
+    GHandle.TempWindow.Temp.CameraTarget = GHandle.TempWindow.NewProbeAxes.CameraTarget;
+    GHandle.TempWindow.Temp.CameraPosition = GHandle.TempWindow.NewProbeAxes.CameraPosition;
+    GHandle.TempWindow.Temp.CameraViewAngle = GHandle.TempWindow.NewProbeAxes.CameraViewAngle;
     Handle.String = 'Zoom Out';
     GHandle.TempWindow.NewProbeRotateButton.Value = 0;
     rotate3d(GHandle.TempWindow.NewProbeAxes, 'off');
-    
+    GHandle.TempWindow.Zoom = true;
 else
     Handle.String = 'Zoom In';
     GHandle.TempWindow.NewProbeAxes.CameraTarget = GHandle.TempWindow.Temp.CameraTarget;
     GHandle.TempWindow.NewProbeAxes.CameraPosition = GHandle.TempWindow.Temp.CameraPosition;
     GHandle.TempWindow.NewProbeAxes.CameraViewAngle = GHandle.TempWindow.Temp.CameraViewAngle;
-    
+    GHandle.TempWindow.Zoom = false;
 end
 end
 
+function close_figure(Handle, ~, GHandle)
+    delete(Handle);
+    GHandle.TempWindow = [];
+end
 
