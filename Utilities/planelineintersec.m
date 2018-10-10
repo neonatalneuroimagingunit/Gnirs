@@ -14,5 +14,3 @@ x(1) = linecoff(1).* k + lineinters(1);
 x(2) = linecoff(2).* k + lineinters(2);
 x(3) = linecoff(3).* k + lineinters(3);
 end
-
-% dtjrszmng
