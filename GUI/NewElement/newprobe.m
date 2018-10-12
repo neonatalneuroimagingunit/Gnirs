@@ -37,7 +37,6 @@ GHandle.TempWindow.NewProbeNote = uiw.widget.EditableText(...
     'Units','normalized',...
     'Position',[0.05 0.5 0.20 0.20]);
 
-
 GHandle.TempWindow.NewProbeLoadButton = uicontrol('Style', 'pushbutton',...
     'Parent', GHandle.TempWindow.NewProbeFigure, ...
     'String', 'Save',...
@@ -49,7 +48,7 @@ GHandle.TempWindow.NewProbeLoadButton = uicontrol('Style', 'pushbutton',...
 GHandle.TempWindow.AtlasWidget = uiw.widget.EditablePopup(...
     'Parent',GHandle.TempWindow.NewProbeFigure,...
     'Items', ['2D Probe',{AtlasList.tag}],...
-    'UserData',[{'NoAtlas'}; num2cell(AtlasList)],...  % fix here, cat does not work properly
+    'UserData',[{'NoAtlas'}; num2cell(AtlasList)],...
     'Label','Atlas',...
     'LabelLocation','top',...
     'Callback',@(Handle,Event)atlas_widget_callback(Handle,Event,GHandle),...
@@ -125,7 +124,7 @@ GHandle.TempWindow.NewProbeAxes = axes(...
 GHandle.TempWindow.NewProbeRotateButton = uicontrol('Style', 'togglebutton',...
     'Parent', GHandle.TempWindow.SgaPuffoPanel, ...
     'String', 'R',...
-    'Visible','off',...
+    'Enable','off',...
     'Units', 'normalize', ...
     'Position', [0 0.95 0.05 0.05],...
     'Callback', {@rotate_Atlas ,GHandle}...
@@ -134,7 +133,7 @@ GHandle.TempWindow.NewProbeRotateButton = uicontrol('Style', 'togglebutton',...
 GHandle.TempWindow.NewProbeZoomButton = uicontrol('Style', 'togglebutton',...
     'Parent', GHandle.TempWindow.SgaPuffoPanel, ...
     'String', 'Z+',...
-    'Visible','off',...
+    'Enable','off',...
     'Units', 'normalize', ...
     'Position', [0.05 0.95 0.05 0.05],...
     'Callback', {@zoom_Atlas ,GHandle}...
@@ -181,7 +180,6 @@ GHandle.TempWindow.light(2) = light(GHandle.TempWindow.NewProbeAxes,...
     'Position',[-100 0 0]);
 
 GHandle.TempWindow.NewProbeFigure.Visible = 'on';
-
 end
 
 
@@ -205,13 +203,18 @@ atlasScaleFactor = 0.98;
 %scalpColor = [255 229 204]./255;
 scalpColor = [200 200 200]./255;
 selectedAtlas = Event.NewSelectedIndex;
+GHandle.TempWindow.NewProbeAxes.CameraTargetMode = 'auto';
+GHandle.TempWindow.NewProbeAxes.CameraPositionMode = 'auto';
+GHandle.TempWindow.NewProbeAxes.CameraUpVectorMode = 'auto';
+GHandle.TempWindow.NewProbeAxes.CameraViewAngleMode = 'auto';
+
 if any(selectedAtlas)
 	GHandle.TempWindow.SourceList.String = [];
 	GHandle.TempWindow.ChannelList.Data = {};
 	GHandle.TempWindow.DetectorList.String = [];
     if (selectedAtlas == 1)
-        GHandle.TempWindow.NewProbeRotateButton.Visible = 'off';
-        GHandle.TempWindow.NewProbeZoomButton.Visible = 'on';
+        GHandle.TempWindow.NewProbeRotateButton.Enable = 'off';
+        GHandle.TempWindow.NewProbeZoomButton.Enable = 'on';
         cla(GHandle.TempWindow.NewProbeAxes);
         GHandle.TempWindow.NewProbeAxes.View = [0 90];
         x = -50:1:50;
@@ -247,14 +250,12 @@ if any(selectedAtlas)
                 'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
                 'Parent', GHandle.TempWindow.NewProbeAxes, ...
                 'Visible', 'on');
-            %GHandle.TempWindow.LandMark.Tag{iLandMark} = [num2str(X2(iLandMark)) ',' num2str(Y2(iLandMark))];
         end
     else
         Atlas = Handle.UserData{selectedAtlas}.load;
-        %Atlas = Handle.UserData{2}(selectedAtlas-1).load; % temporary fix (see line 69, this file)
         
-        GHandle.TempWindow.NewProbeRotateButton.Visible = 'on';
-        GHandle.TempWindow.NewProbeZoomButton.Visible = 'on';
+        GHandle.TempWindow.NewProbeRotateButton.Enable = 'on';
+        GHandle.TempWindow.NewProbeZoomButton.Enable = 'on';
         
         cla(GHandle.TempWindow.NewProbeAxes);
         axis(GHandle.TempWindow.NewProbeAxes,'vis3d');
@@ -306,17 +307,24 @@ sourceColor = [1 0 0];
 detectorColor = [0 0 1];
 distanceThreshold = 30;
 
-colortextintable = @(colorintable,textintable) ['<html><font color=',colorintable,'>',textintable,'</font></html>'];
+%colortextintable = @(colorintable,textintable) ['<html><font color=',colorintable,'>',textintable,'</font></html>'];
 
 %if GHandle.TempWindow.NewProbeZoomButton.Value
 if GHandle.TempWindow.Zoom
     GHandle.TempWindow.Temp.CameraTarget = GHandle.TempWindow.NewProbeAxes.CameraTarget;
     GHandle.TempWindow.Temp.CameraPosition = GHandle.TempWindow.NewProbeAxes.CameraPosition;
     GHandle.TempWindow.Temp.CameraViewAngle = GHandle.TempWindow.NewProbeAxes.CameraViewAngle;
+    GHandle.TempWindow.NewProbeAxes.CameraUpVectorMode = 'manual';
     
-    GHandle.TempWindow.NewProbeAxes.CameraTarget = Evnt.IntersectionPoint;
-    GHandle.TempWindow.NewProbeAxes.CameraPosition = 33.*Evnt.IntersectionPoint;
     GHandle.TempWindow.NewProbeAxes.CameraViewAngle = 1;
+    GHandle.TempWindow.NewProbeAxes.CameraTarget = Evnt.IntersectionPoint;
+    if GHandle.TempWindow.AtlasWidget.SelectedIndex == 1
+        GHandle.TempWindow.NewProbeAxes.CameraPosition = [Evnt.IntersectionPoint(1) Evnt.IntersectionPoint(2) 1420.*Evnt.IntersectionPoint(3)];
+        %GHandle.TempWindow.NewProbeAxes.CameraUpVector = [0 1 0];
+    else
+        GHandle.TempWindow.NewProbeAxes.CameraPosition = 33.*Evnt.IntersectionPoint;
+    end
+
     
     GHandle.TempWindow.Zoom = false;
 else
@@ -367,8 +375,6 @@ else
             roundFactor = 1;
             tempchanneldistance = round(tempchanneldistance*roundFactor)/roundFactor;
             
-            %tempdatatable{cc,1:3} = {ss dd tempchanneldistance};
-            %tempdatatable{cc,4} = true;
             GHandle.TempWindow.ChannelList.Data{cc,1} = ss;
             GHandle.TempWindow.ChannelList.Data{cc,2} = dd;
             if tempchanneldistance > distanceThreshold
