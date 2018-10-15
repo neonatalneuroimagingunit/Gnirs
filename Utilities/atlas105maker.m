@@ -136,7 +136,7 @@ tenFive.names(:,20) = {'NFpz'; 'NFp2h'; 'NFp2'; 'AFp10h'; 'AF10h'; 'AFF10h'; 'F1
 tenFive.coord(:,20,:) = pointsrelpos(tempPoints, tempLength, 1:-0.05:0);
 
 tenFive.names(:,19) = {'Fpz'; 'Fp2h'; 'Fp2'; 'AFp8'; 'AF8'; 'AFF8'; 'F8'; 'FFT8'; 'FT8'; 'FTT8'; ...
-    'T8'; 'TTP8'; 'TP8'; 'TPP8'; 'P8'; 'PPO8'; 'PO8'; 'POO8'; 'O2'; 'O2h'; 'Fpz'};
+    'T8'; 'TTP8'; 'TP8'; 'TPP8'; 'P8'; 'PPO8'; 'PO8'; 'POO8'; 'O2'; 'O2h'; 'Oz'};
 [tempPoints, ~, tempLength] = pathonmesh(meshPoints, Oz, T8 , FPz, nStep);
 tenFive.coord(:,19,:) = pointsrelpos(tempPoints, tempLength, 1:-0.05:0);
 
@@ -219,6 +219,57 @@ tenFive.names(18,4:18) = {'POO7h'; 'POO5'; 'POO5h'; 'POO3'; 'POO3h'; 'POO1'; 'PO
     'POOz'; 'POO2h'; 'POO2'; 'POO4h'; 'POO4'; 'POO6h'; 'POO6'; 'POO8h'};
 [tempPoints, ~, tempLength] = pathonmesh(meshPoints, POO8, POOz , POO7, nStep);
 tenFive.coord(18,4:18,:) = pointsrelpos(tempPoints, tempLength, arcPerc);
+
+%% Near points
+
+middlePoint = points2mdpoints(Nz,Iz,Cz);
+% idxMatx = [-1 -1 1 1];
+% idxMaty = [-1 1 -1 1];
+
+
+
+for iPoints = 1 : size(tenFive.coord,1)
+	for jPoints = 1 : size(tenFive.coord,2)
+		idxMat = false(21 ,21);
+		
+		if iPoints == 1
+			idxMat(iPoints+1,jPoints) = true;
+		elseif iPoints == 21
+			idxMat(iPoints-1,jPoints) = true;
+		else
+			idxMat(iPoints-1:2:iPoints+1,jPoints) = true;
+		end
+		
+		if jPoints == 1
+			idxMat(iPoints,jPoints+1) = true;
+		elseif jPoints == 21
+			idxMat(iPoints,jPoints-1) = true;
+		else
+			idxMat(iPoints,jPoints-1:2:jPoints+1) = true;
+		end
+		
+		
+		idxMat = repmat(idxMat,[1,1,3]);
+		
+
+		if ~isempty(tenFive.names{iPoints,jPoints})
+			centralPoint = squeeze(tenFive.coord(iPoints,jPoints,:))';
+			nPoint = size(tenFive.coord(idxMat),1)/3;
+			nearPoints = reshape(tenFive.coord(idxMat),[nPoint,3]);
+			pointDist = vecnorm(nearPoints - centralPoint,2,2);
+			[~, idxPoint] = max(pointDist(:)); 
+			referencePoint = nearPoints(idxPoint,:);
+
+
+			tenFive.neighbors{iPoints,jPoints} = ...
+				nearpointonmesh(meshPoints,centralPoint, referencePoint, middlePoint);
+		end
+	end
+end
+
+
+
+
 
 end
 
