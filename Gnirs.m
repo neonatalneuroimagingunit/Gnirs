@@ -7,7 +7,7 @@ clear all %#ok<CLALL>
 clc
 
 %% Start default settings
-figureScreenRatioLarge = 0.75
+figureScreenRatioLarge = 0.75;
 figureScreenRatioMedium = 0.5;
 figureScreenRatioSmall = 0.25;
 

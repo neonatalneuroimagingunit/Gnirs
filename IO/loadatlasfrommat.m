@@ -25,35 +25,45 @@ fileIdx = contains({fileList.name}, 'WMSurfaceMesh');
 if any(fileIdx)
 	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
 	fieldName =  fieldnames(temp);
-	Atlas.Scalp = temp.(fieldName{1});
+	Atlas.WhiteMatter = temp.(fieldName{1});
 end
+ 
 
-%% 
-
-if any(strcmp(structField, 'voxel'))
+fileIdx = contains({fileList.name}, 'TissueMask');
+if any(fileIdx)
+	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
+	fieldName =  fieldnames(temp);
 	Atlas.flagVoxel = true;	
-	GHandle.Temp.Voxel.Head = temp.voxel;
-	if any(strcmp(structField, 'optical_properties'))
-		GHandle.Temp.Voxel.OpticalProprety = temp.optical_properties;
-	end
-	if any(strcmp(structField, 'segmentation'))
-		GHandle.Temp.Voxel.Segmentation = temp.segmentation;
-	end
+	GHandle.Temp.Voxel.Head = temp.(fieldName{1});
+% 	if any(strcmp(structField, 'segmentation'))
+% 		GHandle.Temp.Voxel.Segmentation = temp.segmentation;
+% 	end
 end
 
-if any(strcmp(structField, 'head'))
+fileIdx = contains({fileList.name}, 'HeadVolumeMesh');
+if any(fileIdx)
+	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
+	fieldName =  fieldnames(temp);
 	Atlas.flagHead = true;
-	GHandle.Temp.HeadAtlas = temp.head;
+	GHandle.Temp.HeadAtlas = temp.(fieldName{1});
 end
 
+% Nz 	 -0.43 	 28.42 	 -14.19  
+% Iz 	 -0.26 	 -61.33 	 -11.37  
+% Ar 	 30.52 	 -15.31 	 -20.69  
+% Al 	 -35.27 	 -15.01 	 -21.40  
 
 
-
-
-if any(strcmp(structField, 'landmarks'))
-	temp.landmarks.coordinates = [[temp.landmarks.coordinates{:,1}]', [temp.landmarks.coordinates{:,2}]', [temp.landmarks.coordinates{:,3}]'];
-	
-	Atlas.LandMarks = atlas105maker(meshPoints,Nz,Iz,RPA,LPA,200);
+fileIdx = contains({fileList.name}, 'LandmarkPoints');
+if any(fileIdx)
+	landmarkFile = fopen(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
+	tempPoint = fscanf(landmarkFile, '%*s %f %f %f',[3,4])';
+	Nz = tempPoint(1,:);
+	Iz = tempPoint(2,:);
+	RPA = tempPoint(3,:);
+	LPA = tempPoint(4,:);
+	Atlas.LandMarks = atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200);
+	fclose(landmarkFile);
 end
 
 GHandle.CurrentDataSet.Atlas = Atlas;
