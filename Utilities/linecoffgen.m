@@ -16,12 +16,10 @@ function [linecoff,lineinters] = linecoffgen(plaincoff, point0, pointA, N)
 	
 	line1 = repmat(line1,[N,1]);
 	line2 = repmat(line2,[N,1]);
-	alpha = linspace(0,pi,N+2);
+	alpha = linspace(0,pi,N);
 	
 	
-%ochhio
- alpha(1)=[];
- alpha(end)=[];
+
 
 	
 	
