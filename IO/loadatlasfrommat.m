@@ -1,29 +1,34 @@
 function loadatlasfrommat(GHandle)
 %LOADATLASFROMMAT Summary of this function goes here
 %   Detailed explanation goes here
-pathFile = GHandle.Temp.location;
+pathFile = GHandle.TempWindow.location;
 
-temp = load(pathFile,'-mat');
-structField = fields(temp);
+fileList = dir(pathFile);
 
 Atlas = NirsAtlas;
 
-if any(strcmp(structField, 'scalp'))
-	Atlas.Scalp = temp.scalp;
+fileIdx = contains({fileList.name}, 'GMSurfaceMesh');
+if any(fileIdx)
+	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
+	fieldName =  fieldnames(temp);
+	Atlas.GreyMatter = temp.(fieldName{1});
+end 
+
+fileIdx = contains({fileList.name}, 'ScalpSurfaceMesh');
+if any(fileIdx)
+	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
+	fieldName =  fieldnames(temp);
+	Atlas.Scalp = temp.(fieldName{1});
 end
 
-if any(strcmp(structField, 'gm'))
-	Atlas.GreyMatter = temp.gm;
+fileIdx = contains({fileList.name}, 'WMSurfaceMesh');
+if any(fileIdx)
+	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
+	fieldName =  fieldnames(temp);
+	Atlas.Scalp = temp.(fieldName{1});
 end
 
-if any(strcmp(structField, 'wm'))
-	Atlas.WhiteMatter = temp.wm;
-end
-
-if any(strcmp(structField, 'landmarks'))
-	temp.landmarks.coordinates = [[temp.landmarks.coordinates{:,1}]', [temp.landmarks.coordinates{:,2}]', [temp.landmarks.coordinates{:,3}]'];
-	Atlas.LandMarks = temp.landmarks;
-end
+%% 
 
 if any(strcmp(structField, 'voxel'))
 	Atlas.flagVoxel = true;	
@@ -39,6 +44,16 @@ end
 if any(strcmp(structField, 'head'))
 	Atlas.flagHead = true;
 	GHandle.Temp.HeadAtlas = temp.head;
+end
+
+
+
+
+
+if any(strcmp(structField, 'landmarks'))
+	temp.landmarks.coordinates = [[temp.landmarks.coordinates{:,1}]', [temp.landmarks.coordinates{:,2}]', [temp.landmarks.coordinates{:,3}]'];
+	
+	Atlas.LandMarks = atlas105maker(meshPoints,Nz,Iz,RPA,LPA,200);
 end
 
 GHandle.CurrentDataSet.Atlas = Atlas;

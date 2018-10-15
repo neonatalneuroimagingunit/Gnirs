@@ -1,16 +1,15 @@
-function tenFive = atlas105maker(Atlas,nStep)
+function tenFive = atlas105maker(meshPoints,Nz,Iz,RPA,LPA,nStep)
 tenFive.names = {};
 tenFive.coord = zeros(21,21,3);
 tenFive.neighbors = {};
+% Nz = Atlas.LandMarks.coordinates(1,:);
+% Iz = Atlas.LandMarks.coordinates(2,:);
+% RPA = Atlas.LandMarks.coordinates(3,:);
+% LPA = Atlas.LandMarks.coordinates(4,:);
+% %Cz = Atlas.LandMarks.coordinates(5,:);
+% meshPoints = Atlas.Scalp.node;
 
-
-Nz = Atlas.LandMarks.coordinates(1,:);
-Iz = Atlas.LandMarks.coordinates(2,:);
-RPA = Atlas.LandMarks.coordinates(3,:);
-LPA = Atlas.LandMarks.coordinates(4,:);
-Cz = Atlas.LandMarks.coordinates(5,:);
-meshPoints = Atlas.Scalp.node;
-
+Cz = findCz(meshPoints, Iz, Nz, RPA, LPA);
 
 %% find Iz-Cz-Nz line
 [pathIzCzNzPoints, ~, pathIzCzNzrelativeLength] = pathonmesh(meshPoints, Iz, Cz , Nz, nStep);
