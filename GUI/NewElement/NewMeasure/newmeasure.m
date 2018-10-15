@@ -99,7 +99,7 @@ end
 function pre_load(~, Event, GHandle)
 	GHandle.Temp.fast = true;
 	GHandle.Temp.location = Event.NewValue;
-	boxyparser(GHandle);
+	loadimagentISS(GHandle);
 	newmeasdispmeasure(GHandle);
 end
 

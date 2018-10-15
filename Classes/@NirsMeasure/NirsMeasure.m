@@ -18,6 +18,12 @@
 		timeLength(1,1) double
 		
 		updateRate(1,1) double
+		
+		wavelength(1,:) double
+		
+		dataType(1,:) cell
+		
+		channel(1,1) int32
 
 		videoFlag(1,1) logical
 		
@@ -62,6 +68,15 @@
 							
 						case 'updaterate'
 							obj.updateRate = varargin{i+1};
+							
+						case 'wavelength'
+							obj.wavelength = varargin{i+1};
+							
+						case 'datatype'
+							obj.dataType = varargin{i+1};
+														
+						case 'channel'
+							obj.channel = varargin{i+1};
 
 						case 'videoflag '
 							obj.videoFlag  = varargin{i+1};

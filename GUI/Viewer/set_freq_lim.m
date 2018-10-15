@@ -14,5 +14,8 @@ rectangle_w = GHandle.Viewer(vIdx).spectrumplot.bigaxes1.XLim(2) - rectangle_x;
 rectangle_h = GHandle.Viewer(vIdx).spectrumplot.bigaxes1.YLim(2) - rectangle_y;
 
 GHandle.Viewer(vIdx).spectrumplot.rectangle.Position = [rectangle_x rectangle_y rectangle_w rectangle_h];
+
+
+GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.YLim = freqLim;
 end
 

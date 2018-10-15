@@ -12,9 +12,9 @@ classdef GDBAtlas
 	end
 	
 	methods
-%		Atlas = load(DBAtlas)
+ 		Atlas = load(DBAtlas)
 %		DBAtlas = modify(DBAtlas,NewAtlas)
-%		DBAtlas = substitute(DBAtlas,Atlas)
+ 		DBAtlas = substitute(DBAtlas,Atlas)
 	end
 	methods (Static)
 		postFix = id2atlaspostfix(id)
