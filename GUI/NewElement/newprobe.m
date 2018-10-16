@@ -153,22 +153,10 @@ GHandle.TempWindow.MirrorProbe = uicontrol('Style', 'checkbox',...
     'HorizontalAlignment', 'left', ...
     'Position', [0.55 0.55 0.4 0.25]);
 
-GHandle.TempWindow.thresholdText = uicontrol('Style', 'text',...
-    'Parent', GHandle.TempWindow.OptionsPanel, ...
-    'String', 'Max SD distance',...
-    'BackgroundColor', 'r', ...
-    'Visible','on',...
-    'Units', 'normalize', ...
-    'HorizontalAlignment', 'left', ...
-    'Position', [0.1 0.55 0.4 0.25]);
-GHandle.TempWindow.thresholdEdit = uicontrol('Style', 'edit',...
-    'Parent', GHandle.TempWindow.OptionsPanel, ...
-    'String', '10',...
-    'BackgroundColor', 'r', ...
-    'Visible','on',...
-    'Units', 'normalize', ...
-    'HorizontalAlignment', 'left', ...
-    'Position', [0.55 0.55 0.4 0.25]);
+[GHandle.TempWindow.thresholdPanel, ~, GHandle.TempWindow.SDthreshold] = gtextedit(GHandle.TempWindow.OptionsPanel, 'Max SD distance', ...
+    [0.1 0.1 0.35 0.8], 0.1, 1, 'vertical');
+GHandle.TempWindow.SDthreshold.String = '30';
+GHandle.TempWindow.SDthreshold.Callback = {@SDthreshold_callback, GHandle};
 
 GHandle.TempWindow.Options3 = uicontrol('Style', 'checkbox',...
     'Parent', GHandle.TempWindow.OptionsPanel, ...
@@ -187,7 +175,7 @@ GHandle.TempWindow.NewProbeFigure.Visible = 'on';
 end
 
 
-function load_probe(~, ~, GHandle )
+function load_probe(~, ~, GHandle)
 probeName = GHandle.TempWindow.NewProbeName.Value;
 note = GHandle.TempWindow.NewProbeNote.Value;
 
@@ -309,7 +297,6 @@ function landmark_callback(Handle,Evnt,GHandle)
 markColor = [0 1 0];
 sourceColor = [1 0 0];
 detectorColor = [0 0 1];
-distanceThreshold = 30;
 
 %colortextintable = @(colorintable,textintable) ['<html><font color=',colorintable,'>',textintable,'</font></html>'];
 
@@ -381,7 +368,7 @@ else
             
             GHandle.TempWindow.ChannelList.Data{cc,1} = ss;
             GHandle.TempWindow.ChannelList.Data{cc,2} = dd;
-            if tempchanneldistance > distanceThreshold
+            if tempchanneldistance > str2double(GHandle.TempWindow.SDthreshold.String)
                 GHandle.TempWindow.ChannelList.Data{cc,3} = tempchanneldistance;
                 %GHandle.TempWindow.ChannelList.Data{cc,3} = colortextintable('"#FF0000"', num2str(tempchanneldistance));
                 GHandle.TempWindow.ChannelList.Data{cc,4} = false;
@@ -432,6 +419,49 @@ else
 %     end
 end
 end
+
+
+
+
+
+
+
+
+function SDthreshold_callback(Handle,Evnt,GHandle)
+
+
+nSrc = size(GHandle.TempWindow.SourceList.String,1);
+nDet = size(GHandle.TempWindow.DetectorList.String,1);
+cc = 1;
+
+for ss = 1:1:nSrc
+    for dd = 1:1:nDet
+        tempchanneldistance = GHandle.TempWindow.ChannelList.Data{cc,3};
+        if tempchanneldistance > str2double(GHandle.TempWindow.SDthreshold.String)
+            GHandle.TempWindow.ChannelList.Data{cc,4} = false;
+        else
+            GHandle.TempWindow.ChannelList.Data{cc,4} = true;
+        end
+        cc = cc + 1;
+    end
+end
+if cc > 1
+    activeMask = ~logical(cell2mat(GHandle.TempWindow.ChannelList.Data(:,4)));
+    C = cell(sum(activeMask),1);
+    C(:) = {':'};
+    set(GHandle.TempWindow.Channels(activeMask),{'LineStyle'}, C);
+    inactiveMask = logical(cell2mat(GHandle.TempWindow.ChannelList.Data(:,4)));
+    C = cell(sum(inactiveMask),1);
+    C(:) = {'-'};
+    set(GHandle.TempWindow.Channels(inactiveMask),{'LineStyle'}, C);
+end
+end
+
+
+
+
+
+
 
 
 function rotate_Atlas(Handle, ~, GHandle)
