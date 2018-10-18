@@ -146,11 +146,7 @@ HandleTextBox.Title = uicontrol('Parent',Title.Parent,...
 						'Position',Title.Position,...
 						'UserData',Title.UserData,...
 						'Visible', Title.Visible);
-					
-	
-					
-			
-					
+
 					
 					
 					
