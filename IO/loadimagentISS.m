@@ -222,7 +222,7 @@ FILE_info = dir(location);
 				currentline = fgetl(FILE);
 				data(ii , :) = sscanf(currentline, '%f');
 				if any(checkPoint == ii)
-					GHandle.Temp.loadingBar.Observ1 = floor(10*ii/nSamples);					
+					GHandle.Temp.loadingBar.LoadingPerc = ii/nSamples;					
 				end
 				
 			end
