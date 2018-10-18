@@ -82,6 +82,13 @@ function newmeasure(~, ~, GHandle)
 			'Units','normalized',...
 			'Position',[sxPos(6) bottomPos(6) width(6) height(6)]); 
 		
+	[~,~,GHandle.TempWindow.Gray ]= gtextedit(GHandle.TempWindow.NewMeasureFigure,...
+					'Gray', [0.3 0.05 0.1 0.05],0.1,1,'horizontal',1);
+								
+		
+		
+		
+		
 		
 	GHandle.TempWindow.NewMeasureLoadButton = uicontrol('Style', 'pushbutton',...	
 		'Parent', GHandle.TempWindow.NewMeasureFigure, ...

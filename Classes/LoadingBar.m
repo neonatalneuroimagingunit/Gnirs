@@ -5,4 +5,5 @@ classdef LoadingBar < handle
 	  LoadingCounter
 	  LoadingMax
    end
+   
 end

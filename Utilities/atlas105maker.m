@@ -1,4 +1,4 @@
-function tenFive = atlas105maker(meshPoints,Nz,Iz,RPA,LPA,nStep)
+function tenFive = atlas105maker(meshPoints,Nz,Iz,RPA,LPA,nStep,LoadingBarAtlas)
 tenFive.names = {};
 tenFive.coord = zeros(21,21,3);
 tenFive.neighbors = {};
@@ -10,7 +10,7 @@ tenFive.neighbors = {};
 % meshPoints = Atlas.Scalp.node;
 
 Cz = findCz(meshPoints, Iz, Nz, RPA, LPA);
-
+LoadingBarAtlas.LoadingPerc = 0.2;
 %% find Iz-Cz-Nz line
 [pathIzCzNzPoints, ~, pathIzCzNzrelativeLength] = pathonmesh(meshPoints, Iz, Cz , Nz, nStep);
 main_BackFront_Points = pointsrelpos(pathIzCzNzPoints, pathIzCzNzrelativeLength, 0:0.05:1);
@@ -23,7 +23,7 @@ T10 = pointsrelpos(pathRPACzLPAPoints, pathRPACzLPArelativeLength, 0.1);
 %% find  T10-Cz-T9  line
 [pathT10CzT9Points, ~, pathT10CzT9relativeLength] = pathonmesh(meshPoints, T10, Cz , T9, nStep);
 main_RightLeft_Points = pointsrelpos(pathT10CzT9Points, pathT10CzT9relativeLength, 0:0.05:1);
-
+LoadingBarAtlas.LoadingPerc = 0.3;
 %% find  Main points
 %Nz = main_BackFront_Points(1,:);
 OIz = main_BackFront_Points(2,:);
@@ -57,7 +57,7 @@ secondaryBackFrontPoints = pointsrelpos(pathOzT7FPzPoints, pathOzT7FPzrelativeLe
 %% find  FPz-T8-Oz line
 [pathFPZT8OzPoints, ~, pathFPZT8OzrelativeLength] = pathonmesh(meshPoints, Oz, T8 , FPz, nStep);
 secondaryFrontBackPoints = pointsrelpos(pathFPZT8OzPoints, pathFPZT8OzrelativeLength,1:-0.05:0);
-
+LoadingBarAtlas.LoadingPerc = 0.4;
 %% assign main Points
 %Fpz = secondaryBackFrontPoints(21,:);
 %Fp1h = secondaryBackFrontPoints(20,:);
@@ -138,7 +138,7 @@ tenFive.names(:,19) = {'Fpz'; 'Fp2h'; 'Fp2'; 'AFp8'; 'AF8'; 'AFF8'; 'F8'; 'FFT8'
     'T8'; 'TTP8'; 'TP8'; 'TPP8'; 'P8'; 'PPO8'; 'PO8'; 'POO8'; 'O2'; 'O2h'; 'Oz'};
 [tempPoints, ~, tempLength] = pathonmesh(meshPoints, Oz, T8 , FPz, nStep);
 tenFive.coord(:,19,:) = pointsrelpos(tempPoints, tempLength, 1:-0.05:0);
-
+LoadingBarAtlas.LoadingPerc = 0.5;
 %% Landmarks for arcs
 arcPerc = 0.9375:-0.0625:0.0625;
 %AF7
@@ -218,16 +218,17 @@ tenFive.names(18,4:18) = {'POO7h'; 'POO5'; 'POO5h'; 'POO3'; 'POO3h'; 'POO1'; 'PO
     'POOz'; 'POO2h'; 'POO2'; 'POO4h'; 'POO4'; 'POO6h'; 'POO6'; 'POO8h'};
 [tempPoints, ~, tempLength] = pathonmesh(meshPoints, POO8, POOz , POO7, nStep);
 tenFive.coord(18,4:18,:) = pointsrelpos(tempPoints, tempLength, arcPerc);
-
+LoadingBarAtlas.LoadingPerc = 0.6;
 %% Near points
 
 middlePoint = points2mdpoints(Nz,Iz,Cz);
 % idxMatx = [-1 -1 1 1];
 % idxMaty = [-1 1 -1 1];
 
+nPoints = size(tenFive.coord,1);
 
-
-for iPoints = 1 : size(tenFive.coord,1)
+for iPoints = 1:1:nPoints
+	LoadingBarAtlas.LoadingPerc = 0.6 + iPoints/nPoints*0.4;
 	for jPoints = 1 : size(tenFive.coord,2)
 		idxMat = false(21 ,21);
 		
