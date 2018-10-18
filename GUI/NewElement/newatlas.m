@@ -57,9 +57,19 @@ GHandle.TempWindow.NewAtlasWidget = uiw.widget.FolderSelector(...
 end
 
 function load_atlas(~,~, GHandle)
+	%add a tree branch
+	GHandle.TempWindow.loadingBar = LoadingBar;
+	GHandle.TempWindow.MainNode = uiw.widget.TreeNode(... 
+			'Name',repmat(char(9608),[1 10]) ,...
+			'Parent',GHandle.Main.Tree.AtlasTree...
+			);
+
+	
 	name = GHandle.TempWindow.NewAtlasName.Value;
 	note = GHandle.TempWindow.NewAtlasNote.Value;
 	GHandle.TempWindow.location = GHandle.TempWindow.NewAtlasWidget.Value;
+	
+	close(GHandle.TempWindow.NewAtlasFigure);
 	loadatlasfrommat(GHandle);
 	GHandle.CurrentDataSet.Atlas.name = name;
 	GHandle.CurrentDataSet.Atlas.note = note;
@@ -67,6 +77,8 @@ function load_atlas(~,~, GHandle)
 	DataBase = GHandle.DataBase.add(GHandle.CurrentDataSet.Atlas, name, GHandle.Temp);
 	GHandle.DataBase = DataBase;
 	tree(GHandle);
+	
+	GHandle.TempWindow = [];
 end
 
 

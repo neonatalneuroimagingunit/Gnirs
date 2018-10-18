@@ -2,14 +2,14 @@ function loadmeasure(GHandle)
 
 
 % add a tree branch
-	GHandle.Temp.loadingBar = GenericWatchList;
+	GHandle.Temp.loadingBar = LoadingBar;
 	GHandle.Temp.MainNode = uiw.widget.TreeNode(... 
 			'Name',repmat(char(9608),[1 10]) ,...
 			'Parent',GHandle.Main.Tree.StudyTree.SelectedNodes...
 			);
 	GHandle.Main.Tree.StudyTree.SelectedNodes.expand;
 	
-	addlistener(GHandle.Temp.loadingBar,'Observ1','PostSet',@(src,evnt)set_tree_name(src,evnt,GHandle));
+	addlistener(GHandle.Temp.loadingBar,'LoadingPerc','PostSet',@(src,evnt)set_tree_name(src,evnt,GHandle));
 %open pharser
 	GHandle.Temp.fast = false;
 	loadimagentISS(GHandle);
@@ -51,8 +51,8 @@ end
 
 
 function set_tree_name(~, evnt, GHandle)
-	if (evnt.AffectedObject.Observ1 < 10)
-		ii = evnt.AffectedObject.Observ1;
+	if (evnt.AffectedObject.LoadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.LoadingPerc);
 	else
 		ii = 10;
 	end

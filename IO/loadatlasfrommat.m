@@ -3,6 +3,9 @@ function loadatlasfrommat(GHandle)
 %   Detailed explanation goes here
 pathFile = GHandle.TempWindow.location;
 
+
+
+
 fileList = dir(pathFile);
 
 Atlas = NirsAtlas;
