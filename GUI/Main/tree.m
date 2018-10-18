@@ -193,16 +193,18 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 		GHandle.Main.Tree.Atlas(iAtlas).MainNode = uiw.widget.TreeNode(...
 			'Name', tag,...
 			'Parent', GHandle.Main.Tree.AtlasTree.Root,...
-			'Value', GHandle.DataBase.Atlas(iAtlas).id...
-			); %create a node for each Atlas
-		
-		%set his icon
-		setIcon(GHandle.Main.Tree.Atlas(iAtlas).MainNode,atlasIcon);  
-
-		% add right click callback
-		GHandle.Main.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
-		uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@newmeasure ,GHandle});
-		set(GHandle.Main.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',GHandle.Main.Tree.Atlas(iAtlas).ContextMenu);
+            'Value', GHandle.DataBase.Atlas(iAtlas).id...
+            ); %create a node for each Atlas
+        
+        %set his icon
+        setIcon(GHandle.Main.Tree.Atlas(iAtlas).MainNode,atlasIcon);
+        
+        % add right click callback
+        GHandle.Main.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
+        %uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@newmeasure ,GHandle});
+        uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu, 'Label','Delete','tag', GHandle.DataBase.Atlas(iAtlas).id,'callback',{@delete_callback ,GHandle});
+        set(GHandle.Main.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',GHandle.Main.Tree.Atlas(iAtlas).ContextMenu);
+        
 	end	
 
 	%create a node for each Atlas
@@ -256,7 +258,6 @@ function clickcallback(~, Event, GHandle)
 end
  
 function delete_callback (handle, ~, GHandle)
-
 	id = handle.Tag;
 	GHandle.DataBase = GHandle.DataBase.delete(id);
 	tree(GHandle);
