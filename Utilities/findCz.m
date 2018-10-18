@@ -11,7 +11,6 @@ nStep = 250;
 middlePoint = mean([Iz;Nz;RPA;LPA]);
 Cz = linemeshintersect(meshPoints,[0 0 1],middlePoint);
 
-
 for iApprox = 1 : nApprox
 	[pathIzCzNzPoints, ~, pathIzCzNzrelativeLength] = pathonmesh(meshPoints, Iz, Cz , Nz, nStep);
 	Cz = pointsrelpos(pathIzCzNzPoints, pathIzCzNzrelativeLength, 0.5);
