@@ -63,6 +63,14 @@ switch class(ObjToDelete)
         rmdir(ObjToDelete.path, 's');
         % delete the anlysis
         DataBase.Atlas(DataBase.Atlas == ObjToDelete) = [];
+    
+    case 'GDBProbe'
+        %  remothe the atlas from the database
+        % delete the data in the atlas
+        delete([ObjToDelete.path '.mat']);
+        %rmdir(ObjToDelete.path, 's');
+        % delete the anlysis
+        DataBase.Probe(DataBase.Probe == ObjToDelete) = [];
 end
 
 %save the change
