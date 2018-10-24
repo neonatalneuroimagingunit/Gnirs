@@ -229,7 +229,7 @@ atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 
 		% add right click callback
 		GHandle.Main.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
-		uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu,'Label','AddMeasure','callback',{@newmeasure ,GHandle});
+		uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Delete','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@delete_callback ,GHandle});
 		set(GHandle.Main.Tree.Probe(iProbe).MainNode,'UIContextMenu',GHandle.Main.Tree.Probe(iProbe).ContextMenu);
 		
 		
@@ -260,7 +260,9 @@ end
 function delete_callback (handle, ~, GHandle)
 	id = handle.Tag;
 	GHandle.DataBase = GHandle.DataBase.delete(id);
+    idxTab = contains({GHandle.Main.Tree.TabGroup.Children.Title}, GHandle.Main.Tree.TabGroup.SelectedTab.Title);
 	tree(GHandle);
+    GHandle.Main.Tree.TabGroup.SelectedTab = GHandle.Main.Tree.TabGroup.Children(idxTab);
 end
 
 

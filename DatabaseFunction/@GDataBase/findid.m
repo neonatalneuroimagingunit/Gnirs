@@ -47,7 +47,8 @@ function [Find, idx] = findid(DataBase, id)
 
 			case 'P'
 				idx = contains({DataBase.Probe(:).id}, id);
-
+                Find = DataBase.Probe(idx);
+            
 			case 'T'
 				idx = contains({DataBase.Atlas(:).id}, id);
 				Find = DataBase.Atlas(idx);
