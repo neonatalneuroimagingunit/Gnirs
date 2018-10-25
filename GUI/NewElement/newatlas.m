@@ -186,24 +186,38 @@ function load_atlas(~,~, GHandle)
 	GHandle.TempWindow.loadingBar.HeadVolume = LoadingBar;
 	GHandle.TempWindow.loadingBar.LandMarks = LoadingBar;
 	
-	addlistener(GHandle.TempWindow.loadingBar.GrayMatter,'LoadingPerc','PostSet',@(src,evnt)loading_graymatter(src,evnt,GHandle));
-	addlistener(GHandle.TempWindow.loadingBar.WhiteMatter,'LoadingPerc','PostSet',@(src,evnt)loading_whitematter(src,evnt,GHandle));
-	addlistener(GHandle.TempWindow.loadingBar.Scalp,'LoadingPerc','PostSet',@(src,evnt)loading_scalp(src,evnt,GHandle));
-	addlistener(GHandle.TempWindow.loadingBar.Voxel,'LoadingPerc','PostSet',@(src,evnt)loading_voxel(src,evnt,GHandle));
-	addlistener(GHandle.TempWindow.loadingBar.HeadVolume,'LoadingPerc','PostSet',@(src,evnt)loading_headvolume(src,evnt,GHandle));
-	addlistener(GHandle.TempWindow.loadingBar.LandMarks,'LoadingPerc','PostSet',@(src,evnt)loading_landmarks(src,evnt,GHandle));
+	%lissener for perc bar
+	addlistener(GHandle.TempWindow.loadingBar.GrayMatter,'loadingPerc','PostSet',@(src,evnt)loading_graymatter(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.WhiteMatter,'loadingPerc','PostSet',@(src,evnt)loading_whitematter(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.Scalp,'loadingPerc','PostSet',@(src,evnt)loading_scalp(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.Voxel,'loadingPerc','PostSet',@(src,evnt)loading_voxel(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.HeadVolume,'loadingPerc','PostSet',@(src,evnt)loading_headvolume(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.LandMarks,'loadingPerc','PostSet',@(src,evnt)loading_landmarks(src,evnt,GHandle));
+	% lissener for log text
+	addlistener(GHandle.TempWindow.loadingBar.GrayMatter,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.WhiteMatter,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.Scalp,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.Voxel,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.HeadVolume,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
+	addlistener(GHandle.TempWindow.loadingBar.LandMarks,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
 	
-	GHandle.TempWindow.loadingBar.GrayMatter.LoadingPerc = 0;
-	GHandle.TempWindow.loadingBar.WhiteMatter.LoadingPerc = 0;
-	GHandle.TempWindow.loadingBar.Scalp.LoadingPerc = 0;
-	GHandle.TempWindow.loadingBar.Voxel.LoadingPerc = 0;
-	GHandle.TempWindow.loadingBar.HeadVolume.LoadingPerc = 0;
-	GHandle.TempWindow.loadingBar.LandMarks.LoadingPerc = 0;
 	
+	GHandle.TempWindow.loadingBar.GrayMatter.loadingPerc = 0;
+	GHandle.TempWindow.loadingBar.WhiteMatter.loadingPerc = 0;
+	GHandle.TempWindow.loadingBar.Scalp.loadingPerc = 0;
+	GHandle.TempWindow.loadingBar.Voxel.loadingPerc = 0;
+	GHandle.TempWindow.loadingBar.HeadVolume.loadingPerc = 0;
+	GHandle.TempWindow.loadingBar.LandMarks.loadingPerc = 0;
 	
 	name = GHandle.TempWindow.NewAtlasName.Value;
 	note = GHandle.TempWindow.NewAtlasNote.Value;
 	GHandle.TempWindow.location = GHandle.TempWindow.NewAtlasWidget.Value;
+	
+	GHandle.TempWindow.NewAtlasName.Enable = 'off';
+	GHandle.TempWindow.NewAtlasWidget.Enable = 'off';
+	
+	GHandle.TempWindow.NewAtlasNote.Label = 'Loading Log';
+	GHandle.TempWindow.NewAtlasNote.Value = {'Start Loading Atlas...'};
 	
 	
 	loadatlasfrommat(GHandle);
@@ -222,8 +236,8 @@ end
 
 
 function loading_graymatter(~,evnt,GHandle)
-	if (evnt.AffectedObject.LoadingPerc < 1)
-		ii = round(10 * evnt.AffectedObject.LoadingPerc);
+	if (evnt.AffectedObject.loadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.loadingPerc);
 	else
 		ii = 10;
 	end
@@ -232,8 +246,8 @@ function loading_graymatter(~,evnt,GHandle)
 end
 
 function loading_whitematter(~,evnt,GHandle)
-	if (evnt.AffectedObject.LoadingPerc < 1)
-		ii = round(10 * evnt.AffectedObject.LoadingPerc);
+	if (evnt.AffectedObject.loadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.loadingPerc);
 	else
 		ii = 10;
 	end
@@ -242,8 +256,8 @@ function loading_whitematter(~,evnt,GHandle)
 end
 
 function loading_scalp(~,evnt,GHandle)
-	if (evnt.AffectedObject.LoadingPerc < 1)
-		ii = round(10 * evnt.AffectedObject.LoadingPerc);
+	if (evnt.AffectedObject.loadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.loadingPerc);
 	else
 		ii = 10;
 	end
@@ -252,8 +266,8 @@ function loading_scalp(~,evnt,GHandle)
 end
 
 function loading_voxel(~,evnt,GHandle)
-	if (evnt.AffectedObject.LoadingPerc < 1)
-		ii = round(10 * evnt.AffectedObject.LoadingPerc);
+	if (evnt.AffectedObject.loadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.loadingPerc);
 	else
 		ii = 10;
 	end
@@ -262,8 +276,8 @@ function loading_voxel(~,evnt,GHandle)
 end
 
 function loading_headvolume(~,evnt,GHandle)
-	if (evnt.AffectedObject.LoadingPerc < 1)
-		ii = round(10 * evnt.AffectedObject.LoadingPerc);
+	if (evnt.AffectedObject.loadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.loadingPerc);
 	else
 		ii = 10;
 	end
@@ -272,8 +286,8 @@ function loading_headvolume(~,evnt,GHandle)
 end
 
 function loading_landmarks(~,evnt,GHandle)
-	if (evnt.AffectedObject.LoadingPerc < 1)
-		ii = round(10 * evnt.AffectedObject.LoadingPerc);
+	if (evnt.AffectedObject.loadingPerc < 1)
+		ii = round(10 * evnt.AffectedObject.loadingPerc);
 	else
 		ii = 10;
 	end
@@ -282,8 +296,12 @@ function loading_landmarks(~,evnt,GHandle)
 end
 
 
+function add_log(~,evnt,GHandle)
 
-
+	GHandle.TempWindow.NewAtlasNote.Value = [GHandle.TempWindow.NewAtlasNote.Value; evnt.AffectedObject.loadingText];
+	drawnow;
+	
+end
 
 
 

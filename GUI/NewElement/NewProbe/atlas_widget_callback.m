@@ -24,11 +24,13 @@ if any(selectedAtlas)
         Y2 = Y(1:10:end,1:10:end);
         X2 = X2(:);
         Y2 = Y2(:);
-        if isfield(GHandle.TempWindow, 'LandMark')
-            GHandle.TempWindow.LandMark(size(X2,1)+1:end) = [];
+		
+		nLandMark = size(X2,1);
+        if isfield(GHandle.TempWindow, 'LandMark') % empty the unused landmarks
+            GHandle.TempWindow.LandMark(nLandMark+1:end) = [];
         end
 
-        for iLandMark = 1:1:size(X2,1)
+        for iLandMark = 1:1:nLandMark
             GHandle.TempWindow.LandMark(iLandMark) = plot3(X2(iLandMark),Y2(iLandMark), 1, ...
                 'tag', [num2str(X2(iLandMark)) ',' num2str(Y2(iLandMark))],...
                 'LineStyle', 'none',...
@@ -41,6 +43,7 @@ if any(selectedAtlas)
         end
     else
         Atlas = Handle.UserData{selectedAtlas}.load;
+		GHandle.TempWindow.SelectedAtlas = Atlas;
         
         GHandle.TempWindow.NewProbeRotateButton.Enable = 'on';
         GHandle.TempWindow.NewProbeZoomButton.Enable = 'on';
@@ -66,7 +69,12 @@ if any(selectedAtlas)
         z = reshape(Atlas.LandMarks.coord(:,:,3), [],1);
         landmarkNames = reshape(Atlas.LandMarks.names, [], 1);
         
-        for iLandMark = 1 : size(landmarkNames,1)
+		nLandMark = size(landmarkNames,1);
+        if isfield(GHandle.TempWindow, 'LandMark') % empty the unused landmarks
+            GHandle.TempWindow.LandMark(nLandMark+1:end) = [];
+        end
+		
+        for iLandMark = 1 : nLandMark
             if ~isempty(landmarkNames{iLandMark})
                 GHandle.TempWindow.LandMark(iLandMark) = plot3(...
                     x(iLandMark), y(iLandMark), z(iLandMark), ...

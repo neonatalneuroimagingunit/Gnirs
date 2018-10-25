@@ -12,10 +12,12 @@ Atlas = NirsAtlas;
 
 fileIdx = contains({fileList.name}, 'GMSurfaceMesh');
 if any(fileIdx)
+	GHandle.TempWindow.loadingBar.GrayMatter.loadingText = {'Loading Gray Matter....'};
 	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
 	fieldName =  fieldnames(temp);
 	Atlas.GreyMatter = temp.(fieldName{1});
-	GHandle.TempWindow.loadingBar.GrayMatter.LoadingPerc = 1;
+	GHandle.TempWindow.loadingBar.GrayMatter.loadingPerc = 1;
+	GHandle.TempWindow.loadingBar.GrayMatter.loadingText = {'Gray Matter Loaded'};
 end 
  
 
@@ -24,7 +26,7 @@ if any(fileIdx)
 	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
 	fieldName =  fieldnames(temp);
 	Atlas.Scalp = temp.(fieldName{1});
-	GHandle.TempWindow.loadingBar.Scalp.LoadingPerc = 1;
+	GHandle.TempWindow.loadingBar.Scalp.loadingPerc = 1;
 end
  
 
@@ -33,7 +35,7 @@ if any(fileIdx)
 	temp = load(fullfile(fileList(fileIdx).folder,fileList(fileIdx).name));
 	fieldName =  fieldnames(temp);
 	Atlas.WhiteMatter = temp.(fieldName{1});
-	GHandle.TempWindow.loadingBar.WhiteMatter.LoadingPerc = 1;
+	GHandle.TempWindow.loadingBar.WhiteMatter.loadingPerc = 1;
 end
   
 
@@ -44,7 +46,7 @@ if any(fileIdx)
 	fieldName =  fieldnames(temp);
 	Atlas.flagVoxel = true;	
 	GHandle.Temp.Voxel.Head = temp.(fieldName{1});
-	GHandle.TempWindow.loadingBar.Voxel.LoadingPerc = 1;
+	GHandle.TempWindow.loadingBar.Voxel.loadingPerc = 1;
 % 	if any(strcmp(structField, 'segmentation'))
 % 		GHandle.Temp.Voxel.Segmentation = temp.segmentation;
 % 	end
@@ -57,7 +59,7 @@ if any(fileIdx)
 	fieldName =  fieldnames(temp);
 	Atlas.flagHead = true;
 	GHandle.Temp.HeadAtlas = temp.(fieldName{1});
-	GHandle.TempWindow.loadingBar.HeadVolume.LoadingPerc = 1;
+	GHandle.TempWindow.loadingBar.HeadVolume.loadingPerc = 1;
 end
  
 
@@ -75,8 +77,9 @@ if any(fileIdx)
 	Iz = tempPoint(2,:);
 	RPA = tempPoint(3,:);
 	LPA = tempPoint(4,:);
-	GHandle.TempWindow.loadingBar.LandMarks.LoadingPerc = 0.1;
-	Atlas.LandMarks = atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,GHandle.TempWindow.loadingBar.LandMarks);
+	GHandle.TempWindow.loadingBar.LandMarks.loadingPerc = 0.1;
+	%Atlas.LandMarks = atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,GHandle.TempWindow.loadingBar.LandMarks);
+	Atlas.LandMarks = Copy_of_atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,GHandle.TempWindow.loadingBar.LandMarks);
 	fclose(landmarkFile);
 end
  

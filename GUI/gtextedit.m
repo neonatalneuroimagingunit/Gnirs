@@ -10,7 +10,7 @@ BackgroundColor =  [0.9400    0.9400    0.9400];
 configuration = 'vertical';
 texttype = 'text';
 textHeight = 10;
-
+callback = {};
 
 for i = 1 : 2 : nargin
 	switch lower(varargin{i})

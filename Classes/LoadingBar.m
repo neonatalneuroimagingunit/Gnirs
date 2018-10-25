@@ -1,9 +1,11 @@
 classdef LoadingBar < handle
 
    properties (SetObservable) 
-      LoadingPerc
-	  LoadingCounter
-	  LoadingMax
+      loadingPerc
+	  loadingCounter
+	  loadingMax
+	  
+	  loadingText
    end
    
 end
