@@ -173,7 +173,7 @@ GHandle.TempWindow.MirrorProbe = uicontrol('Style', 'checkbox',...
 	'texttype','edit',...
 	'sizeratio',1,...
 	'configuration','vertical');
-
+addlistener(GHandle.TempWindow.ThresholdDistance,'String','PostSet',@(src,evnt)channelrefresh(src,evnt,GHandle));
 
 GHandle.TempWindow.ShowInactive = uicontrol('Style', 'checkbox', ...
 	'Parent', GHandle.TempWindow.OptionsPanel, ...
@@ -216,19 +216,16 @@ showInactive = GHandle.TempWindow.ShowInactive.Value;
 thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistance.String);
 
 if ~isempty(GHandle.TempWindow.ChannelList.Data)
-	GHandle.TempWindow.ChannelList.Data(:,5) =  num2cell([GHandle.TempWindow.ChannelList.Data{:,4}] < thresholdDistance);
-	activeMask = ~[GHandle.TempWindow.ChannelList.Data{:,5}];
-	C = cell(sum(activeMask),1);
-	if showInactive
-		C(:) = {':'};
-	else
-		C(:) = {'none'};
-	end
-	set(GHandle.TempWindow.Channel(activeMask),{'LineStyle'}, C);
-	inactiveMask = [GHandle.TempWindow.ChannelList.Data{:,5}];
-	C = cell(sum(inactiveMask),1);
-	C(:) = {'-'};
-	set(GHandle.TempWindow.Channel(inactiveMask),{'LineStyle'}, C);
+    GHandle.TempWindow.ChannelList.Data(:,5) =  num2cell([GHandle.TempWindow.ChannelList.Data{:,4}] < thresholdDistance);
+    
+    activeMask = [GHandle.TempWindow.ChannelList.Data{:,5}];
+    if showInactive
+        set(GHandle.TempWindow.Channel(~activeMask),'Visible', 'on');
+        set(GHandle.TempWindow.ChannelText(~activeMask),'Visible', 'on');
+    else
+        set(GHandle.TempWindow.Channel(~activeMask),'Visible', 'off');
+        set(GHandle.TempWindow.ChannelText(~activeMask),'Visible', 'off');
+    end
 end
 end
 
@@ -255,7 +252,6 @@ else
 	rotate3d(GHandle.TempWindow.NewProbeAxes, 'off');
 end
 end
-
 
 function zoom_Atlas(Handle, ~, GHandle)
 if Handle.Value

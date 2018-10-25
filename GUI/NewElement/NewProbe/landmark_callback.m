@@ -22,28 +22,32 @@ if GHandle.TempWindow.Zoom
 	else
 		pointTag = Handle.Tag;
 		[iPoint, jPoint] = find(strcmp(GHandle.TempWindow.SelectedAtlas.LandMarks.names ,pointTag));
-		iPointMin = max(iPoint-10,1);
-		iPointMax = min(iPoint+10,101);
-		jPointMin = max(jPoint-10,1);
-		jPointMax = min(jPoint+10,101);
+		iPointMin = max(iPoint-5,1);
+		iPointMax = min(iPoint+5,101);
+		jPointMin = max(jPoint-5,1);
+		jPointMax = min(jPoint+5,101);
 		
 		pointGrid = combvec(iPointMin:iPointMax,jPointMin:jPointMax)';
 		
-		nearPoint = GHandle.TempWindow.SelectedAtlas.LandMarks.coord(pointGrid(:,1),pointGrid(:,2),:);
+		%nearPoint = GHandle.TempWindow.SelectedAtlas.LandMarks.coord(pointGrid(:,1),pointGrid(:,2),:);
+        nearPoint = GHandle.TempWindow.SelectedAtlas.LandMarks.coord(iPointMin:iPointMax,jPointMin:jPointMax,:);
 		GHandle.TempWindow.NewProbeAxes.CameraPosition = 33.*Evnt.IntersectionPoint;
-		
-		
-		
-		for iNearPoins = 1 : (size(nearPoins,1)
-			GHandle.TempWindow.LandMark(iNearPoins) = plot3(...
-				nearPoins(iNearPoins,1), nearPoins(iNearPoins,2), nearPoins(iNearPoins,3), ...
-				'tag',['Near', pointTag, num2str(iNearPoins)], ...
-				'MarkerSize',10, ...
+        
+        x = reshape(nearPoint(:,:,1), [],1);
+        y = reshape(nearPoint(:,:,2), [],1);
+        z = reshape(nearPoint(:,:,3), [],1);
+        landmarkNames = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.names(iPointMin:iPointMax,jPointMin:jPointMax), [], 1);
+
+		for iNearPoint = 1:1:size(x,1)
+			GHandle.TempWindow.LandMark(iNearPoint) = plot3(...
+				x(iNearPoint), y(iNearPoint), z(iNearPoint), ...
+				'tag',['Near', pointTag, num2str(iNearPoint)], ...
+				'MarkerSize',5, ...
 				'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
 				'LineStyle', 'none', ...
 				'Visible', 'on', ...
 				'Marker','.', ...
-				'Color','g', ...
+				'Color','m', ...
 				'Parent', GHandle.TempWindow.NewProbeAxes);
 		end
 		
