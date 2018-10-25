@@ -29,7 +29,6 @@ if GHandle.TempWindow.Zoom
 		
 		pointGrid = combvec(iPointMin:iPointMax,jPointMin:jPointMax)';
 		
-		%nearPoint = GHandle.TempWindow.SelectedAtlas.LandMarks.coord(pointGrid(:,1),pointGrid(:,2),:);
         nearPoint = GHandle.TempWindow.SelectedAtlas.LandMarks.coord(iPointMin:iPointMax,jPointMin:jPointMax,:);
 		GHandle.TempWindow.NewProbeAxes.CameraPosition = 33.*Evnt.IntersectionPoint;
         
@@ -42,7 +41,7 @@ if GHandle.TempWindow.Zoom
 			GHandle.TempWindow.LandMarkFineStructure(iNearPoint) = plot3(...
 				x(iNearPoint), y(iNearPoint), z(iNearPoint), ...
 				'tag',['Near', pointTag, num2str(iNearPoint)], ...
-				'MarkerSize',5, ...
+				'MarkerSize',8, ...
 				'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
 				'LineStyle', 'none', ...
 				'Visible', 'on', ...
@@ -52,8 +51,7 @@ if GHandle.TempWindow.Zoom
 		end
 		
 	end
-	
-	
+		
 	GHandle.TempWindow.Zoom = false;
 else
 	if all(Handle.Color == markColor)
