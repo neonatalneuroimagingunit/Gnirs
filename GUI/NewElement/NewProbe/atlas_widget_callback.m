@@ -10,8 +10,11 @@ GHandle.TempWindow.NewProbeAxes.CameraViewAngleMode = 'auto';
 
 if any(selectedAtlas)
 	GHandle.TempWindow.SourceList.String = [];
+    GHandle.TempWindow.DetectorList.String = [];
 	GHandle.TempWindow.ChannelList.Data = {};
-	GHandle.TempWindow.DetectorList.String = [];
+    GHandle.TempWindow.SourceList.UserData = [];
+    GHandle.TempWindow.DetectorList.UserData = [];
+    
     if (selectedAtlas == 1) % 2D
         GHandle.TempWindow.NewProbeRotateButton.Enable = 'off';
         GHandle.TempWindow.NewProbeZoomButton.Enable = 'on';
