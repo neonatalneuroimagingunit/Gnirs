@@ -1,4 +1,4 @@
-	function DataBase = create(pathDataBase, pathGnirs)
+	function DataBase = create(pathDataBase)
 
 
 		dirFullPath = fullfile(pathDataBase , 'GDataBase'); %create the new path
@@ -21,12 +21,6 @@
 			filefullPath = fullfile(DataBase.path, 'DataBase');
 			save(filefullPath,'DataBase');
 
-			if (nargin == 2)
-				txtPath = fullfile(pathGnirs, 'Path.txt' );
-				fid = fopen( txtPath, 'wt' );
-				fprintf( fid, '%s', dirFullPath);
-				fclose(fid);
-			end
 		else
 			error('the database alredy exist')
 		end

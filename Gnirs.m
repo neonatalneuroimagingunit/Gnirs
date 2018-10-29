@@ -7,9 +7,14 @@ clear all %#ok<CLALL>
 clc
 
 %% Start default settings
-figureScreenRatioLarge = 0.75;
-figureScreenRatioMedium = 0.5;
-figureScreenRatioSmall = 0.25;
+largeScreenRatio = 0.75;
+mediumScreenRatio = 0.5;
+smallScreenRatio = 0.25;
+
+%% Font Ratio settings
+smallFont = 2;
+mediumFont = 1.75;
+largeFont = 1.5;
 
 %% set Path
 currentPath = fileparts(which(mfilename));
@@ -17,7 +22,6 @@ addpath(genpath(currentPath));
 
 %% create the main handle
 GHandle = GnirsHandle;
-
 
 %% Load database 
 GHandle.Preference.Path.currentPath = currentPath;
@@ -28,29 +32,25 @@ GHandle.Preference.Path.preferenceTxt = preferenceTxt;
 if ~exist(preferenceTxt, 'file')
 	
  	handleNewDatabase = newdatabasewindow(currentPath);
-	waitfor(handleNewDatabase.MainFigure);	
+	waitfor(handleNewDatabase.MainFigure);
 end
-
 
 % check if something go wrong
 if exist(GHandle.Preference.Path.preferenceTxt, 'file') 
 	
 	%% open all the preference
-	fid = fopen(preferenceTxt);
-	databasePath = fgetl(fid);
-	fclose(fid);
-
+    loadpreferences(GHandle);
+    databasePath = fullfile(GHandle.Preference.Path.databasePath);
 	GHandle.DataBase = GDataBase.load(databasePath);
 
-
-	%%  load and set Setings color theme
+	%%  load and set Settings color theme
 	
 	GHandle.Preference.Font.name = 'Helvetica';
 	set(0,'units','centimeters')
 	GHandle.Preference.Screen.sizeCm = get(0,'ScreenSize');
-	fontSizeS = floor(GHandle.Preference.Screen.sizeCm(4)/2);
-	fontSizeM = floor(GHandle.Preference.Screen.sizeCm(4)/1.75);
-	fontSizeL = floor(GHandle.Preference.Screen.sizeCm(4)/1.5);
+	fontSizeS = floor(GHandle.Preference.Screen.sizeCm(4)/smallFont);
+	fontSizeM = floor(GHandle.Preference.Screen.sizeCm(4)/mediumFont);
+	fontSizeL = floor(GHandle.Preference.Screen.sizeCm(4)/largeFont);
 	
 	GHandle.Preference.Font.sizeS = fontSizeS;
 	GHandle.Preference.Font.sizeM = fontSizeS;
@@ -64,40 +64,36 @@ if exist(GHandle.Preference.Path.preferenceTxt, 'file')
 	GHandle.Preference.Figure.sizeFull = GHandle.Preference.Screen.size;
 	
 	% Size large windows
-	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatioLarge)./2;
-	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatioLarge;
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - largeScreenRatio)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* largeScreenRatio;
 	figureSize = [edge, size];
 	GHandle.Preference.Figure.sizeLarge = figureSize;
 
 	% Size medium windows
-	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatioMedium)./2;
-	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatioMedium;
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - mediumScreenRatio)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* mediumScreenRatio;
 	figureSize = [edge, size];
 	GHandle.Preference.Figure.sizeMedium = figureSize;
 	
-	
 	% Size small windows
-	edge = GHandle.Preference.Screen.size(3:4) .* (1 - figureScreenRatioSmall)./2;
-	size =  GHandle.Preference.Screen.size(3:4) .* figureScreenRatioSmall;
+	edge = GHandle.Preference.Screen.size(3:4) .* (1 - smallScreenRatio)./2;
+	size =  GHandle.Preference.Screen.size(3:4) .* smallScreenRatio;
 	figureSize = [edge, size];
 	GHandle.Preference.Figure.sizeSmall = figureSize;
-	
-	
-	GHandle.Preference.Figure.theme = 'dark';
-	
+    
 	%% aggiungerlo come listener
-	switch GHandle.Preference.Figure.theme
-		case 'classic'
-			GHandle.Preference.Figure.backgroundColor = get(0,'DefaultUicontrolBackgroundcolor');
-			GHandle.Preference.Figure.foregroundColor = 'k';
-			GHandle.Preference.Figure.panelColor = [211 211 211]/255;
-			GHandle.Preference.Figure.highlightColor = [211 211 211]/255;
-		case 'dark'
-			GHandle.Preference.Figure.backgroundColor = [68 68 68]/255;
-			GHandle.Preference.Figure.foregroundColor = 'w';
-			GHandle.Preference.Figure.panelColor = [92 92 92]/255;
-			GHandle.Preference.Figure.highlightColor = [211 211 211]/255;
-	end
+% 	switch GHandle.Preference.Figure.Theme
+% 		case 'classic'
+% 			GHandle.Preference.Figure.backgroundColor = get(0,'DefaultUicontrolBackgroundcolor');
+% 			GHandle.Preference.Figure.foregroundColor = 'k';
+% 			GHandle.Preference.Figure.panelColor = [211 211 211]/255;
+% 			GHandle.Preference.Figure.highlightColor = [211 211 211]/255;
+% 		case 'dark'
+% 			GHandle.Preference.Figure.backgroundColor = [68 68 68]/255;
+% 			GHandle.Preference.Figure.foregroundColor = 'w';
+% 			GHandle.Preference.Figure.panelColor = [92 92 92]/255;
+% 			GHandle.Preference.Figure.highlightColor = [211 211 211]/255;
+% 	end
 	%% create a loading figure
 	
 	loadigfigure(GHandle);

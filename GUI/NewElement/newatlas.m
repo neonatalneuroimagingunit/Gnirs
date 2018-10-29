@@ -217,18 +217,18 @@ function load_atlas(~,~, GHandle)
 	GHandle.TempWindow.NewAtlasWidget.Enable = 'off';
 	
 	GHandle.TempWindow.NewAtlasNote.Label = 'Loading Log';
-	GHandle.TempWindow.NewAtlasNote.Value = {'Start Loading Atlas...'};
+	GHandle.TempWindow.NewAtlasNote.Value = 'Start Loading Atlas...';
 	
 	
 	loadatlasfrommat(GHandle);
-	close(GHandle.TempWindow.NewAtlasFigure);
 	
 	GHandle.CurrentDataSet.Atlas.name = name;
 	GHandle.CurrentDataSet.Atlas.note = note;
-	
+    
 	DataBase = GHandle.DataBase.add(GHandle.CurrentDataSet.Atlas, name, GHandle.Temp);
 	GHandle.DataBase = DataBase;
-	tree(GHandle);
+	close(GHandle.TempWindow.NewAtlasFigure);
+    tree(GHandle);
 	GHandle.TempWindow = [];
 	
 	GHandle.Main.Tree.TabGroup.SelectedTab = GHandle.Main.Tree.AtlasTab;
@@ -295,10 +295,9 @@ function loading_landmarks(~,evnt,GHandle)
 	drawnow;
 end
 
-
 function add_log(~,evnt,GHandle)
 
-	GHandle.TempWindow.NewAtlasNote.Value = [GHandle.TempWindow.NewAtlasNote.Value; evnt.AffectedObject.loadingText];
+	GHandle.TempWindow.NewAtlasNote.Value = [GHandle.TempWindow.NewAtlasNote.Value newline evnt.AffectedObject.loadingText];
 	drawnow;
 	
 end
