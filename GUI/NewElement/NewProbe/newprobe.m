@@ -115,7 +115,7 @@ GHandle.TempWindow.ChannelList = uitable(...
     'ColumnName', {'Name', 'S', 'D', 'SD distance (mm)', 'Active'}, ...
     'ColumnEditable',[true false false false true], ...
     'ColumnWidth', {100 50 50 150 50}, ...
-    'ColumnFormat', {'char' 'numeric', 'numeric', 'numeric', 'logical'}, ...
+    'ColumnFormat', {'char' 'char', 'char', 'numeric', 'logical'}, ...
     'Position',  [0.05 0.05 0.39 0.40]);
 
 GHandle.TempWindow.SgaPuffoPanel = uipanel(...
@@ -209,15 +209,41 @@ end
 function load_probe(~, ~, GHandle)
 probeName = GHandle.TempWindow.NewProbeName.Value;
 note = GHandle.TempWindow.NewProbeNote.Value;
-% for dd = 1:1:length(GHandle.TempWindow.DetectorList.String)
-%     detector(1,dd).label = GHandle.TempWindow.DetectorList.String{dd};
-%     detector(1,dd).position = GHandle.TempWindow.Detector.;
-% end
-detector(1,:).label = GHandle.TempWindow.DetectorList.String;
-source
-channel
 
-NewProbe = NirsProbe('name', probeName, 'note', note, 'detector', detector, 'source', source, 'channel', channel);
+xAtlas = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,1),[],1);
+yAtlas = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,2),[],1);
+zAtlas = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,3),[],1);
+
+nDetector = size(GHandle.TempWindow.DetectorList.String,1);
+Detector = repmat(struct(),[nDetector,1]);
+for iDetector = 1:1:nDetector
+    Detector(iDetector).label = GHandle.TempWindow.DetectorList.String{iDetector};
+    idxPosition = GHandle.TempWindow.DetectorList.UserData(iDetector);
+    Detector(iDetector).position = [xAtlas(idxPosition) yAtlas(idxPosition) zAtlas(idxPosition)];
+end
+
+nSource = size(GHandle.TempWindow.SourceList.String,1);
+Source = repmat(struct(),[nSource,1]);
+for iSource = 1:1:nSource
+    Source(iSource).label = GHandle.TempWindow.SourceList.String{iSource};
+    idxPosition = GHandle.TempWindow.SourceList.UserData(iSource);
+    Source(iSource).position = [xAtlas(idxPosition) yAtlas(idxPosition) zAtlas(idxPosition)];
+end
+
+nChannel = sum([GHandle.TempWindow.ChannelList.Data{:,5}]);
+idxChannel = find([GHandle.TempWindow.ChannelList.Data{:,5}] == 1);
+Channel = repmat(struct(),[nChannel,1]);
+for iChannel = 1:1:nChannel
+    idxPosition = idxChannel(iChannel);
+    Channel(iChannel).label = GHandle.TempWindow.ChannelList.Data{1,idxPosition};
+    Channel(iChannel).distance = GHandle.TempWindow.ChannelList.Data{idxPosition,4};
+    % [source detector]
+    idxSource = find(strcmp(GHandle.TempWindow.SourceList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,2}));
+    idxDetector = find(strcmp(GHandle.TempWindow.DetectorList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,3}));
+    Channel(iChannel).pairs = [idxSource idxDetector];
+end
+
+NewProbe = NirsProbe('name', probeName, 'note', note, 'detector', Detector, 'source', Source, 'channel', Channel);
 
 DataBase = GHandle.DataBase.add(NewProbe);
 

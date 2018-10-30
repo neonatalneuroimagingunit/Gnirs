@@ -10,6 +10,7 @@ detectorTag = GHandle.TempWindow.DetectorList.String;
 nSource = size(sourceTag,1);
 nDetector = size(detectorTag,1);
 channelPairs = int32(combvec(GHandle.TempWindow.SourceList.UserData', GHandle.TempWindow.DetectorList.UserData')');
+channelPairsIdx = combvec(1:nSource, 1:nDetector)';
 nChannel = size(channelPairs,1);
 
 if GHandle.TempWindow.LandmarkLabels.Value == 1
@@ -68,8 +69,8 @@ if nChannel
         tempChannelDistance = norm(tempCoordSource-tempCoordDetector);
         
         GHandle.TempWindow.ChannelList.Data{iChannel,1} = ['Ch' num2str(iChannel)];
-        GHandle.TempWindow.ChannelList.Data{iChannel,2} = channelPairs(iChannel,1);
-        GHandle.TempWindow.ChannelList.Data{iChannel,3} = channelPairs(iChannel,2);
+        GHandle.TempWindow.ChannelList.Data{iChannel,2} = GHandle.TempWindow.SourceList.String{channelPairsIdx(iChannel,1)};
+        GHandle.TempWindow.ChannelList.Data{iChannel,3} = GHandle.TempWindow.DetectorList.String{channelPairsIdx(iChannel,2)};
         GHandle.TempWindow.ChannelList.Data{iChannel,4} = tempChannelDistance;
         GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
         if GHandle.TempWindow.ChannelList.Data{iChannel,5}
