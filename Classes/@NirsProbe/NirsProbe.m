@@ -7,13 +7,11 @@ classdef NirsProbe
 		
 		name(1,:) char
 		
-		source(:,2) double
+		source(1,:) struct
 		
-		detector(:,2) double
+		detector(1,:) struct
 		
-		channel(:,2) int32
-		
-		distance(:,1) double
+		channel(1,:) struct
 		
 		note(1,:) char
 	end

@@ -2,7 +2,7 @@ function newprobe(~, ~, GHandle)
 
 figureSize = GHandle.Preference.Figure.sizeLarge;
 AtlasList = GHandle.DataBase.Atlas;
-axesBackgroundColor = 'w';
+axesBackgroundColor = GHandle.Preference.Theme.axesBackgroundColor;
 GHandle.TempWindow.Zoom = false;
 
 GHandle.TempWindow.NewProbeFigure = figure(...
@@ -51,7 +51,7 @@ GHandle.TempWindow.AtlasWidget = uiw.widget.EditablePopup(...
     'UserData',[{'NoAtlas'}; num2cell(AtlasList)],...
     'Label','Atlas',...
     'LabelLocation','top',...
-    'Callback',@(Handle,Event)atlas_widget_callback(Handle,Event,GHandle),...
+    'Callback',@(Handle,Event)atlaswidgetcallback(Handle,Event,GHandle),...
     'Units','normalized',...
     'Position',[0.05 0.75 0.2 0.1]);
 
@@ -209,8 +209,15 @@ end
 function load_probe(~, ~, GHandle)
 probeName = GHandle.TempWindow.NewProbeName.Value;
 note = GHandle.TempWindow.NewProbeNote.Value;
+% for dd = 1:1:length(GHandle.TempWindow.DetectorList.String)
+%     detector(1,dd).label = GHandle.TempWindow.DetectorList.String{dd};
+%     detector(1,dd).position = GHandle.TempWindow.Detector.;
+% end
+detector(1,:).label = GHandle.TempWindow.DetectorList.String;
+source
+channel
 
-NewProbe = NirsProbe('name', probeName, 'note', note);
+NewProbe = NirsProbe('name', probeName, 'note', note, 'detector', detector, 'source', source, 'channel', channel);
 
 DataBase = GHandle.DataBase.add(NewProbe);
 

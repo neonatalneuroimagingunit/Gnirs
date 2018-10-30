@@ -1,7 +1,9 @@
-function atlas_widget_callback(Handle, Event, GHandle)
+function atlaswidgetcallback(Handle, Event, GHandle)
 atlasScaleFactor = 0.98;
-%scalpColor = [255 229 204]./255;
-scalpColor = [200 200 200]./255;
+
+scalpColor = GHandle.Preference.Theme.scalpColor;
+landmarkColor = GHandle.Preference.Theme.landmarkColor;
+
 selectedAtlas = Event.NewSelectedIndex;
 GHandle.TempWindow.NewProbeAxes.CameraTargetMode = 'auto';
 GHandle.TempWindow.NewProbeAxes.CameraPositionMode = 'auto';
@@ -87,7 +89,7 @@ if any(selectedAtlas)
                     'LineStyle', 'none', ...
                     'Visible', 'on', ...
                     'Marker','.', ...
-                    'Color','g', ...
+                    'Color',landmarkColor, ...
                     'Parent', GHandle.TempWindow.NewProbeAxes);
             end
         end
