@@ -250,6 +250,25 @@ tenFive.names(86,16:5:86) = {'POO7h'; 'POO5'; 'POO5h'; 'POO3'; 'POO3h'; 'POO1'; 
 % [tempPoints, ~, tempLength] = pathonmesh(meshPoints, POO8, POOz , POO7, nStep);
 % tenFive.coord(18,4:18,:) = pointsrelpos(tempPoints, tempLength, arcPerc);
 
+l1 = {'L2'; 'L1'; ''; 'R1'; 'R2'}; % left 2 right
+l2 = {'F2'; 'F1'; ''; 'B1'; 'B2'}; % front 2 back
+separatore = repmat({'_'},[5,5]);
+separatore{3,3} = '';
+
+for i = 6:5:96
+    for j = 6:5:96
+        if ~isempty(tenFive.names(i,j))
+            spam = repmat{tenFive.names(i,j),[5,5]};
+            for x = 1:1:5
+                for y = 1:1:5
+                    spam{x,y} = [spam{x,y} separatore{x,y} l1{x} l2{y}];
+                end
+            end
+            tenFive.names(i-2:i+2,j-2:j+2) = spam;
+        end
+    end
+end
+
 
 end
 
