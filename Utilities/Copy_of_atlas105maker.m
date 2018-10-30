@@ -241,9 +241,6 @@ tempname = repmat({'POO7h'; 'POO5'; 'POO5h'; 'POO3'; 'POO3h'; 'POO1'; 'POO1h'; .
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(86:1:90,16:1:90) = tempname';
 
-
-
-
 postFixMatrix = {'_L2F2', '_L1F2', '_F2', '_R1F2', '_R2F2';...
     '_L2F1', '_L1F1', '_F1', '_R1F1', '_R2F1';...
     '_L2', '_L1', '', '_Rv1', '_R2';...
@@ -253,7 +250,6 @@ postFixMatrix = {'_L2F2', '_L1F2', '_F2', '_R1F2', '_R2F2';...
 postFixMatrix = repmat(postFixMatrix,[21,21]);
 tempNameMatrixWhitPostFix = strcat(tempNameMatrix,postFixMatrix);
 tempNameMatrixWhitPostFix(cellfun('isempty',tempNameMatrix)) = {''};
-
 
 tenFive.names = tempNameMatrixWhitPostFix(3:103,3:103);
 end

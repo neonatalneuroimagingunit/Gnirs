@@ -7,25 +7,20 @@ function channelColors = sorting_colors(nchannels, sortingmethod)
 %        - channel
 %        - wavelength
 
-% Written by Matteo Caffini
+% Written by Matteo Caffini Modify by Nadir
 % CIMeC - Universita' dgli Studi di Trento
 % on June, 29th 2018 in Rovereto (TN)
 %
-
 switch sortingmethod
     case 'wavelength'
         spam = lines(2);
-        channelColors = ones(nchannels, 4);
-        channelColors(1:2:end,1:3) = repmat(spam(1,:),[nchannels/2 1]);
-        channelColors(2:2:end,1:3) = repmat(spam(2,:),[nchannels/2 1]);
+        channelColors =  repmat(spam,nchannels/2,1);
     case 'channel'
         spam = lines(nchannels/2);
-        channelColors(:,1:3) = repmat(spam,[nchannels/2 1]);
+        channelColors(1:2:nchannels,:) = spam;
+        channelColors(2:2:nchannels,:) = spam;
     case 'sortnomo'
-        channelColors(:,1:3) = lines(nchannels);
-    case 'type' % not sure it's necessary (intended to sort by AC, DC, Ph)
-        channelColors(:,1:3) = lines(nchannels);
+        channelColors = lines(nchannels);
 end
-
 
 end
