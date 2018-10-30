@@ -7,6 +7,7 @@ function newatlas(~, ~, GHandle)
 	'position', figureSize,...
     'Resize', 'on',...
     'Name', 'New NIRS Atlas', ...
+    'CloseRequestFcn',{@close_figure,GHandle},...
     'Numbertitle', 'off', ...
     'Toolbar', 'none', ...
     'Menubar', 'none', ...
@@ -179,6 +180,10 @@ end
 
 function load_atlas(~,~, GHandle)
 	%add a tree branch
+    name = GHandle.TempWindow.NewAtlasName.Value;
+	note = GHandle.TempWindow.NewAtlasNote.Value;
+    
+    
 	GHandle.TempWindow.loadingBar.GrayMatter = LoadingBar;
 	GHandle.TempWindow.loadingBar.WhiteMatter = LoadingBar;
 	GHandle.TempWindow.loadingBar.Scalp = LoadingBar;
@@ -208,9 +213,7 @@ function load_atlas(~,~, GHandle)
 	GHandle.TempWindow.loadingBar.Voxel.loadingPerc = 0;
 	GHandle.TempWindow.loadingBar.HeadVolume.loadingPerc = 0;
 	GHandle.TempWindow.loadingBar.LandMarks.loadingPerc = 0;
-	
-	name = GHandle.TempWindow.NewAtlasName.Value;
-	note = GHandle.TempWindow.NewAtlasNote.Value;
+
 	GHandle.TempWindow.location = GHandle.TempWindow.NewAtlasWidget.Value;
 	
 	GHandle.TempWindow.NewAtlasName.Enable = 'off';
@@ -228,10 +231,7 @@ function load_atlas(~,~, GHandle)
 	DataBase = GHandle.DataBase.add(GHandle.CurrentDataSet.Atlas, name, GHandle.Temp);
 	GHandle.DataBase = DataBase;
 	close(GHandle.TempWindow.NewAtlasFigure);
-    tree(GHandle);
-	GHandle.TempWindow = [];
-	
-	GHandle.Main.Tree.TabGroup.SelectedTab = GHandle.Main.Tree.AtlasTab;
+    tree(GHandle);	
 end
 
 
@@ -304,8 +304,10 @@ end
 
 
 
-
-
+function close_figure(Handle, ~, GHandle)
+delete(Handle);
+GHandle.TempWindow = [];
+end
 
 
 

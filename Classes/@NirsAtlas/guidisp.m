@@ -155,10 +155,10 @@ function  guidisp(Atlas, GHandle , editableField)
 		'EdgeColor','none',...
 		'FaceColor',wmColor);
     
-    x = reshape(Atlas.LandMarks.coord(:,:,1), [],1);
-    y = reshape(Atlas.LandMarks.coord(:,:,2), [],1);
-    z = reshape(Atlas.LandMarks.coord(:,:,3), [],1);
-    landmarkNames = reshape(Atlas.LandMarks.names, [], 1);
+    x = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,1), [],1);
+    y = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,2), [],1);
+    z = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,3), [],1);
+    landmarkNames = reshape(Atlas.LandMarks.names(1:5:end,1:5:end), [], 1);
     iMask = find(~cellfun('isempty', landmarkNames));
     
 	GHandle.Main.Display.SubPanel(idx).LandMark = plot3(...

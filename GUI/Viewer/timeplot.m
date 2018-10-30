@@ -1,6 +1,6 @@
 function timeplot(~, eventData, GHandle, vIdx)
 
-foregroundColor = GHandle.Preference.Figure.foregroundColor;
+foregroundColor = GHandle.Preference.Theme.foregroundColor;
 
 Data = eventData.AffectedObject.time2Plot;
 lineLabels = Data.Properties.VariableNames(2:end);

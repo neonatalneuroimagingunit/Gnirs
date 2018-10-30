@@ -219,6 +219,8 @@ Detector = repmat(struct(),[nDetector,1]);
 for iDetector = 1:1:nDetector
     Detector(iDetector).label = GHandle.TempWindow.DetectorList.String{iDetector};
     idxPosition = GHandle.TempWindow.DetectorList.UserData(iDetector);
+    [xPos,yPos] = ind2sub([101, 101],idxPosition);
+    Detector(iDetector).position2D = [xPos,yPos];
     Detector(iDetector).position = [xAtlas(idxPosition) yAtlas(idxPosition) zAtlas(idxPosition)];
 end
 
@@ -227,6 +229,8 @@ Source = repmat(struct(),[nSource,1]);
 for iSource = 1:1:nSource
     Source(iSource).label = GHandle.TempWindow.SourceList.String{iSource};
     idxPosition = GHandle.TempWindow.SourceList.UserData(iSource);
+    [xPos,yPos] = ind2sub([101, 101],idxPosition);
+    Source(iSource).position2D = [xPos,yPos];
     Source(iSource).position = [xAtlas(idxPosition) yAtlas(idxPosition) zAtlas(idxPosition)];
 end
 
@@ -237,7 +241,6 @@ for iChannel = 1:1:nChannel
     idxPosition = idxChannel(iChannel);
     Channel(iChannel).label = GHandle.TempWindow.ChannelList.Data{1,idxPosition};
     Channel(iChannel).distance = GHandle.TempWindow.ChannelList.Data{idxPosition,4};
-    % [source detector]
     idxSource = find(strcmp(GHandle.TempWindow.SourceList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,2}));
     idxDetector = find(strcmp(GHandle.TempWindow.DetectorList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,3}));
     Channel(iChannel).pairs = [idxSource idxDetector];
@@ -251,7 +254,7 @@ GHandle.DataBase = DataBase;
 
 tree(GHandle);
 
-GHandle.Main.Tree.TabGroup.SelectedTab = GHandle.Main.Tree.ProbeTab;
+close(GHandle.TempWindow.NewProbeFigure);
 end
 
 

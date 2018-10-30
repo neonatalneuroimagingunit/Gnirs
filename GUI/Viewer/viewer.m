@@ -30,9 +30,9 @@ figurePosition = GHandle.Preference.Figure.sizeLarge;
 
 % Set color theme
 
-backgroundColor = GHandle.Preference.Figure.backgroundColor;
-foregroundColor = GHandle.Preference.Figure.foregroundColor;
-highlightColor = GHandle.Preference.Figure.highlightColor;
+backgroundColor = GHandle.Preference.Theme.backgroundColor;
+foregroundColor = GHandle.Preference.Theme.foregroundColor;
+highlightColor = GHandle.Preference.Theme.highlightColor;
 
 
 % Set font

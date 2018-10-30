@@ -258,7 +258,7 @@ separatore{3,3} = '';
 for i = 6:5:96
     for j = 6:5:96
         if ~isempty(tenFive.names(i,j))
-            spam = repmat{tenFive.names(i,j),[5,5]};
+            spam = repmat(tenFive.names(i,j),[5,5]);
             for x = 1:1:5
                 for y = 1:1:5
                     spam{x,y} = [spam{x,y} separatore{x,y} l1{x} l2{y}];

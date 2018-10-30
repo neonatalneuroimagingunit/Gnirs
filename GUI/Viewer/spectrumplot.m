@@ -1,7 +1,7 @@
 function spectrumplot(~, eventData, GHandle, vIdx)
 %SPECTRUMPLOT Summary of this function goes here
 
-foregroundColor = GHandle.Preference.Figure.foregroundColor;
+foregroundColor = GHandle.Preference.Theme.foregroundColor;
 
 Data = eventData.AffectedObject.spectrum2Plot;
 lineLabels = Data.Properties.VariableNames(2:end);
