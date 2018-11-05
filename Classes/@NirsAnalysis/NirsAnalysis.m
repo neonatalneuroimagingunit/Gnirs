@@ -10,6 +10,8 @@ classdef NirsAnalysis
 		date(1,1) datetime = NaT;
 		
 		analysis
+        
+        TrackType (:,1) struct
 		
 		SimplyData
 		

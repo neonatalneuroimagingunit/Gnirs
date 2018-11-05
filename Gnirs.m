@@ -6,6 +6,8 @@ close all
 clear all %#ok<CLALL>
 clc
 
+
+opengl hardware
 %% Start default settings
 largeScreenRatio = 0.75;
 mediumScreenRatio = 0.5;

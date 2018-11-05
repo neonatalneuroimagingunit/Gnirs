@@ -16,10 +16,8 @@
 		date(1,1) datetime = NaT;
 	
 		timeLength(1,1) double
-		
-		updateRate(1,1) double
-		
-		wavelength(1,:) double
+        
+        InstrumentType (1,1) struct
 		
 		dataType(1,:) cell
 		
@@ -27,7 +25,9 @@
 
 		videoFlag(1,1) logical
 		
-		Info 
+		Info (1,1) struct
+        
+        AdvanceInfo (1,1) struct
 
 		note(1,:) char
 	end
