@@ -239,7 +239,7 @@ idxChannel = find([GHandle.TempWindow.ChannelList.Data{:,5}] == 1);
 Channel = repmat(struct(),[nChannel,1]);
 for iChannel = 1:1:nChannel
     idxPosition = idxChannel(iChannel);
-    Channel(iChannel).label = GHandle.TempWindow.ChannelList.Data{1,idxPosition};
+    Channel(iChannel).label = GHandle.TempWindow.ChannelList.Data{idxPosition,1};
     Channel(iChannel).distance = GHandle.TempWindow.ChannelList.Data{idxPosition,4};
     idxSource = find(strcmp(GHandle.TempWindow.SourceList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,2}));
     idxDetector = find(strcmp(GHandle.TempWindow.DetectorList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,3}));
