@@ -136,20 +136,36 @@ for ii = 12 : 1 : 90 %(101 - 11)
 end
 tempNameMatrix = repmat({''},105,105);
 
-tempname = repmat( {'Nz'; 'N1h'; 'N1'; 'AFp9'; 'AF9'; 'AFF9'; 'F9'; 'FFT9'; 'FT9'; 'FTT9'; ...
-    'T9'; 'TTP9'; 'TP9'; 'TPP9'; 'P9'; 'PPO9'; 'PO9'; 'POO9'; 'I1'; 'I1h'; 'Iz'}',5,1);
+
+
+
+% tempname = repmat( {'Nz'; 'N1h'; 'N1'; 'AFp9'; 'AF9'; 'AFF9'; 'F9'; 'FFT9'; 'FT9'; 'FTT9'; ...
+%     'T9'; 'TTP9'; 'TP9'; 'TPP9'; 'P9'; 'PPO9'; 'PO9'; 'POO9'; 'I1'; 'I1h'; 'Iz'}',5,1);
+
+tempname = repmat( {'Iz','I1h','I1','POO9','PO9','PPO9','P9','TPP9','TP9','TTP9', ...
+    'T9', 'FTT9','FT9','FFT9','F9','AFF9','AF9','AFp9','N1','N1h','Nz'}',5,1);
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,1:1:5) = tempname;
 
-tempname = repmat({'NFpz'; 'NFp1h'; 'NFp1'; 'AFp9h'; 'AF9h'; 'AFF9h'; 'F9h'; 'FFT9h'; 'FT9h'; 'FTT9h'; ...
-    'T9h'; 'TTP9h'; 'TP9h'; 'TPP9h'; 'P9h'; 'PPO9h'; 'PO9h'; 'POO9h'; 'O1h'; 'OI1h'; 'OIz'}',5,1);
+% tempname = repmat({'NFpz'; 'NFp1h'; 'NFp1'; 'AFp9h'; 'AF9h'; 'AFF9h'; 'F9h'; 'FFT9h'; 'FT9h'; 'FTT9h'; ...
+%     'T9h'; 'TTP9h'; 'TP9h'; 'TPP9h'; 'P9h'; 'PPO9h'; 'PO9h'; 'POO9h'; 'O1h'; 'OI1h'; 'OIz'}',5,1);
+
+tempname = repmat({'OIz','OI1h','O1h','POO9h','PO9h','PPO9h','P9h','TPP9h','TP9h','TTP9h', ...
+    'T9h','FTT9h','FT9h','FFT9h','F9h','AFF9h','AF9h','AFp9h','NFp1','NFp1h','NFpz'}',5,1);
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,6:1:10) = tempname;
 
-tempname = repmat({'Fpz'; 'Fp1h'; 'Fp1'; 'AFp7'; 'AF7'; 'AFF7'; 'F7'; 'FFT7'; 'FT7'; 'FTT7'; ...
-    'T7'; 'TTP7'; 'TP7'; 'TPP7'; 'P7'; 'PPO7'; 'PO7'; 'POO7'; 'O1'; 'O1h'; 'Oz'}',5,1);
+% tempname = repmat({'Fpz'; 'Fp1h'; 'Fp1'; 'AFp7'; 'AF7'; 'AFF7'; 'F7'; 'FFT7'; 'FT7'; 'FTT7'; ...
+%     'T7'; 'TTP7'; 'TP7'; 'TPP7'; 'P7'; 'PPO7'; 'PO7'; 'POO7'; 'O1'; 'O1h'; 'Oz'}',5,1);
+
+tempname = repmat({'Oz','O1h','O1','POO7','PO7','PPO7','P7','TPP7','TP7','TTP7',...
+    'T7','FTT7','FT7','FFT7','F7','AFF7','AF7','AFp7','Fp1','Fp1h','Fpz'},5,1);
+
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,11:1:15) = tempname;
+
+
+
 
 tempname = repmat({'Nz'; 'N2h'; 'N2'; 'AFp10'; 'AF10'; 'AFF10'; 'F10'; 'FFT10'; 'FT10'; 'FTT10'; ...
     'T10'; 'TTP10'; 'TP10'; 'TPP10'; 'P10'; 'PPO10'; 'PO10'; 'POO10'; 'I2'; 'I2h'; 'Iz'}',5,1);

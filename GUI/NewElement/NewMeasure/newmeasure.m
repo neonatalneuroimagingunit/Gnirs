@@ -175,6 +175,11 @@ if (strcmp(GHandle.TempWindow.SubjectWidget.Value, 'New Subject'))
     
     %modify this part
     GHandle.CurrentDataSet.Subject.id = GHandle.DataBase.Subject(end).id;
+    
+end
+
+if ~isempty(GHandle.TempWindow.ProbeWidget.SelectedIndex)
+    GHandle.CurrentDataSet.Probe = GHandle.DataBase.Probe(GHandle.TempWindow.ProbeWidget.SelectedIndex).load;
 end
 
 %close the figure
@@ -183,23 +188,3 @@ GHandle.TempWindow = [];
 
 loadmeasure(GHandle)
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

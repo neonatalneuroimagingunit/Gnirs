@@ -11,9 +11,10 @@ else
 end
 
 sortingmethod = {'sortnomo','wavelength','channel'};
-dataType = GHandle.CurrentDataSet.Measure.dataType;
+dataType = GHandle.CurrentDataSet.Measure.InstrumentType.datatype;
 
 GHandle.Viewer(vIdx).Data = GHandle.CurrentDataSet.Data;
+GHandle.Viewer(vIdx).Probe = GHandle.CurrentDataSet.Probe;
 % Set UI objects size
 
 
@@ -34,6 +35,9 @@ backgroundColor = GHandle.Preference.Theme.backgroundColor;
 foregroundColor = GHandle.Preference.Theme.foregroundColor;
 highlightColor = GHandle.Preference.Theme.highlightColor;
 textForegroundColor = [0 0 0];
+sourceColor = 'r';
+detectorColor = 'b';
+channelColor = 'k';
 
 % Set font
 defaultFontName = GHandle.Preference.Font.name;
@@ -41,7 +45,7 @@ defaultFontName = GHandle.Preference.Font.name;
 %initialize plot settings
 GHandle.Viewer(vIdx).WatchList = ViewerWatchList;
 
-updateRate = 15.625;
+updateRate = GHandle.CurrentDataSet.Measure.InstrumentType.UpdateRate;
 GHandle.Viewer(vIdx).updateRate = updateRate;
 
 %% Main figure
@@ -179,6 +183,7 @@ for jj = 1:1:npanels
     else
         GHandle.Viewer(vIdx).metadata(jj).probeAxes = axes('Parent', GHandle.Viewer(vIdx).metadata(jj).panel,...
             'Position', [0.1 0.1 0.8 0.8], ...
+            'DataAspectRatio', [1 1 1], ...
             'Units', 'normalized', ...
             'Color', backgroundColor, ...
             'XColor', foregroundColor, ...
@@ -190,7 +195,7 @@ for jj = 1:1:npanels
             'FontWeight', 'bold', ...
             'FontSize', 8, ...
             'FontName', defaultFontName, ...
-            'Visible', 'on', ...
+            'Visible', 'off', ...
             'Title', 'Probe plot');
     end
 end
@@ -727,13 +732,75 @@ GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'edvL
 
 
 %% Probe plot
-GHandle.Viewer(vIdx).timeplot.lines1(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
-							'LineWidth', 1, 'LineStyle', '-',...
-							'buttonDownFcn', {@line_callback , GHandle, vIdx},...
-							'Color', GHandle.Viewer(vIdx).WatchList.colorLine(iLines,:),...
-							'DisplayName', lineLabels{iLines},...
-							'Tag', lineLabels{iLines},...
-							'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
+nSrc = length(GHandle.Viewer(vIdx).Probe.source);
+nDet = length(GHandle.Viewer(vIdx).Probe.detector);
+nCh = length(GHandle.Viewer(vIdx).Probe.channel);
+
+% sizetemp = 101;
+% sourceNewPosition2D = zeros(sizetemp,sizetemp);
+% sourceNewPosition2D([GHandle.Viewer(vIdx).Probe.source.position2D(1)],[GHandle.Viewer(vIdx).Probe.source.position2D(2)]) = 1;
+% detectorNewPosition2D = zeros(sizetemp,sizetemp);
+% detectorNewPosition2D(GHandle.Viewer(vIdx).Probe.detector(ss).position2D(1),GHandle.Viewer(vIdx).Probe.detector(ss).position2D(2)) = 1;
+for cc = 1:1:nCh
+    ss = GHandle.Viewer(vIdx).Probe.channel(cc).pairs(1);
+    dd = GHandle.Viewer(vIdx).Probe.channel(cc).pairs(2);
+    if 1
+        x = [GHandle.Viewer(vIdx).Probe.source(ss).position2D(1) GHandle.Viewer(vIdx).Probe.detector(dd).position2D(1)];
+        y = [GHandle.Viewer(vIdx).Probe.source(ss).position2D(2) GHandle.Viewer(vIdx).Probe.detector(dd).position2D(2)];
+        z = [0,0];
+    else
+        x = [GHandle.Viewer(vIdx).Probe.source(ss).position(1) GHandle.Viewer(vIdx).Probe.detector(dd).position(1)];
+        y = [GHandle.Viewer(vIdx).Probe.source(ss).position(2) GHandle.Viewer(vIdx).Probe.detector(dd).position(2)];
+        z = [GHandle.Viewer(vIdx).Probe.source(ss).position(3) GHandle.Viewer(vIdx).Probe.detector(dd).position(3)];
+    end
+    GHandle.Viewer(vIdx).probeplot.channel = plot3(y,-x,z,...
+        'LineStyle', '-',...
+        'buttonDownFcn', {@probe_callback , GHandle, vIdx},...
+        'Color', channelColor,...
+        'DisplayName', GHandle.Viewer(vIdx).Probe.channel(cc).label,...
+        'Tag', GHandle.Viewer(vIdx).Probe.channel(cc).label,...
+        'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
+end
+for ss = 1:1:nSrc
+    if 1
+        x = GHandle.Viewer(vIdx).Probe.source(ss).position2D(1);
+        y = GHandle.Viewer(vIdx).Probe.source(ss).position2D(2);
+        z = 0;
+    else
+        x = GHandle.Viewer(vIdx).Probe.source(ss).position(1);
+        y = GHandle.Viewer(vIdx).Probe.source(ss).position(2);
+        z = GHandle.Viewer(vIdx).Probe.source(ss).position(3);
+    end
+    GHandle.Viewer(vIdx).probeplot.source = plot3(y,-x,z,...
+        'LineStyle', 'none',...
+        'Marker', '.',...
+        'MarkerSize', 10, ...
+        'buttonDownFcn', {@probe_callback , GHandle, vIdx},...
+        'Color', sourceColor,...
+        'DisplayName', GHandle.Viewer(vIdx).Probe.source(ss).label,...
+        'Tag', ['s' num2str(ss, '%.3d')],...
+        'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
+end
+for dd = 1:1:nDet
+    if 1
+        x = GHandle.Viewer(vIdx).Probe.detector(dd).position2D(1);
+        y = GHandle.Viewer(vIdx).Probe.detector(dd).position2D(2);
+        z = 0;
+    else
+        x = GHandle.Viewer(vIdx).Probe.detector(dd).position(1);
+        y = GHandle.Viewer(vIdx).Probe.detector(dd).position(2);
+        z = GHandle.Viewer(vIdx).Probe.detector(dd).position(3);
+    end
+    GHandle.Viewer(vIdx).probeplot.detector = plot3(y,-x,z,...
+        'LineStyle', 'none',...
+        'Marker', '.',...
+        'MarkerSize', 10, ...
+        'buttonDownFcn', {@probe_callback , GHandle, vIdx},...
+        'Color', detectorColor,...
+        'DisplayName', GHandle.Viewer(vIdx).Probe.detector(dd).label,...
+        'Tag', ['d' num2str(dd, '%.3d')],...
+        'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
+end
 
 %% Turn figure on
 GHandle.Viewer(vIdx).mainFigure.Visible = 'on';
@@ -757,6 +824,7 @@ end
 
 
 function typeselector_callback(~, Event, GHandle, vIdx)
+updateRate = GHandle.Viewer(vIdx).updateRate;
 dataIdx = contains(GHandle.Viewer(vIdx).Data.Properties.VariableNames , ['Time',Event.Source.String(Event.Source.Value)]);
 
 GHandle.Viewer(vIdx).WatchList.time2Plot = GHandle.Viewer(vIdx).Data(:,dataIdx);
@@ -775,6 +843,17 @@ sortingmethod = Event.Source.String{Event.Source.Value};
 colors = sorting_colors((size(GHandle.Viewer(vIdx).Data,2)-1), sortingmethod);
 GHandle.Viewer(vIdx).WatchList.colorLine = colors;
 GHandle.Viewer(vIdx).WatchList.edvLine = ones(size(GHandle.Viewer(vIdx).WatchList.edvLine));
+end
+
+function probe_callback(hOptode, ~, GHandle, vIdx)
+tobesearched = hOptode.Tag;
+if contains(tobesearched,'Ch')
+    temp = GHandle.Viewer.Probe.channel(contains({GHandle.Viewer.Probe.channel.label}, tobesearched)).pairs;
+    tobesearched = num2str(temp,'s%.3d_d%.3d');
+end
+GHandle.Viewer(vIdx).WatchList.edvLine = contains({GHandle.Viewer(vIdx).timeplot.lines1.Tag}, tobesearched);
+
+
 end
 
 

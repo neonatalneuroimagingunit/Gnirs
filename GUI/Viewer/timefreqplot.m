@@ -5,7 +5,7 @@ maskLine = eventData.AffectedObject.timefreq2Plot;
 
 tagLine = GHandle.Viewer(vIdx).timeplot.lines1(maskLine).Tag;
 
-[sp,fp,tp] = pspectrum(GHandle.Viewer(vIdx).Data.(tagLine), GHandle.CurrentDataSet.Measure.updateRate, 'spectrogram');
+[sp,fp,tp] = pspectrum(GHandle.Viewer(vIdx).Data.(tagLine), GHandle.Viewer(vIdx).updateRate, 'spectrogram');
 
 GHandle.Viewer(vIdx).timefrequencyplot.Surface = surf(tp,fp,sp,sp,...
 		'Parent',GHandle.Viewer(vIdx).timefrequencyplot.bigaxes,...

@@ -26,12 +26,15 @@ function [DBMeasure, DataBase] = newmeasure(DataBase, studyId, varargin)
 			DBMeasure = GDBMeasure('id',measureId,...
 									'path',pathMeasure,...
 									'studyid',Study.id);
-		end
-		
+        end
+        probeIdx = find(contains(varargin,'probeId','IgnoreCase',true), 1);
+        if probeIdx
+            DBMeasure.probeId = varargin{probeIdx+1};
+        end
 		idxArg = find(contains(varargin,'subjectid','IgnoreCase',true), 1);
 		
 		if  ~isempty(idxArg)
-			DBMeasure.subjectId = varargin{idxArg +1 };
+			DBMeasure.subjectId = varargin{idxArg+1};
 			
 			idxSubject = contains({DataBase.Subject(:).id}, DBMeasure.subjectId);
 			idxMeasure = DataBase.Subject(idxSubject).nMeasure + 1;

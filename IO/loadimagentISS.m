@@ -12,7 +12,7 @@ InstrumentType.datatype = datatype;
 
 location = GHandle.Temp.location;
 fast = GHandle.Temp.fast; % default load all data
-
+Probe = GHandle.CurrentDataSet.Probe;
 
 FILE_info = dir(location);
 %% Preliminar check on file
@@ -264,22 +264,28 @@ else
         currentChannelName = channelNames{iName};
         switch currentChannelName(2:3)
             case 'AC'
-                tempChannelNames = 'tAC';
+                typeName = 'tAC';
             case 'DC'
-                tempChannelNames = 'tDC';
+                typeName = 'tDC';
             case 'Ph'
-                tempChannelNames = 'tPh';
+                typeName = 'tPh';
         end
         if  mod(iName,2)
-            tempChannelNames = [tempChannelNames, '_w690'];
+            wavelenghName = '_w690';
         else
-            tempChannelNames = [tempChannelNames, '_w830'];
+            wavelenghName = '_w830';
         end
-       tempChannelNames = [tempChannelNames, '_d' ,num2str(currentChannelName(1)-'A'+1)];
-       
-       sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.2d');
-       tempChannelNames = [tempChannelNames, '_s' ,sourceName];
-       newChannelNames{iName} = tempChannelNames;
+       idxDet = currentChannelName(1)-'A'+1;
+       egg = reshape([Probe.channel.pairs]',2, [])';
+       idxSrc = egg(egg(:,2)==idxDet,1);
+       idxSrc =  idxSrc(ceil(str2double(currentChannelName(4:end))/2));
+       srcName = num2str(idxSrc, '_s%.3d');
+       %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
+       %tempChannelNames = [tempChannelNames, '_s' ,sourceName];
+       %detName = num2str(currentChannelName(1)-'A'+1, '%.3d');
+       detName = num2str(idxDet, '_d%.3d');
+       %tempChannelNames = [tempChannelNames, '_d', detName];
+       newChannelNames{iName} = [typeName wavelenghName srcName detName];
     end
     MdataClean.Properties.VariableNames = newChannelNames;
     
@@ -291,13 +297,14 @@ else
     
     
     columns2Save = contains(channelNames,dataType2Save);
+    columns2Save(1) = true;
     if (size(reltime,1)>500)
         idx = round(linspace(1,size(reltime,1), 500));
         SimplyData = MdataClean(idx,columns2Save);
     else
         SimplyData = MdataClean(:,columns2Save);
     end
-    SimplyData.Time = reltime(idx,:);
+    %SimplyData.Time = reltime(idx,:);
     
     GHandle.CurrentDataSet.Measure =  NirsMeasure(...
         'date', date, ...

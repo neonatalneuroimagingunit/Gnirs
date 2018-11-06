@@ -87,8 +87,8 @@ function  Handle = guidisp(Analysis, GHandle , editableField)
 	nField = length(Analysis.SimplyData.Properties.VariableNames);
 	
 	plot(...    
-		Analysis.SimplyData.Time{:,1},...
-		Analysis.SimplyData{:,1:nField-1});
+		Analysis.SimplyData.Time,...
+		Analysis.SimplyData{:,2:nField});
 
 end
 
