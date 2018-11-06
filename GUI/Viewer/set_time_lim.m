@@ -1,7 +1,7 @@
 function set_time_lim(~,evnt,GHandle, vIdx)
 
 
-fs = GHandle.CurrentDataSet.Measure.updateRate;
+fs = GHandle.Viewer(vIdx).updateRate;
 timeLim = evnt.AffectedObject.timeLim;
 
 %main ax lim
@@ -26,7 +26,7 @@ txt_y = [rectangle_y+1.3*rectangle_h rectangle_y-0.3*rectangle_h];
 GHandle.Viewer(vIdx).timeplot.txt_seconds.Position = [txt_x, txt_y(1)];
 GHandle.Viewer(vIdx).timeplot.txt_seconds.String = [num2str(timeLim(2)-timeLim(1)) ' s'];
 GHandle.Viewer(vIdx).timeplot.txt_samples.Position = [txt_x, txt_y(2)];
-GHandle.Viewer(vIdx).timeplot.txt_samples.String = [num2str(round((timeLim(2)-timeLim(1))*GHandle.CurrentDataSet.Measure.updateRate)) ' samples'];
+GHandle.Viewer(vIdx).timeplot.txt_samples.String = [num2str(round((timeLim(2)-timeLim(1))*fs)) ' samples'];
 
 GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.XLim = timeLim;
 end
