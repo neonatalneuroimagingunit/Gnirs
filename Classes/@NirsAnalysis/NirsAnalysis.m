@@ -50,7 +50,7 @@ classdef NirsAnalysis
                             obj.date = varargin{i+1};
                             
                         case 'tracktype'
-                            obj.date = varargin{i+1};
+                            obj.TrackType = varargin{i+1};
                             
                         case 'analysis'
                             obj.analysis = varargin{i+1};
