@@ -5,7 +5,7 @@ function loadimagentISS(GHandle)
 dataType2Save = 'DC';
 datatype = {'AC','DC', 'Ph'};
 wavelength = [830, 690];
-
+Info = [];
 InstrumentType.wavelength = wavelength;
 InstrumentType.name = 'Imagent ISS';
 InstrumentType.datatype = datatype;
@@ -156,7 +156,7 @@ else
     end
     if ~isempty(Wfcal)
         InstrumentType.CalibrationValue = array2table(Wfcal,'VariableNames',DetectorCHName,'RowNames',{'Term','Factor'});
-    end
+    end    
     
     frewind(FILE); %back to the begin of the file
     currentline = fgetl(FILE);
@@ -199,6 +199,11 @@ else
     
     
     %% Load raw data
+    TrackType.WaveLength = num2cell(wavelength');
+    TrackType.Component = datatype;
+    nChannel =  length(DetectorCHName)/2;
+    TrackType.Channel = num2cell(1:nChannel); 
+    
     frewind(FILE); %back to the begin of the file
     currentline = fgetl(FILE);     %acquisisce linea per linea fino a che incontra i dati
     while ~contains(currentline,'#DATA BEGINS')
@@ -238,7 +243,6 @@ else
             
         end
         
-        %			data = fscanf(FILE,'%f',[length(ColumnName),Inf]); %parse all row data
         Mdata = array2table(data,'VariableNames',ColumnName(1:end));  %save all
     end
     
@@ -247,34 +251,60 @@ else
     reltime = array2table((Mdata.time - Mdata.time(1)),'VariableNames', {'Time'}); %create the column of relative time
     
     variableIdx = contains(Mdata.Properties.VariableNames,datatype);
-    Mdata = [reltime, Mdata(:,variableIdx)];
+    MdataClean = [reltime, Mdata(:,variableIdx)];
     %%sampling frequency check
     AdvanceInfo.fscheck = abs(updateRate-1./mean(diff(reltime{:,1})))./updateRate; %check if the frequency is correct (inserire una deviazione standard?)
+    %create new variable name 
+    channelNames = MdataClean.Properties.VariableNames';
+    nName = length(channelNames);
+    newChannelNames = cell(nName,1);
+    newChannelNames{1} = 'Time';
+    for iName = 2 : nName
+        tempChannelNames = '';
+        currentChannelName = channelNames{iName};
+        switch currentChannelName(2:3)
+            case 'AC'
+                tempChannelNames = 'tAC';
+            case 'DC'
+                tempChannelNames = 'tDC';
+            case 'Ph'
+                tempChannelNames = 'tPh';
+        end
+        if  mod(iName,2)
+            tempChannelNames = [tempChannelNames, '_w690'];
+        else
+            tempChannelNames = [tempChannelNames, '_w830'];
+        end
+       tempChannelNames = [tempChannelNames, '_d' ,num2str(currentChannelName(1)-'A'+1)];
+       
+       sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.2d');
+       tempChannelNames = [tempChannelNames, '_s' ,sourceName];
+       newChannelNames{iName} = tempChannelNames;
+    end
+    MdataClean.Properties.VariableNames = newChannelNames;
     
-    channel = (size(Mdata,2) - 1) / (length(datatype)*length(wavelength));
-    
-    
+    Event = NirsEvent;
+    if any(strcmp(Mdata.Properties.VariableNames,'digaux'))
+        Event = eventdecoder(Mdata.digaux,InstrumentType.UpdateRate);
+    end
     %% Save all in a NIRS measure variable
-    TrackType.WaveLength = num2cell(wavelength');
-    TrackType.Component = datatype;
-    nChannel = length(DetectorCHName);
-    TrackType.Channel = num2cell(DetectorCHName(1:2:end)); 
     
-    channelNames = Mdata.Properties.VariableNames;
+    
     columns2Save = contains(channelNames,dataType2Save);
     if (size(reltime,1)>500)
         idx = round(linspace(1,size(reltime,1), 500));
-        SimplyData = Mdata(idx,columns2Save);
+        SimplyData = MdataClean(idx,columns2Save);
     else
-        SimplyData = Mdata(:,columns2Save);
+        SimplyData = MdataClean(:,columns2Save);
     end
     SimplyData.Time = reltime(idx,:);
     
     GHandle.CurrentDataSet.Measure =  NirsMeasure(...
         'date', date, ...
         'timeLength', Duration, ...
-        'InstrumentType', wavelength,...
-        'updaterate', AdvanceInfo.UpdateRate,...
+        'Event', Event,...
+        'InstrumentType', InstrumentType,...
+        'AdvanceInfo', AdvanceInfo,...
         'Info', Info ...
         );
     
@@ -286,6 +316,6 @@ else
         'SimplyData', SimplyData...
         );
     
-    GHandle.CurrentDataSet.Data = Mdata;
+    GHandle.CurrentDataSet.Data = MdataClean;
 end
 end
