@@ -69,11 +69,14 @@ if any(selectedAtlas)
             'FaceColor',scalpColor, ...
             'FaceAlpha', 0.8);
         
-        x = reshape(Atlas.LandMarks.coord(:,:,1), [],1);
-        y = reshape(Atlas.LandMarks.coord(:,:,2), [],1);
-        z = reshape(Atlas.LandMarks.coord(:,:,3), [],1);
-        landmarkNames = reshape(Atlas.LandMarks.names, [], 1);
-        
+
+        x = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,1), [],1);
+        y = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,2), [],1);
+        z = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,3), [],1);
+        landmarkNames = reshape(Atlas.LandMarks.names(1:5:end,1:5:end), [], 1);
+
+
+
 		nLandMark = size(landmarkNames,1);
         if isfield(GHandle.TempWindow, 'LandMark') % empty the unused landmarks
             GHandle.TempWindow.LandMark(nLandMark+1:end) = [];

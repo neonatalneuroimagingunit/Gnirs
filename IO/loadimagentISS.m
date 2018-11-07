@@ -12,7 +12,13 @@ InstrumentType.datatype = datatype;
 
 location = GHandle.Temp.location;
 fast = GHandle.Temp.fast; % default load all data
-Probe = GHandle.CurrentDataSet.Probe;
+
+
+pobeFlag = false;
+if  isfield(GHandle.CurrentDataSet,'Probe')
+    pobeFlag = true;
+    Probe = GHandle.CurrentDataSet.Probe;
+end
 
 FILE_info = dir(location);
 %% Preliminar check on file
@@ -156,7 +162,7 @@ else
     end
     if ~isempty(Wfcal)
         InstrumentType.CalibrationValue = array2table(Wfcal,'VariableNames',DetectorCHName,'RowNames',{'Term','Factor'});
-    end    
+    end
     
     frewind(FILE); %back to the begin of the file
     currentline = fgetl(FILE);
@@ -202,7 +208,7 @@ else
     TrackType.WaveLength = num2cell(wavelength');
     TrackType.Component = datatype;
     nChannel =  length(DetectorCHName)/2;
-    TrackType.Channel = num2cell(1:nChannel); 
+    TrackType.Channel = num2cell(1:nChannel);
     
     frewind(FILE); %back to the begin of the file
     currentline = fgetl(FILE);     %acquisisce linea per linea fino a che incontra i dati
@@ -254,8 +260,11 @@ else
     MdataClean = [reltime, Mdata(:,variableIdx)];
     %%sampling frequency check
     AdvanceInfo.fscheck = abs(updateRate-1./mean(diff(reltime{:,1})))./updateRate; %check if the frequency is correct (inserire una deviazione standard?)
-    %create new variable name 
+    %create new variable name
     channelNames = MdataClean.Properties.VariableNames';
+    
+    
+    if pobeFlag
     nName = length(channelNames);
     newChannelNames = cell(nName,1);
     newChannelNames{1} = 'Time';
@@ -275,19 +284,20 @@ else
         else
             wavelenghName = '_w830';
         end
-       idxDet = currentChannelName(1)-'A'+1;
-       egg = reshape([Probe.channel.pairs]',2, [])';
-       idxSrc = egg(egg(:,2)==idxDet,1);
-       idxSrc =  idxSrc(ceil(str2double(currentChannelName(4:end))/2));
-       srcName = num2str(idxSrc, '_s%.3d');
-       %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
-       %tempChannelNames = [tempChannelNames, '_s' ,sourceName];
-       %detName = num2str(currentChannelName(1)-'A'+1, '%.3d');
-       detName = num2str(idxDet, '_d%.3d');
-       %tempChannelNames = [tempChannelNames, '_d', detName];
-       newChannelNames{iName} = [typeName wavelenghName srcName detName];
+        idxDet = currentChannelName(1)-'A'+1;
+        egg = reshape([Probe.channel.pairs]',2, [])';
+        idxSrc = egg(egg(:,2)==idxDet,1);
+        idxSrc =  idxSrc(ceil(str2double(currentChannelName(4:end))/2));
+        srcName = num2str(idxSrc, '_s%.3d');
+        %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
+        %tempChannelNames = [tempChannelNames, '_s' ,sourceName];
+        %detName = num2str(currentChannelName(1)-'A'+1, '%.3d');
+        detName = num2str(idxDet, '_d%.3d');
+        %tempChannelNames = [tempChannelNames, '_d', detName];
+        newChannelNames{iName} = [typeName wavelenghName srcName detName];
     end
     MdataClean.Properties.VariableNames = newChannelNames;
+    end
     
     Event = NirsEvent;
     if any(strcmp(Mdata.Properties.VariableNames,'digaux'))

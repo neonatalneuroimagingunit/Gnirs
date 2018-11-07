@@ -14,6 +14,7 @@ sortingmethod = {'sortnomo','wavelength','channel'};
 dataType = GHandle.CurrentDataSet.Measure.InstrumentType.datatype;
 
 GHandle.Viewer(vIdx).Data = GHandle.CurrentDataSet.Data;
+GHandle.Viewer(vIdx).Event = GHandle.CurrentDataSet.Measure.Event;
 GHandle.Viewer(vIdx).Probe = GHandle.CurrentDataSet.Probe;
 % Set UI objects size
 

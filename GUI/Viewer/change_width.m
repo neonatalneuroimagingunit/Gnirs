@@ -1,10 +1,11 @@
 function change_width(~,evnt,GHandle, vIdx)
 
 colorBackground = [200 200 200]/255;
-alphaBackground = 0.3;
+alphaBackground = 0.1;
 alphaForeground = 1;
 lineWidth = 0.5;
 linewidthFactor = 2;
+eventRatio = 0.8;
 
 edvLine = evnt.AffectedObject.edvLine;
 if all(edvLine)
@@ -44,10 +45,20 @@ if sum(edvLine) == 1
     GHandle.Viewer(vIdx).spectrumplot.lines1(edvLine).LineWidth = linewidthForeground;
     uistack(GHandle.Viewer(vIdx).spectrumplot.lines1(edvLine),'top');
     
+    xRange = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim;
+    xVal = GHandle.Viewer(vIdx).timeplot.lines1(edvLine).XData';
+    yVal = GHandle.Viewer(vIdx).timeplot.lines1(edvLine).YData(xVal>xRange(1) & xVal<xRange(2));
+    GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim = [min(yVal), max(yVal)];
+    nEvents = length(GHandle.Viewer(vIdx).timeplot.Events);
+    for iEvents = 1 : 1 : nEvents
+        GHandle.Viewer(:).timeplot.Events(iEvents).YData = eventRatio.*max(yVal).*ones( [1, length(GHandle.Viewer(1).timeplot.Events(iEvents).XData)]);
+    end
+    
 else
     GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.Visible = 'off';
     cla(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes);
     GHandle.Viewer(vIdx).timefrequencyplot.text.Visible = 'on';
+    GHandle.Viewer(vIdx).timeplot.bigaxes1.YLimMode = 'auto';
 end
 
 

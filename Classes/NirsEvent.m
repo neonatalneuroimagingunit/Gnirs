@@ -19,10 +19,10 @@ classdef NirsEvent
     
     methods
         function durationTime = get.durationTime(obj)
-            durationTime = obj.durationSamples./obj.samplingFrequency;
+            durationTime = double(obj.durationSample)/obj.samplingFrequency;
         end
         function startTime = get.startTime(obj)
-            startTime = obj.startTime./obj.samplingFrequency;
+            startTime = double(obj.startSample)/obj.samplingFrequency;
         end
         
         function obj = NirsEvent(varargin)
