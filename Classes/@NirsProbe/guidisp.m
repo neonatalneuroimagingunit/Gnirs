@@ -3,7 +3,16 @@ function  Handle = guidisp(Subject, GHandle , editableField)
 	overunderEdge = 0.009;
 	textBoxWidth = 0.3;
 	textBoxHeight = 0.12;
+	gmColor = [0.65 0.65 0.65];
+	wmColor =  [1 1 1];
+	scalpColor = [255 229 204]./255;
+	sourceColor = [1 0 0];
+    detectorColor = [0 0 1];
 	
+	idx = GHandle.Temp.idx;
+	fontName = 'Arial'; %'Lobster Two';
+    
+    
 	textFontSize = GHandle.Preference.Font.sizeM;
 	
 	idx = GHandle.Temp.idx;
