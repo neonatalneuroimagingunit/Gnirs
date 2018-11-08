@@ -1,4 +1,4 @@
-function  guidisp(Atlas, GHandle , editableField)
+function  guidisp(Atlas, GHandle , modify)
 	dxsxEdge = 0.05;
 	overunderEdge = 0.009;
 	textBoxWidth = 0.3;
@@ -16,11 +16,10 @@ function  guidisp(Atlas, GHandle , editableField)
 	
 
 	% create the figure and the editable field if is not specify
-	if ~exist('editableField','var')
-		editableField = '';
-	end
-	editableField = lower(editableField);
-	
+if (nargin < 3)
+    modify = false;
+end
+
 	if ~exist('GHandle','var') || isempty(GHandle)
 		Handle.MainFigure = figure;
 		GHandle.Main.SubPanel.Panel = uipanel('Parent',Handle.MainFigure);
@@ -42,7 +41,7 @@ function  guidisp(Atlas, GHandle , editableField)
 	
 	lowerPos = (0.65 +overunderEdge) + 1 *( 0.35 - overunderEdge)/3;
 	% name	
-	if any(contains(editableField,'name'))
+	if modify
 			GHandle.Main.Display.SubPanel(idx).NameEditableTextBox = getitabletext(...      
 			'Parent',GHandle.Main.Display.SubPanel(idx).Panel,...
 			'TextString',Atlas.name,...
@@ -62,7 +61,7 @@ function  guidisp(Atlas, GHandle , editableField)
 	
 	% date
 	lowerPos = (0.65 +overunderEdge);
-	if any(contains(editableField,'date'))
+	if modify
 		GHandle.Main.Display.SubPanel(idx).DateEditableTextBox = getitabletext(...      
 			'Parent',GHandle.Main.Display.SubPanel(idx).Panel,...
 			'TextString',datestr(Atlas.date, 'dd/mm/yyyy'),...
@@ -82,7 +81,7 @@ function  guidisp(Atlas, GHandle , editableField)
 	
 	% note
 	lowerPos = (0.45);
-	if any(contains(editableField,'note'))
+	if modify
 		GHandle.Main.Display.SubPanel(idx).NoteEditableTextBox = getitabletext(...      
 			'Parent',GHandle.Main.Display.SubPanel(idx).Panel,...
 			'TextString',Atlas.note,...

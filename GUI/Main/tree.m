@@ -155,10 +155,10 @@ for iMeasure = 1:GHandle.DataBase.nMeasure %for each measure in the study create
     
     uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
         'Label','Add Analysis',...
-        'callback',{@Newalysis ,GHandle});
+        'callback',{@new_alysis ,GHandle});
     uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
         'Label','Modify',...
-        'callback',{@ModifyMeasure ,GHandle});
+        'callback',{@modify ,GHandle});
     uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
         'Label','Delete',...
         'tag', GHandle.DataBase.Measure(iMeasure).id,...
@@ -199,7 +199,7 @@ for iAnalysis = 1:(GHandle.DataBase.nAnalysis) %for each analysis plus the row o
         'callback',{@delete_callback ,GHandle});
     uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,...
         'Label','Develop',...
-        'callback',{@developanalysis ,GHandle});
+        'callback',{@develop_analysis ,GHandle});
     
     set(GHandle.Main.Tree.Analysis(iAnalysis).MainNode,'UIContextMenu',GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu);
     
@@ -286,9 +286,28 @@ end
 function delete_callback (handle, ~, GHandle)
 id = handle.Tag;
 GHandle.DataBase = GHandle.DataBase.delete(id);
-idxTab = contains({GHandle.Main.Tree.TabGroup.Children.Title}, GHandle.Main.Tree.TabGroup.SelectedTab.Title);
 tree(GHandle);
-GHandle.Main.Tree.TabGroup.SelectedTab = GHandle.Main.Tree.TabGroup.Children(idxTab);
 end
+
+function develop_analysis(~, ~, GHandle)
+analysisId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+makeanalysiscurrent(GHandle, analysisId)
+methodwindow(GHandle)
+end
+
+function new_alysis (~, ~, GHandle)
+measureId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+DBMeasure = GHandle.DataBase.findid(measureId);
+analysisId = DBMeasure.analysisId(1,:);
+makeanalysiscurrent(GHandle, analysisId);
+methodwindow(GHandle)
+end
+
+function modify(~, ~, GHandle)
+    id = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+    populatedisplay(id, GHandle, modify)
+end
+
+
 
 
