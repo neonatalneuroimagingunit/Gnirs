@@ -3,7 +3,7 @@ function change_width(~,evnt,GHandle, vIdx)
 colorBackground = [200 200 200]/255;
 alphaBackground = 0.1;
 alphaForeground = 1;
-lineWidth = 0.5;
+lineWidth = 1;
 linewidthFactor = 2;
 eventRatio = 0.8;
 
@@ -51,7 +51,7 @@ if sum(edvLine) == 1
     GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim = [min(yVal), max(yVal)];
     nEvents = length(GHandle.Viewer(vIdx).timeplot.Events);
     for iEvents = 1 : 1 : nEvents
-        GHandle.Viewer(:).timeplot.Events(iEvents).YData = eventRatio.*max(yVal).*ones( [1, length(GHandle.Viewer(1).timeplot.Events(iEvents).XData)]);
+        GHandle.Viewer(vIdx).timeplot.Events(iEvents).YData = eventRatio.*max(yVal).*ones( [1, length(GHandle.Viewer(vIdx).timeplot.Events(iEvents).XData)]);
     end
     
 else
@@ -59,6 +59,11 @@ else
     cla(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes);
     GHandle.Viewer(vIdx).timefrequencyplot.text.Visible = 'on';
     GHandle.Viewer(vIdx).timeplot.bigaxes1.YLimMode = 'auto';
+    yVal = GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(2);
+    nEvents = length(GHandle.Viewer(vIdx).timeplot.Events);
+    for iEvents = 1 : 1 : nEvents
+        GHandle.Viewer(vIdx).timeplot.Events(iEvents).YData = eventRatio.*max(yVal).*ones( [1, length(GHandle.Viewer(vIdx).timeplot.Events(iEvents).XData)]);
+    end
 end
 
 

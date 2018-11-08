@@ -1,7 +1,7 @@
 function timeplot(~, eventData, GHandle, vIdx)
 
 foregroundColor = GHandle.Preference.Theme.foregroundColor;
-eventColor = lines(size(GHandle.Viewer.Event.Dictionary,1));
+eventColor = lines(size(GHandle.Viewer(vIdx).Event.Dictionary,1));
 eventRatio = 0.8;
 
 
@@ -17,12 +17,16 @@ cla(GHandle.Viewer(vIdx).timeplot.bigaxes1);
 cla(GHandle.Viewer(vIdx).timeplot.smallaxes);
 %% plot the events
 yMax = max(Data{:,2:end},[],'all');
-nEventType = size(GHandle.Viewer.Event.Dictionary,1);
+yMax = GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(2);
+nEventType = size(GHandle.Viewer(vIdx).Event.Dictionary,1);
 for iEventType = 1 : nEventType
     eventMask = GHandle.Viewer(vIdx).Event.type == iEventType;
     GHandle.Viewer(vIdx).timeplot.Events(iEventType) = stem(GHandle.Viewer(vIdx).timeplot.bigaxes1,...
         GHandle.Viewer(vIdx).Event.startTime(eventMask), eventRatio.*yMax.*ones(size(GHandle.Viewer(vIdx).Event.startTime(eventMask))),...
-        'Color',eventColor(iEventType,:));
+        'Color',eventColor(iEventType,:), ...
+        'Marker', '.', ...
+        'MarkerSize', 30, ...
+        'LineWidth', 2);
 end
 
 %% plot the line in the main and small axes
@@ -47,7 +51,11 @@ end
 GHandle.Viewer(vIdx).timeplot.lines1((nLines+1):end) = [];
 GHandle.Viewer(vIdx).timeplot.lines2((nLines+1):end) = [];
 
-
+%% resize event height
+yVal = GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(2);
+for iEvents = 1 : 1 : nEventType
+    GHandle.Viewer(vIdx).timeplot.Events(iEvents).YData = eventRatio.*max(yVal).*ones( [1, length(GHandle.Viewer(vIdx).timeplot.Events(iEvents).XData)]);
+end
 %% set the axes
 
 GHandle.Viewer(vIdx).timeplot.bigaxes1.YAxis.Exponent = 0;
