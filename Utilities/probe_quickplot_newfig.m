@@ -3,7 +3,7 @@ figure
 for pp = 1:1:nProbes
     
     aa = zeros(101,101);
-    p = GHandle.DataBase.Probe(pp).load;
+    %p = GHandle.DataBase.Probe(pp).load;
     
     nSrc = length(p.source);
     for ss = 1:1:nSrc
