@@ -1,4 +1,4 @@
-function  Handle = guidisp(Subject, GHandle , modify)
+function  Handle = guidisp(Probe, GHandle , modify)
 dxsxEdge = 0.05;
 overunderEdge = 0.009;
 textBoxWidth = 0.3;
