@@ -305,7 +305,7 @@ end
 
 function modify(~, ~, GHandle)
     id = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
-    populatedisplay(id, GHandle, modify)
+    populatedisplay(id, GHandle, true)
 end
 
 
