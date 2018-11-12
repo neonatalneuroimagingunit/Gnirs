@@ -64,6 +64,6 @@ for iEvents = 1 : 1 : nEvents
     GHandle.Viewer(vIdx).timeplot.Events(iEvents).YData = eventRatio.*yLimit(2).*ones( [1, length(GHandle.Viewer(vIdx).timeplot.Events(iEvents).XData)]);
 end
 
-
+GHandle.Viewer.WatchList.timeLim = xRange;
 end
 

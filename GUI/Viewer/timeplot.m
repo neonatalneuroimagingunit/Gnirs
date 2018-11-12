@@ -89,11 +89,16 @@ GHandle.Viewer(vIdx).timeplot.txt_samples = text(0, 0, '',...
     'FontSize', 8,...
     'Parent', GHandle.Viewer(vIdx).timeplot.smallaxes);
 
+% GHandle.Viewer(vIdx).WatchList.timeLim = [GHandle.CurrentDataSet.Data.Time(1),...
+%     GHandle.CurrentDataSet.Data.Time(end)];
 
-GHandle.Viewer(vIdx).WatchList.edvLine = true(size(GHandle.Viewer(vIdx).timeplot.lines2));
+if isempty(GHandle.Viewer(vIdx).WatchList.edvLine)
+    GHandle.Viewer(vIdx).WatchList.edvLine = true(size(GHandle.Viewer(vIdx).timeplot.lines2));
+else
+    GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
+end
 
-GHandle.Viewer(vIdx).WatchList.timeLim = [GHandle.CurrentDataSet.Data.Time(1),...
-    GHandle.CurrentDataSet.Data.Time(end)];
+
 
 end
 

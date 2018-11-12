@@ -736,17 +736,26 @@ GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'edvL
 
 %nCh = length(GHandle.Viewer(vIdx).Probe.channel.label);
 
-% sizetemp = 101;
-% sourceNewPosition2D = zeros(sizetemp,sizetemp);
-% sourceNewPosition2D([GHandle.Viewer(vIdx).Probe.source.position2D(1)],[GHandle.Viewer(vIdx).Probe.source.position2D(2)]) = 1;
-% detectorNewPosition2D = zeros(sizetemp,sizetemp);
-% detectorNewPosition2D(GHandle.Viewer(vIdx).Probe.detector(ss).position2D(1),GHandle.Viewer(vIdx).Probe.detector(ss).position2D(2)) = 1;
+egg = 101;
+spam = zeros(egg,egg);
+bacon = sub2ind(size(spam),GHandle.Viewer(vIdx).Probe.source.position2D(:,1),GHandle.Viewer(vIdx).Probe.source.position2D(:,2));
+spam(bacon) = 1;
+bacon = sub2ind(size(spam),GHandle.Viewer(vIdx).Probe.detector.position2D(:,1),GHandle.Viewer(vIdx).Probe.detector.position2D(:,2));
+spam(bacon) = 2;
+spam(~any(spam,2),:) = [];
+spam(:,~any(spam,1)) = [];
+
+[posSrc(:,1), posSrc(:,2)] = find(spam==1);
+[posDet(:,1), posDet(:,2)] = find(spam==2);
 
 idxSrc = GHandle.Viewer(vIdx).Probe.channel.pairs(:,1);
 idxDet = GHandle.Viewer(vIdx).Probe.channel.pairs(:,2);
 if 1
-    x = [GHandle.Viewer(vIdx).Probe.source.position2D(idxSrc,1)'; GHandle.Viewer(vIdx).Probe.detector.position2D(idxDet,1)'];
-    y = [GHandle.Viewer(vIdx).Probe.source.position2D(idxSrc,2)'; GHandle.Viewer(vIdx).Probe.detector.position2D(idxDet,2)'];
+%     x = [GHandle.Viewer(vIdx).Probe.source.position2D(idxSrc,1)'; GHandle.Viewer(vIdx).Probe.detector.position2D(idxDet,1)'];
+%     y = [GHandle.Viewer(vIdx).Probe.source.position2D(idxSrc,2)'; GHandle.Viewer(vIdx).Probe.detector.position2D(idxDet,2)'];
+%     z = zeros(size(x));
+    x = [posSrc(idxSrc,1)'; posDet(idxDet,1)'];
+    y = [posSrc(idxSrc,2)'; posDet(idxDet,2)'];
     z = zeros(size(x));
 else
     x = [GHandle.Viewer(vIdx).Probe.source.position(idxSrc,1)'; GHandle.Viewer(vIdx).Probe.detector.position(idxDet,1)'];
@@ -762,8 +771,8 @@ set(GHandle.Viewer(vIdx).probeplot.channel, {'Tag'}, GHandle.Viewer(vIdx).Probe.
 
 
 if 1
-    x = repmat(GHandle.Viewer(vIdx).Probe.source.position2D(:,1)',[2,1]);
-    y = repmat(GHandle.Viewer(vIdx).Probe.source.position2D(:,2)',[2,1]);
+    x = repmat(posSrc(:,1)',[2,1]);
+    y = repmat(posSrc(:,2)',[2,1]);
     z = zeros(size(x));
 else
     x = repmat(GHandle.Viewer(vIdx).Probe.source.position(:,1)',[2,1]);
@@ -773,14 +782,14 @@ end
 GHandle.Viewer(vIdx).probeplot.source = plot3(y,-x,z,...
     'LineStyle', 'none',...
     'Marker', '.',...
-    'MarkerSize', 10, ...
+    'MarkerSize', 20, ...
     'buttonDownFcn', {@probe_callback , GHandle, vIdx},...
     'Color', sourceColor,...
     'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
 
 if 1
-    x = repmat(GHandle.Viewer(vIdx).Probe.detector.position2D(:,1)',[2,1]);
-    y = repmat(GHandle.Viewer(vIdx).Probe.detector.position2D(:,2)',[2,1]);
+    x = repmat(posDet(:,1)',[2,1]);
+    y = repmat(posDet(:,2)',[2,1]);
     z = zeros(size(x));
 else
     x = repmat(GHandle.Viewer(vIdx).Probe.detector.position(:,1)',[2,1]);
@@ -790,7 +799,7 @@ end
 GHandle.Viewer(vIdx).probeplot.detector = plot3(y,-x,z,...
     'LineStyle', 'none',...
     'Marker', '.',...
-    'MarkerSize', 10, ...
+    'MarkerSize', 20, ...
     'buttonDownFcn', {@probe_callback , GHandle, vIdx},...
     'Color', detectorColor,...
     'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
