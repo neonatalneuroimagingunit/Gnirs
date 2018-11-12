@@ -51,7 +51,7 @@ if any(selectedAtlas)
        
         GHandle.TempWindow.Mask.LandMark(idxM) = true;
        
-        tempplotfunc(GHandle)
+        tempplotfunc([],[],GHandle)
 
      end
 else

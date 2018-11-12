@@ -160,6 +160,7 @@ GHandle.TempWindow.MirrorProbe = uicontrol('Style', 'checkbox',...
     'Parent', GHandle.TempWindow.OptionsPanel, ...
     'String', 'Mirror probe L/R',...
     'Visible', 'on',...
+    'callback',{@tempplotfunc, GHandle},...
     'Units', 'normalize', ...
     'HorizontalAlignment', 'left', ...
     'Position', [0.55 0.6 0.35 0.35]);
@@ -169,8 +170,8 @@ GHandle.TempWindow.LandmarkLabels = uicontrol('Style', 'checkbox',...
     'String', 'Landmark labels',...
     'Visible', 'on',...
     'Units', 'normalize', ...
-    'Value', 1, ...
-    'callback',{@landmark_labels_callback, GHandle},...
+    'Value', 0, ...
+    'callback',{@tempplotfunc, GHandle},...
     'HorizontalAlignment', 'left', ...
     'Position', [0.55 0.35 0.35 0.35]);
 %addlistener(GHandle.TempWindow.LandmarkLabels,'Value','PostSet',@(src,evnt)channelrefresh(src,evnt,GHandle));
@@ -181,11 +182,10 @@ GHandle.TempWindow.LandmarkLabels = uicontrol('Style', 'checkbox',...
     'position',[0.1 0.1 0.35 0.8],...
     'spacing',0.1,...
     'text','30',...
-    'callback',{@threshold_distance_callback, GHandle},...
+    'callback',{@tempplotfunc, GHandle},...
     'texttype','edit',...
     'sizeratio',1,...
     'configuration','vertical');
-addlistener(GHandle.TempWindow.ThresholdDistance,'String','PostSet',@(src,evnt)channelrefresh(src,evnt,GHandle));
 
 GHandle.TempWindow.ShowInactive = uicontrol('Style', 'checkbox', ...
     'Parent', GHandle.TempWindow.OptionsPanel, ...
@@ -194,7 +194,7 @@ GHandle.TempWindow.ShowInactive = uicontrol('Style', 'checkbox', ...
     'Visible','on', ...
     'Units', 'normalize', ...
     'HorizontalAlignment', 'left', ...
-    'Callback', {@threshold_distance_callback, GHandle}, ...
+    'Callback', {@tempplotfunc, GHandle}, ...
     'Position', [0.55 0.1 0.35 0.35]);
 
 GHandle.TempWindow.light(1) = light(GHandle.TempWindow.NewProbeAxes,...
@@ -258,56 +258,33 @@ close(GHandle.TempWindow.NewProbeFigure);
 end
 
 
-function threshold_distance_callback(~,~,GHandle)
-
-showInactive = GHandle.TempWindow.ShowInactive.Value;
-thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistance.String);
-
-if ~isempty(GHandle.TempWindow.ChannelList.Data)
-    GHandle.TempWindow.ChannelList.Data(:,5) =  num2cell([GHandle.TempWindow.ChannelList.Data{:,4}] < thresholdDistance);
-    
-    activeMask = [GHandle.TempWindow.ChannelList.Data{:,5}];
-    if showInactive
-        set(GHandle.TempWindow.Channel(~activeMask),'Visible', 'on');
-        set(GHandle.TempWindow.ChannelText(~activeMask),'Visible', 'on');
-    else
-        set(GHandle.TempWindow.Channel(~activeMask),'Visible', 'off');
-        set(GHandle.TempWindow.ChannelText(~activeMask),'Visible', 'off');
-    end
-end
-end
-
-function landmark_labels_callback(~,~,GHandle)
-
-landmarkLabels = GHandle.TempWindow.LandmarkLabels.Value;
-
-if ~isempty(GHandle.TempWindow.ChannelList.Data)
-    if landmarkLabels
-        set(GHandle.TempWindow.Source, 'Visible', 'on');
-        set(GHandle.TempWindow.Detector, 'Visible', 'on');
-        set(GHandle.TempWindow.ChannelText, 'Visible', 'on');
-    else
-        set(GHandle.TempWindow.Source, 'Visible', 'off');
-        set(GHandle.TempWindow.Detector, 'Visible', 'off');
-        set(GHandle.TempWindow.ChannelText, 'Visible', 'off');
-    end
-end
-end
 
 function delete_source(~, ~, GHandle)
 idx2Delete = GHandle.TempWindow.SourceList.Value;
+nEl2Delete = size(idx2Delete,2);
+mask = false([size(GHandle.TempWindow.Mask.LandMark),nEl2Delete]);
+for iMask = 1 : 1 : nEl2Delete
+    mask(:,:,iMask) = strcmp(GHandle.TempWindow.SelectedAtlas.LandMarks.names, GHandle.TempWindow.SourceList.String(idx2Delete(iMask)));
+end
+mask = any(mask,3);
+GHandle.TempWindow.Mask.LandMark(mask) = true;
+GHandle.TempWindow.Mask.Source(mask) = false;
 GHandle.TempWindow.SourceList.Value = [];
-set(GHandle.TempWindow.LandMark(GHandle.TempWindow.SourceList.UserData(idx2Delete)),'Color','g');
-GHandle.TempWindow.SourceList.String(idx2Delete) = [];
-GHandle.TempWindow.SourceList.UserData(idx2Delete) = [];
+tempplotfunc([],[],GHandle)
 end
 
 function delete_detector(~, ~, GHandle)
 idx2Delete = GHandle.TempWindow.DetectorList.Value;
+nEl2Delete = size(idx2Delete,2);
+mask = false([size(GHandle.TempWindow.Mask.LandMark),nEl2Delete]);
+for iMask = 1 : 1 : nEl2Delete
+    mask(:,:,iMask) = strcmp(GHandle.TempWindow.SelectedAtlas.LandMarks.names, GHandle.TempWindow.DetectorList.String(idx2Delete(iMask)));
+end
+mask = any(mask,3);
+GHandle.TempWindow.Mask.LandMark(mask) = true;
+GHandle.TempWindow.Mask.Detector(mask) = false;
 GHandle.TempWindow.DetectorList.Value = [];
-set(GHandle.TempWindow.LandMark(GHandle.TempWindow.DetectorList.UserData(idx2Delete)),'Color','g');
-GHandle.TempWindow.DetectorList.String(idx2Delete) = [];
-GHandle.TempWindow.DetectorList.UserData(idx2Delete) = [];
+tempplotfunc([],[],GHandle)
 end
 
 function rotate_Atlas(Handle, ~, GHandle)
@@ -337,7 +314,7 @@ else
     idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
     
     GHandle.TempWindow.Mask.LandMark(setdiff(1:1:10201,idxM)) = false;
-    tempplotfunc(GHandle)
+    tempplotfunc([],[],GHandle)
 end
 end
 
