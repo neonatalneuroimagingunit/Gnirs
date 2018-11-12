@@ -83,7 +83,7 @@ GHandle.TempWindow.SourceList = uicontrol(...
 GHandle.TempWindow.SourceContextMenu = uicontextmenu('Parent',GHandle.TempWindow.NewProbeFigure);
 uimenu(GHandle.TempWindow.SourceContextMenu,'Label','Delete','callback',{@delete_source, GHandle});
 set(GHandle.TempWindow.SourceList,'UIContextMenu',GHandle.TempWindow.SourceContextMenu);
-addlistener(GHandle.TempWindow.SourceList,'UserData','PostSet',@(src,evnt)channelrefresh(src,evnt,GHandle));
+
 
 GHandle.TempWindow.DetectorList = uicontrol(...
     'Parent', GHandle.TempWindow.NewProbeFigure, ...
@@ -97,7 +97,7 @@ GHandle.TempWindow.DetectorList = uicontrol(...
 GHandle.TempWindow.DetectorContextMenu = uicontextmenu('Parent',GHandle.TempWindow.NewProbeFigure);
 uimenu(GHandle.TempWindow.DetectorContextMenu,'Label','Delete','callback',{@delete_detector, GHandle});
 set(GHandle.TempWindow.DetectorList,'UIContextMenu',GHandle.TempWindow.DetectorContextMenu);
-addlistener(GHandle.TempWindow.DetectorList,'UserData','PostSet',@(src,evnt)channelrefresh(src,evnt,GHandle));
+
 
 GHandle.TempWindow.ChannelListTitle = uicontrol('Style', 'text',...
     'Parent', GHandle.TempWindow.NewProbeFigure, ...
@@ -333,6 +333,11 @@ else
     GHandle.TempWindow.NewProbeAxes.CameraPosition = GHandle.TempWindow.Temp.CameraPosition;
     GHandle.TempWindow.NewProbeAxes.CameraViewAngle = GHandle.TempWindow.Temp.CameraViewAngle;
     GHandle.TempWindow.Zoom = false;
+    
+    idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
+    
+    GHandle.TempWindow.Mask.LandMark(setdiff(1:1:10201,idxM)) = false;
+    tempplotfunc(GHandle)
 end
 end
 

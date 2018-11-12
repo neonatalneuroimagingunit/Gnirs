@@ -1,8 +1,7 @@
 function atlaswidgetcallback(Handle, Event, GHandle)
 atlasScaleFactor = 0.98;
-
 scalpColor = GHandle.Preference.Theme.scalpColor;
-landmarkColor = GHandle.Preference.Theme.landmarkColor;
+
 
 selectedAtlas = Event.NewSelectedIndex;
 GHandle.TempWindow.NewProbeAxes.CameraTargetMode = 'auto';
@@ -18,37 +17,14 @@ if any(selectedAtlas)
     GHandle.TempWindow.DetectorList.UserData = [];
     
     if (selectedAtlas == 1) % 2D
-        GHandle.TempWindow.NewProbeRotateButton.Enable = 'off';
-        GHandle.TempWindow.NewProbeZoomButton.Enable = 'on';
-        cla(GHandle.TempWindow.NewProbeAxes);
-        GHandle.TempWindow.NewProbeAxes.View = [0 90];
-        x = -50:1:50;
-        y = -50:1:50;
-        [X,Y] = meshgrid(x,y);
-        X2 = X(1:10:end,1:10:end);
-        Y2 = Y(1:10:end,1:10:end);
-        X2 = X2(:);
-        Y2 = Y2(:);
-        
-        nLandMark = size(X2,1);
-        if isfield(GHandle.TempWindow, 'LandMark') % empty the unused landmarks
-            GHandle.TempWindow.LandMark(nLandMark+1:end) = [];
-        end
-        
-        for iLandMark = 1:1:nLandMark
-            GHandle.TempWindow.LandMark(iLandMark) = plot3(X2(iLandMark),Y2(iLandMark), 1, ...
-                'tag', [num2str(X2(iLandMark)) ',' num2str(Y2(iLandMark))],...
-                'LineStyle', 'none',...
-                'Marker','.',...
-                'Color','g',...
-                'MarkerSize', 20, ...
-                'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
-                'Parent', GHandle.TempWindow.NewProbeAxes, ...
-                'Visible', 'on');
-        end
+%% aggiungere un atlas 2d
+
     else
         Atlas = Handle.UserData{selectedAtlas}.load;
         GHandle.TempWindow.SelectedAtlas = Atlas;
+        GHandle.TempWindow.Mask.LandMark = false(size(Atlas.LandMarks.names));
+        GHandle.TempWindow.Mask.Source = false(size(Atlas.LandMarks.names));
+        GHandle.TempWindow.Mask.Detector = false(size(Atlas.LandMarks.names));
         
         GHandle.TempWindow.NewProbeRotateButton.Enable = 'on';
         GHandle.TempWindow.NewProbeZoomButton.Enable = 'on';
@@ -68,44 +44,19 @@ if any(selectedAtlas)
             'EdgeColor','none',...
             'FaceColor',scalpColor, ...
             'FaceAlpha', 0.8);
+
         
-        %         x = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,1), [],1);
-        %         y = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,2), [],1);
-        %         z = reshape(Atlas.LandMarks.coord(1:5:end,1:5:end,3), [],1);
-        %        landmarkNames = reshape(Atlas.LandMarks.names(1:5:end,1:5:end), [], 1);
-        x = reshape(Atlas.LandMarks.coord(:,:,1), [],1);
-        y = reshape(Atlas.LandMarks.coord(:,:,2), [],1);
-        z = reshape(Atlas.LandMarks.coord(:,:,3), [],1);
-        landmarkNames = reshape(Atlas.LandMarks.names, [], 1);
-        
-        idxM = reshape(505.*(ones(21,1)*(0:1:20))' + repmat(1:5:101,[21,1]),1,[]);
-        nLandMark = size(idxM,1);
-        
-        if isfield(GHandle.TempWindow, 'LandMark') % empty the unused landmarks
-            GHandle.TempWindow.LandMark(nLandMark+1:end) = [];
-        end
-        
-        for iLandMark = idxM
-            %if maskona(iLandMark)
-                if ~isempty(landmarkNames{iLandMark})
-                    GHandle.TempWindow.LandMark(iLandMark) = plot3(...
-                        x(iLandMark), y(iLandMark), z(iLandMark), ...
-                        'tag',landmarkNames{iLandMark}, ...
-                        'MarkerSize',20, ...
-                        'ButtonDownFcn',{@(Handle,Evnt)landmark_callback(Handle,Evnt,GHandle)}, ...
-                        'LineStyle', 'none', ...
-                        'Visible', 'on', ...
-                        'Marker','.', ...
-                        'Color',landmarkColor, ...
-                        'Parent', GHandle.TempWindow.NewProbeAxes);
-                end
-            %end
-        end
-        
-    end
+        idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
+        idxM(cellfun(@isempty, Atlas.LandMarks.names(idxM))) = [];
+       
+        GHandle.TempWindow.Mask.LandMark(idxM) = true;
+       
+        tempplotfunc(GHandle)
+
+     end
 else
     idx = contains(Handle.UserData.tag, Event.NewString);
-    Handle.Items = {Handle.UserData.tag{idx}};
+    Handle.Items = Handle.UserData.tag(idx);
 end
 
 end

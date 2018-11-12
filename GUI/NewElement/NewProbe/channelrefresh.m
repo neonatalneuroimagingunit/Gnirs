@@ -1,107 +1,97 @@
-function channelrefresh(h,e,GHandle)
+function channelrefresh(~,~,GHandle)
 
 lineShrinkFactor = 0.85; % between 0.5 (no line) and 1 (point to point)
 
 sourceColor = [1 0 0];
 detectorColor = [0 0 1];
 
-sourceTag = GHandle.TempWindow.SourceList.String;
-detectorTag = GHandle.TempWindow.DetectorList.String;
-nSource = size(sourceTag,1);
-nDetector = size(detectorTag,1);
-channelPairs = int32(combvec(GHandle.TempWindow.SourceList.UserData', GHandle.TempWindow.DetectorList.UserData')');
-channelPairsIdx = combvec(1:nSource, 1:nDetector)';
-nChannel = size(channelPairs,1);
 
-if GHandle.TempWindow.LandmarkLabels.Value == 1
-    labelVisibility = 'on';
-else
-    labelVisibility = 'off';
-end
+sourceTag = GHandle.TempWindow.SelectedAtlas.LandMarks.names(GHandle.TempWindow.Mask.Source);
+sourcePos = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(repmat(GHandle.TempWindow.Mask.Source,1,1,3)),[],3);
+GHandle.TempWindow.SourceList.String = sourceTag;
+detectorTag = GHandle.TempWindow.SelectedAtlas.LandMarks.names(GHandle.TempWindow.Mask.Detector);
+detectorPos = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(repmat(GHandle.TempWindow.Mask.Detector,1,1,3)),[],3);
+GHandle.TempWindow.DetectorList.String = detectorTag;
 
 GHandle.TempWindow.ChannelList.Data = {};
-if isfield(GHandle.TempWindow,'Channel')
-    delete(GHandle.TempWindow.Channel);
-    GHandle.TempWindow.Channel(nChannel+1:end) = [];
-end
-if isfield(GHandle.TempWindow,'Source')
-    delete(GHandle.TempWindow.Source);
-    GHandle.TempWindow.Source(nSource+1:end) = [];
-end
-if isfield(GHandle.TempWindow,'Detector')
-    delete(GHandle.TempWindow.Detector);
-    GHandle.TempWindow.Detector(nDetector+1:end) = [];
-end
-if isfield(GHandle.TempWindow,'ChannelText')
-    delete(GHandle.TempWindow.ChannelText);
-    GHandle.TempWindow.ChannelText(nChannel+1:end) = [];
+
+nSource = size(sourceTag,1);
+nDetector = size(detectorTag,1);
+
+channelPairsIdx = combvec(1:nSource, 1:nDetector)';
+nChannel = size(channelPairsIdx,1);
+
+
+
+
+thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistance.String);
+
+for iChannel = 1:1:nChannel
+    tempCoordSource = sourcePos(channelPairsIdx(iChannel,1),:);
+    tempCoordDetector = detectorPos(channelPairsIdx(iChannel,2),:);
+    tempChannelDistance = norm(tempCoordSource-tempCoordDetector);
+    
+    GHandle.TempWindow.ChannelList.Data{iChannel,1} = ['Ch' num2str(iChannel)];
+    GHandle.TempWindow.ChannelList.Data{iChannel,2} = sourceTag{channelPairsIdx(iChannel,1)};
+    GHandle.TempWindow.ChannelList.Data{iChannel,3} = detectorTag{channelPairsIdx(iChannel,2)};
+    GHandle.TempWindow.ChannelList.Data{iChannel,4} = tempChannelDistance;
+    GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
 end
 
-if nChannel
-    GHandle.TempWindow.Source = text([GHandle.TempWindow.LandMark(channelPairs(:,1)).XData],...
-        [GHandle.TempWindow.LandMark(channelPairs(:,1)).YData],...
-        [GHandle.TempWindow.LandMark(channelPairs(:,1)).ZData],...
-        GHandle.TempWindow.SourceList.String(channelPairsIdx(:,1)), ...
+if  GHandle.TempWindow.LandmarkLabels.Value
+    GHandle.TempWindow.Source = text(sourcePos(:,1),...
+        sourcePos(:,2),...
+        sourcePos(:,3),...
+        sourceTag, ...
         'FontWeight', 'bold', ...
         'FontSize', 10, ...
-        'Visible', labelVisibility, ...
         'HitTest', 'off', ...
         'Color', sourceColor);
-    GHandle.TempWindow.Detector = text([GHandle.TempWindow.LandMark(channelPairs(:,2)).XData],...
-        [GHandle.TempWindow.LandMark(channelPairs(:,2)).YData],...
-        [GHandle.TempWindow.LandMark(channelPairs(:,2)).ZData],...
-        GHandle.TempWindow.DetectorList.String(channelPairsIdx(:,2)), ...
+    GHandle.TempWindow.Detector = text(detectorPos(:,1),...
+        detectorPos(:,2),...
+        detectorPos(:,3),...
+        detectorTag, ...
         'FontWeight', 'bold', ...
         'FontSize', 10, ...
-        'Visible', labelVisibility, ...
         'HitTest', 'off', ...
         'Color', detectorColor);
-    
-    
-    coordSource = [GHandle.TempWindow.LandMark(channelPairs(:,1)).XData; GHandle.TempWindow.LandMark(channelPairs(:,1)).YData; GHandle.TempWindow.LandMark(channelPairs(:,1)).ZData]';
-    coordDetector =  [GHandle.TempWindow.LandMark(channelPairs(:,2)).XData; GHandle.TempWindow.LandMark(channelPairs(:,2)).YData; GHandle.TempWindow.LandMark(channelPairs(:,2)).ZData]';
-    coordChannel = ( coordSource +  coordDetector)/2;
-    thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistance.String);
-    
-    for iChannel = 1:1:nChannel
-        tempCoordSource = coordSource(iChannel,:);
-        tempCoordDetector = coordDetector(iChannel,:);
-        tempChannelDistance = norm(tempCoordSource-tempCoordDetector);
-        
-        GHandle.TempWindow.ChannelList.Data{iChannel,1} = ['Ch' num2str(iChannel)];
-        GHandle.TempWindow.ChannelList.Data{iChannel,2} = GHandle.TempWindow.SourceList.String{channelPairsIdx(iChannel,1)};
-        GHandle.TempWindow.ChannelList.Data{iChannel,3} = GHandle.TempWindow.DetectorList.String{channelPairsIdx(iChannel,2)};
-        GHandle.TempWindow.ChannelList.Data{iChannel,4} = tempChannelDistance;
-        GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
-        if GHandle.TempWindow.ChannelList.Data{iChannel,5}
-            linestyleChannel = '-';
-        else
-            if GHandle.TempWindow.ShowInactive.Value
-                linestyleChannel = ':';
-            else
-                linestyleChannel = 'none';
-            end
-        end
- 
-        tempCoordSourceShrink = tempCoordSource - (tempCoordSource-tempCoordDetector)*lineShrinkFactor;
-        tempCoordDetectorShrink = tempCoordDetector + (tempCoordSource-tempCoordDetector)*lineShrinkFactor;
-        GHandle.TempWindow.Channel(iChannel) = plot3([tempCoordSourceShrink(1) tempCoordDetectorShrink(1)],...
-            [tempCoordSourceShrink(2) tempCoordDetectorShrink(2)],...
-            [tempCoordSourceShrink(3) tempCoordDetectorShrink(3)], ...
-            'LineWidth', 2, ...
-            'LineStyle',linestyleChannel,...
+    if nChannel
+        coordChannel = (sourcePos(channelPairsIdx(:,1),:) + detectorPos(channelPairsIdx(:,2),:))/2;
+        GHandle.TempWindow.ChannelText = text(coordChannel(:,1), coordChannel(:,2), coordChannel(:,3), ...
+            GHandle.TempWindow.ChannelList.Data(:,1), ...
+            'FontWeight', 'bold', ...
+            'FontSize', 10, ...
             'HitTest', 'off', ...
             'Color', 'k');
-        
     end
-    
-    GHandle.TempWindow.ChannelText = text(coordChannel(:,1), coordChannel(:,2), coordChannel(:,3), ...
-        GHandle.TempWindow.ChannelList.Data(:,1), ...
-        'FontWeight', 'bold', ...
-        'FontSize', 10, ...
-        'Visible', labelVisibility, ...
-        'HitTest', 'off', ...
-        'Color', 'k');
 end
+
+
+tempCoordSourceShrink = sourcePos(channelPairsIdx(:,1),:) - (sourcePos(channelPairsIdx(:,1),:)-detectorPos(channelPairsIdx(:,2),:))*lineShrinkFactor;
+tempCoordDetectorShrink = detectorPos(channelPairsIdx(:,2),:) + (sourcePos(channelPairsIdx(:,1),:)-detectorPos(channelPairsIdx(:,2),:))*lineShrinkFactor;
+xChannel = [tempCoordSourceShrink(:,1) tempCoordDetectorShrink(:,1)]';
+yChannel = [tempCoordSourceShrink(:,2) tempCoordDetectorShrink(:,2)]';
+zChannel = [tempCoordSourceShrink(:,3) tempCoordDetectorShrink(:,3)]';
+shortIdx =  [GHandle.TempWindow.ChannelList.Data{:,5}];
+if GHandle.TempWindow.ShowInactive.Value
+    longLineStyle = ':';
+else
+    longLineStyle = 'none';
+end
+
+GHandle.TempWindow.Channel = plot3(xChannel(shortIdx),...
+    yChannel(shortIdx),...
+    zChannel(shortIdx), ...
+    '-',...
+    xChannel(shortIdx),...
+    yChannel(shortIdx),...
+    zChannel(shortIdx), ...
+    longLineStyle,...
+    'LineWidth', 2, ...
+    'HitTest', 'off', ...
+    'Color', 'k'...
+    );
+
+
 end
 
