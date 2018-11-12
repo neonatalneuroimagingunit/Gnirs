@@ -89,7 +89,9 @@ GHandle.Viewer(vIdx).timeplot.txt_samples = text(0, 0, '',...
     'FontSize', 8,...
     'Parent', GHandle.Viewer(vIdx).timeplot.smallaxes);
 
-GHandle.Viewer(vIdx).WatchList.edvLine = ones(size(GHandle.Viewer(vIdx).timeplot.lines2));
+
+GHandle.Viewer(vIdx).WatchList.edvLine = true(size(GHandle.Viewer(vIdx).timeplot.lines2));
+
 GHandle.Viewer(vIdx).WatchList.timeLim = [GHandle.CurrentDataSet.Data.Time(1),...
     GHandle.CurrentDataSet.Data.Time(end)];
 
@@ -102,7 +104,7 @@ lineIdx = GHandle.Viewer(vIdx).timeplot.lines1 == hObject;
 
 
 if lineIdx == GHandle.Viewer(vIdx).WatchList.edvLine
-    GHandle.Viewer(vIdx).WatchList.edvLine = ones(size(GHandle.Viewer(vIdx).WatchList.edvLine));
+    GHandle.Viewer(vIdx).WatchList.edvLine = true(size(GHandle.Viewer(vIdx).WatchList.edvLine));
 else
     GHandle.Viewer(vIdx).WatchList.edvLine = lineIdx;
 end

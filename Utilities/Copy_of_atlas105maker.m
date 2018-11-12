@@ -64,7 +64,7 @@ LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
 for ii = 1 : 11
 	LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
 	[tempPoints, ~, tempLength] = pathonmesh(meshPoints, main_BackFront_Points(end-ii+1,:), main_RightLeft_Points(end-ii+1,:) , main_BackFront_Points(ii,:), nStep);
-	tenFive.coord(:,ii,:) = pointsrelpos(tempPoints, tempLength, 1:(-0.01):0);
+	tenFive.coord(:,ii,:) = pointsrelpos(tempPoints, tempLength, 0:(0.01):1);
 end
 for ii = 1 : 11
 	LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
@@ -131,37 +131,36 @@ arcPerc =  0.9875: - 0.0125 :0.0125;
 
 for ii = 12 : 1 : 90 %(101 - 11)
 	LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
-	[tempPoints, ~, tempLength] = pathonmesh(meshPoints, secondaryFrontBackPoints(ii,:), main_BackFront_Points(end - ii + 1,:) , secondaryBackFrontPoints(end - ii + 1,:), nStep);
+	[tempPoints, ~, tempLength] = pathonmesh(meshPoints, secondaryFrontBackPoints(ii,:), main_BackFront_Points(end - ii + 1,:) , secondaryBackFrontPoints(ii,:), nStep);
 	tenFive.coord(ii,12:90,:) = pointsrelpos(tempPoints, tempLength, arcPerc);
 end
 tempNameMatrix = repmat({''},105,105);
 
 
-% tempname = repmat( {'Nz'; 'N1h'; 'N1'; 'AFp9'; 'AF9'; 'AFF9'; 'F9'; 'FFT9'; 'FT9'; 'FTT9'; ...
-%     'T9'; 'TTP9'; 'TP9'; 'TPP9'; 'P9'; 'PPO9'; 'PO9'; 'POO9'; 'I1'; 'I1h'; 'Iz'}',5,1);
+tempname = repmat( {'Nz'; 'N1h'; 'N1'; 'AFp9'; 'AF9'; 'AFF9'; 'F9'; 'FFT9'; 'FT9'; 'FTT9'; ...
+    'T9'; 'TTP9'; 'TP9'; 'TPP9'; 'P9'; 'PPO9'; 'PO9'; 'POO9'; 'I1'; 'I1h'; 'Iz'}',5,1);
 
-tempname = repmat( {'Iz';'I1h';'I1';'POO9';'PO9';'PPO9';'P9';'TPP9';'TP9';'TTP9'; ...
-    'T9'; 'FTT9';'FT9';'FFT9';'F9';'AFF9';'AF9';'AFp9';'N1';'N1h';'Nz'}',5,1);
+% tempname = repmat( {'Iz';'I1h';'I1';'POO9';'PO9';'PPO9';'P9';'TPP9';'TP9';'TTP9'; ...
+%     'T9'; 'FTT9';'FT9';'FFT9';'F9';'AFF9';'AF9';'AFp9';'N1';'N1h';'Nz'}',5,1);
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,1:1:5) = tempname;
 
-% tempname = repmat({'NFpz'; 'NFp1h'; 'NFp1'; 'AFp9h'; 'AF9h'; 'AFF9h'; 'F9h'; 'FFT9h'; 'FT9h'; 'FTT9h'; ...
-%     'T9h'; 'TTP9h'; 'TP9h'; 'TPP9h'; 'P9h'; 'PPO9h'; 'PO9h'; 'POO9h'; 'O1h'; 'OI1h'; 'OIz'}',5,1);
+tempname = repmat({'NFpz'; 'NFp1h'; 'NFp1'; 'AFp9h'; 'AF9h'; 'AFF9h'; 'F9h'; 'FFT9h'; 'FT9h'; 'FTT9h'; ...
+    'T9h'; 'TTP9h'; 'TP9h'; 'TPP9h'; 'P9h'; 'PPO9h'; 'PO9h'; 'POO9h'; 'O1h'; 'OI1h'; 'OIz'}',5,1);
 
-tempname = repmat({'OIz';'OI1h';'O1h';'POO9h';'PO9h';'PPO9h';'P9h';'TPP9h';'TP9h';'TTP9h'; ...
-    'T9h';'FTT9h';'FT9h';'FFT9h';'F9h';'AFF9h';'AF9h';'AFp9h';'NFp1';'NFp1h';'NFpz'}',5,1);
+% tempname = repmat({'OIz';'OI1h';'O1h';'POO9h';'PO9h';'PPO9h';'P9h';'TPP9h';'TP9h';'TTP9h'; ...
+%     'T9h';'FTT9h';'FT9h';'FFT9h';'F9h';'AFF9h';'AF9h';'AFp9h';'NFp1';'NFp1h';'NFpz'}',5,1);
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,6:1:10) = tempname;
 
-% tempname = repmat({'Fpz'; 'Fp1h'; 'Fp1'; 'AFp7'; 'AF7'; 'AFF7'; 'F7'; 'FFT7'; 'FT7'; 'FTT7'; ...
-%     'T7'; 'TTP7'; 'TP7'; 'TPP7'; 'P7'; 'PPO7'; 'PO7'; 'POO7'; 'O1'; 'O1h'; 'Oz'}',5,1);
+tempname = repmat({'Fpz'; 'Fp1h'; 'Fp1'; 'AFp7'; 'AF7'; 'AFF7'; 'F7'; 'FFT7'; 'FT7'; 'FTT7'; ...
+    'T7'; 'TTP7'; 'TP7'; 'TPP7'; 'P7'; 'PPO7'; 'PO7'; 'POO7'; 'O1'; 'O1h'; 'Oz'}',5,1);
 
-tempname = repmat({'Oz';'O1h';'O1';'POO7';'PO7';'PPO7';'P7';'TPP7';'TP7';'TTP7';...
-    'T7';'FTT7';'FT7';'FFT7';'F7';'AFF7';'AF7';'AFp7';'Fp1';'Fp1h';'Fpz'}',5,1);
+% tempname = repmat({'Oz';'O1h';'O1';'POO7';'PO7';'PPO7';'P7';'TPP7';'TP7';'TTP7';...
+%     'T7';'FTT7';'FT7';'FFT7';'F7';'AFF7';'AF7';'AFp7';'Fp1';'Fp1h';'Fpz'}',5,1);
 
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,11:1:15) = tempname;
-
 
 
 
@@ -179,6 +178,8 @@ tempname = repmat({'Fpz'; 'Fp2h'; 'Fp2'; 'AFp8'; 'AF8'; 'AFF8'; 'F8'; 'FFT8'; 'F
     'T8'; 'TTP8'; 'TP8'; 'TPP8'; 'P8'; 'PPO8'; 'PO8'; 'POO8'; 'O2'; 'O2h'; 'Oz'}',5,1);
 tempname = repmat(tempname(:),1,5);
 tempNameMatrix(:,91:1:95) = tempname;
+
+
 
 tempname = repmat({'AFp7h'; 'AFp5'; 'AFp5h'; 'AFp3'; 'AFp3h'; 'AFp1'; 'AFp1h'; ...
     'AFpz'; 'AFp2h'; 'AFp2'; 'AFp4h'; 'AFp4'; 'AFp6h'; 'AFp6'; 'AFp8h'}',5,1);
