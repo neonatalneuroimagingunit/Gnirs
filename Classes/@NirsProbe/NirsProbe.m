@@ -5,13 +5,15 @@ classdef NirsProbe
     properties
         id(1,:) char
         
+        atlasId(1,:) char
+        
         name(1,:) char
         
-        source(1,:) struct
+        source(1,1) struct
         
-        detector(1,:) struct
+        detector(1,1) struct
         
-        channel(1,:) struct
+        channel(1,1) struct
         
         note(1,:) char
     end
@@ -55,8 +57,8 @@ classdef NirsProbe
                         case 'note'
                             obj.note = varargin{i+1};
                             
-                        case 'distance'
-                            obj.distance = varargin{i+1};
+                        case 'atlasid'
+                            obj.atlasId = varargin{i+1};
                             
                         otherwise
                             warning('the %s field is not a valid field',varargin{i});

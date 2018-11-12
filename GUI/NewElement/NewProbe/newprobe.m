@@ -42,7 +42,7 @@ GHandle.TempWindow.NewProbeLoadButton = uicontrol('Style', 'pushbutton',...
     'String', 'Save',...
     'Units', 'normalize', ...
     'Position', [0.85 0.05 0.1 0.05],...
-    'Callback', {@load_probe ,GHandle}...
+    'Callback', {@save_probe ,GHandle}...
     );
 
 GHandle.TempWindow.AtlasWidget = uiw.widget.EditablePopup(...
@@ -174,7 +174,6 @@ GHandle.TempWindow.LandmarkLabels = uicontrol('Style', 'checkbox',...
     'callback',{@tempplotfunc, GHandle},...
     'HorizontalAlignment', 'left', ...
     'Position', [0.55 0.35 0.35 0.35]);
-%addlistener(GHandle.TempWindow.LandmarkLabels,'Value','PostSet',@(src,evnt)channelrefresh(src,evnt,GHandle));
 
 [GHandle.TempWindow.ThresholdPanel, ~, GHandle.TempWindow.ThresholdDistance] = gtextedit(...
     'Parent', GHandle.TempWindow.OptionsPanel,...
@@ -206,54 +205,42 @@ GHandle.TempWindow.NewProbeFigure.Visible = 'on';
 end
 
 
-function load_probe(~, ~, GHandle)
+function save_probe(~, ~, GHandle)
 probeName = GHandle.TempWindow.NewProbeName.Value;
 note = GHandle.TempWindow.NewProbeNote.Value;
+atlasID = GHandle.TempWindow.SelectedAtlas.id;
+landMark = GHandle.TempWindow.SelectedAtlas.LandMarks;
 
-xAtlas = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,1),[],1);
-yAtlas = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,2),[],1);
-zAtlas = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,3),[],1);
+idxSrc = GHandle.TempWindow.Mask.Source(:);
+idxDet = GHandle.TempWindow.Mask.Detector(:);
+xLandMark = reshape(landMark.coord(:,:,1), [],1);
+yLandMark = reshape(landMark.coord(:,:,2), [],1);
+zLandMark = reshape(landMark.coord(:,:,3), [],1);
 
-nDetector = size(GHandle.TempWindow.DetectorList.String,1);
-Detector = repmat(struct(),[nDetector,1]);
-for iDetector = 1:1:nDetector
-    Detector(iDetector).label = GHandle.TempWindow.DetectorList.String{iDetector};
-    idxPosition = GHandle.TempWindow.DetectorList.UserData(iDetector);
-    [xPos,yPos] = ind2sub([101, 101],idxPosition);
-    Detector(iDetector).position2D = [xPos,yPos];
-    Detector(iDetector).position = [xAtlas(idxPosition) yAtlas(idxPosition) zAtlas(idxPosition)];
-end
+detectorMask = GHandle.TempWindow.Mask.Detector;
+Detector.label = landMark.names(detectorMask);
+[xPos,yPos] = find(detectorMask);
+Detector.position2D = [xPos,yPos];
+Detector.position = [xLandMark(idxDet), yLandMark(idxDet), zLandMark(idxDet)];
 
-nSource = size(GHandle.TempWindow.SourceList.String,1);
-Source = repmat(struct(),[nSource,1]);
-for iSource = 1:1:nSource
-    Source(iSource).label = GHandle.TempWindow.SourceList.String{iSource};
-    idxPosition = GHandle.TempWindow.SourceList.UserData(iSource);
-    [xPos,yPos] = ind2sub([101, 101],idxPosition);
-    Source(iSource).position2D = [xPos,yPos];
-    Source(iSource).position = [xAtlas(idxPosition) yAtlas(idxPosition) zAtlas(idxPosition)];
-end
+sourceMask = GHandle.TempWindow.Mask.Source;
+Source.label = landMark.names(sourceMask);
+[xPos,yPos] = find(sourceMask);
+Source.position2D = [xPos,yPos];
+Source.position = [xLandMark(idxSrc), yLandMark(idxSrc), zLandMark(idxSrc)];
 
-nChannel = sum([GHandle.TempWindow.ChannelList.Data{:,5}]);
 idxChannel = find([GHandle.TempWindow.ChannelList.Data{:,5}] == 1);
-Channel = repmat(struct(),[nChannel,1]);
-for iChannel = 1:1:nChannel
-    idxPosition = idxChannel(iChannel);
-    Channel(iChannel).label = GHandle.TempWindow.ChannelList.Data{idxPosition,1};
-    Channel(iChannel).distance = GHandle.TempWindow.ChannelList.Data{idxPosition,4};
-    idxSource = find(strcmp(GHandle.TempWindow.SourceList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,2}));
-    idxDetector = find(strcmp(GHandle.TempWindow.DetectorList.String, GHandle.TempWindow.ChannelList.Data{idxPosition,3}));
-    Channel(iChannel).pairs = [idxSource idxDetector];
-end
+Channel.label = GHandle.TempWindow.ChannelList.Data(idxChannel,1);
+Channel.distance = [GHandle.TempWindow.ChannelList.Data{idxChannel,4}]';
+channelPairsIdx = combvec(1:size(Source.label,1), 1:size(Detector.label,1))';
+Channel.pairs = channelPairsIdx(idxChannel,:);
 
-NewProbe = NirsProbe('name', probeName, 'note', note, 'detector', Detector, 'source', Source, 'channel', Channel);
 
+NewProbe = NirsProbe('name', probeName, 'atlasid', atlasID, 'note', note, 'detector', Detector, 'source', Source, 'channel', Channel);
 DataBase = GHandle.DataBase.add(NewProbe);
-
 GHandle.DataBase = DataBase;
 
 tree(GHandle);
-
 close(GHandle.TempWindow.NewProbeFigure);
 end
 
@@ -312,6 +299,7 @@ else
     GHandle.TempWindow.Zoom = false;
     
     idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
+    
     
     GHandle.TempWindow.Mask.LandMark(setdiff(1:1:10201,idxM)) = false;
     tempplotfunc([],[],GHandle)

@@ -32,10 +32,6 @@ function [find, n] = finddependence(DataBase, id)
 			
 		case 'P'
 			find{1} = id;
-			DBProbe = DataBase.findid(id);
-			if ~isempty(DBProbe.altasId)
-				find = [find, {DBProbe.altasId}] ;
-			end
 			
 		case 'T'
 			find{1} = id;

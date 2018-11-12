@@ -83,12 +83,12 @@ switch objType
     case 'NirsProbe'
         varName = 'Probe';
         if ~isempty(Object2Add.name)
-            [DBObject, DataBase] = DataBase.newprobe('tag',Object2Add.name);
+            [DBObject, DataBase] = DataBase.newprobe('tag',Object2Add.name,'atlasId',Object2Add.atlasId);
         else
             if (nargin > 2)
-                [DBObject, DataBase] = DataBase.newprobe('tag',tag);
+                [DBObject, DataBase] = DataBase.newprobe('tag',tag,'atlasId',Object2Add.atlasId);
             else
-                [DBObject, DataBase] = DataBase.newprobe;
+                [DBObject, DataBase] = DataBase.newprobe('atlasId',Object2Add.atlasId);
             end
         end
         
