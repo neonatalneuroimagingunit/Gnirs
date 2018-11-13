@@ -1,6 +1,5 @@
 function set_time_lim(~,evnt,GHandle, vIdx)
 
-
 fs = GHandle.Viewer(vIdx).updateRate;
 timeLim = evnt.AffectedObject.timeLim;
 

@@ -736,6 +736,7 @@ GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'edvL
 
 %nCh = length(GHandle.Viewer(vIdx).Probe.channel.label);
 
+% Remove empty spaces in optodes matrix layout
 egg = 101;
 spam = zeros(egg,egg);
 bacon = sub2ind(size(spam),GHandle.Viewer(vIdx).Probe.source.position2D(:,1),GHandle.Viewer(vIdx).Probe.source.position2D(:,2));
@@ -744,16 +745,12 @@ bacon = sub2ind(size(spam),GHandle.Viewer(vIdx).Probe.detector.position2D(:,1),G
 spam(bacon) = 2;
 spam(~any(spam,2),:) = [];
 spam(:,~any(spam,1)) = [];
-
 [posSrc(:,1), posSrc(:,2)] = find(spam==1);
 [posDet(:,1), posDet(:,2)] = find(spam==2);
 
 idxSrc = GHandle.Viewer(vIdx).Probe.channel.pairs(:,1);
 idxDet = GHandle.Viewer(vIdx).Probe.channel.pairs(:,2);
 if 1
-%     x = [GHandle.Viewer(vIdx).Probe.source.position2D(idxSrc,1)'; GHandle.Viewer(vIdx).Probe.detector.position2D(idxDet,1)'];
-%     y = [GHandle.Viewer(vIdx).Probe.source.position2D(idxSrc,2)'; GHandle.Viewer(vIdx).Probe.detector.position2D(idxDet,2)'];
-%     z = zeros(size(x));
     x = [posSrc(idxSrc,1)'; posDet(idxDet,1)'];
     y = [posSrc(idxSrc,2)'; posDet(idxDet,2)'];
     z = zeros(size(x));
@@ -768,7 +765,6 @@ GHandle.Viewer(vIdx).probeplot.channel = plot3(y,-x,z,...
     'Color', channelColor,...
     'Parent', GHandle.Viewer(vIdx).metadata(3).probeAxes);
 set(GHandle.Viewer(vIdx).probeplot.channel, {'Tag'}, GHandle.Viewer(vIdx).Probe.channel.label);
-
 
 if 1
     x = repmat(posSrc(:,1)',[2,1]);
