@@ -1,7 +1,7 @@
 function change_width(~,evnt,GHandle, vIdx)
 
 colorBackground = [200 200 200]/255;
-alphaBackground = 0.1;
+alphaBackground = 0.03;
 alphaForeground = 1;
 lineWidth = 1;
 linewidthFactor = 2;
@@ -55,22 +55,24 @@ else
     GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.Visible = 'off';
     cla(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes);
     GHandle.Viewer(vIdx).timefrequencyplot.text.Visible = 'on';
-    %GHandle.Viewer(vIdx).timeplot.bigaxes1.YLimMode = 'auto';
 end
 
-xRange = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim;
-xVal = cat(1,GHandle.Viewer(vIdx).timeplot.lines1(edvLine).XData)';
-yVal = cat(1,GHandle.Viewer(vIdx).timeplot.lines1(edvLine).YData)';
-mask = any((xVal>xRange(1) & xVal<xRange(2)),2);
-yLimit = [min(yVal(mask,:),[],'all'), max(yVal(mask,:),[],'all')];
-GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim = yLimit;
-nEvents = length(GHandle.Viewer(vIdx).timeplot.Events);
-
-for iEvents = 1 : 1 : nEvents
-    GHandle.Viewer(vIdx).timeplot.Events(iEvents).YData = eventRatio.*yLimit(2).*ones( [1, length(GHandle.Viewer(vIdx).timeplot.Events(iEvents).XData)]);
+ xRange = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim;
+if  GHandle.Viewer(vIdx).Preference.YAutoscale.Value
+   
+    xVal = cat(1,GHandle.Viewer(vIdx).timeplot.lines1(edvLine).XData)';
+    yVal = cat(1,GHandle.Viewer(vIdx).timeplot.lines1(edvLine).YData)';
+    mask = any((xVal>xRange(1) & xVal<xRange(2)),2);
+    yLimit = [min(yVal(mask,:),[],'all'), max(yVal(mask,:),[],'all')];
+    GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim = yLimit;
+    nEvents = length(GHandle.Viewer(vIdx).timeplot.Events);
+    
+    for iEvents = 1 : 1 : nEvents
+        GHandle.Viewer(vIdx).timeplot.Events(iEvents).YData = eventRatio.*yLimit(2).*ones( [1, length(GHandle.Viewer(vIdx).timeplot.Events(iEvents).XData)]);
+    end
 end
 
-GHandle.Viewer.WatchList.timeLim = xRange;
+GHandle.Viewer(vIdx).WatchList.timeLim = xRange;
 
 
 %% edv the probe
