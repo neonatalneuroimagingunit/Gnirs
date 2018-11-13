@@ -851,6 +851,7 @@ end
 
 function probe_callback(hOptode, ~, GHandle, vIdx)
 tobesearched = hOptode.Tag;
+%hOptode.MarkerSize = hOptode.MarkerSize * 2;
 if contains(tobesearched,'Ch')
     temp = GHandle.Viewer.Probe.channel.pairs(contains(GHandle.Viewer.Probe.channel.label, tobesearched),:);
     tobesearched = num2str(temp,'s%.3d_d%.3d');
