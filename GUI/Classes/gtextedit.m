@@ -2,17 +2,17 @@ classdef gtextedit < handle & matlab.mixin.SetGet
     
     properties (Transient)
         parent
-        Position = [0 0 1 1]
+        Position
         labelString = ''
         textString = ''
-        spacing = 0.1
-        sizeratio = 1
+        spacing
+        sizeratio
         BackgroundColor =  [0.9400    0.9400    0.9400]
         TextBackgroundColor =  [0.9400    0.9400    0.9400]
         LabelBackgroundColor =  [0.9400    0.9400    0.9400]
-        configuration = 'vertical'
+        configuration
         texttype = 'text'
-        textHeight = 10
+        textHeight
         callback = {}
     end
     
@@ -22,12 +22,11 @@ classdef gtextedit < handle & matlab.mixin.SetGet
         Text = uicontrol;
         
         parentH
-        spacingH
-        sizeratioH
-        configurationH
-        texttypeH
-        PositionH
-        textHeightH
+        spacingH = 0.1
+        sizeratioH = 1
+        configurationH = 'vertical'
+        PositionH = [0 0 1 1]
+        textHeightH = 10
     end
     
     methods
@@ -69,7 +68,6 @@ classdef gtextedit < handle & matlab.mixin.SetGet
         end
         function set.texttype(obj,value)
             obj.Text.Style = value;
-            obj.texttypeH = value;
         end
         function set.textHeight(obj,value)
             [obj.Label.Position, obj.Text.Position] = spacing_text(obj.parent,obj.Position,obj.configuration,obj.spacing,obj.sizeratio,value);
@@ -85,7 +83,6 @@ classdef gtextedit < handle & matlab.mixin.SetGet
         end
         function value = get.parent(obj)
             value = obj.parentH;
-            
         end
         function value = get.labelString(obj)
             value = obj.Label.String;
@@ -124,7 +121,7 @@ classdef gtextedit < handle & matlab.mixin.SetGet
         %% constructor
         function  obj = gtextedit(varargin)
             callback = [];
-            
+            texttype = 'text';
             
             for i = 1 : 2 : nargin
                 switch lower(varargin{i})
