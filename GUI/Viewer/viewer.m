@@ -908,6 +908,7 @@ end
 function editY_callback(handle, ~, GHandle, vIdx)
 mask = contains({'min', 'max'}, handle.Tag);
 GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(mask) = str2double(handle.String);
+GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
 end
 
 function yautoscale_callback(handle, ~, GHandle, vIdx)
@@ -919,5 +920,7 @@ if handle.Value
 else
     GHandle.Viewer(vIdx).timeplot.editmaxY.Visible = 'on';
     GHandle.Viewer(vIdx).timeplot.editminY.Visible = 'on';
+    GHandle.Viewer(vIdx).timeplot.editmaxY.String = 'max';
+    GHandle.Viewer(vIdx).timeplot.editminY.String = 'min';
 end
 end

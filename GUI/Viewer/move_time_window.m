@@ -55,8 +55,9 @@ switch eventData.EventName
 	end
 	
 	case 'Hit'
-		xmin = eventData.IntersectionPoint(1);
-		xmax = GHandle.Viewer(vIdx).WatchList.timeLim(2) - GHandle.Viewer(vIdx).WatchList.timeLim(1) + xmin;
+        xrange = GHandle.Viewer(vIdx).WatchList.timeLim(2) - GHandle.Viewer(vIdx).WatchList.timeLim(1);
+		xmin = eventData.IntersectionPoint(1) - xrange/2;
+		xmax = xmin + xrange;
 end
 if strcmp(GHandle.Viewer(vIdx).LockMultipleWiewer.State,'on')
 	for vIdx = GHandle.Temp.vIdxList'

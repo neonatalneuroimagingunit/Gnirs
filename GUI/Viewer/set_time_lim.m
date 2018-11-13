@@ -21,7 +21,8 @@ GHandle.Viewer(vIdx).timeplot.rectangle.Position = [rectangle_x rectangle_y rect
 
 %modify text
 txt_x = rectangle_w/2 + rectangle_x;
-txt_y = [rectangle_y+1.3*rectangle_h rectangle_y-0.3*rectangle_h];
+%txt_y = [rectangle_y+1.3*rectangle_h rectangle_y-0.3*rectangle_h];
+txt_y = [rectangle_y+rectangle_h+5 rectangle_y-5];
 GHandle.Viewer(vIdx).timeplot.txt_seconds.Position = [txt_x, txt_y(1)];
 GHandle.Viewer(vIdx).timeplot.txt_seconds.String = [num2str(timeLim(2)-timeLim(1)) ' s'];
 GHandle.Viewer(vIdx).timeplot.txt_samples.Position = [txt_x, txt_y(2)];
