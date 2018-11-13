@@ -6,8 +6,14 @@ alphaForeground = 1;
 lineWidth = 1;
 linewidthFactor = 2;
 eventRatio = 0.8;
+edvMarkerSize = 30;
+notEdvMarkerSize = 15;
+edvLineWidth = 3;
+notEdvLineWidth = 1;
+notEdvColor = 'k';
 
 edvLine = evnt.AffectedObject.edvLine;
+idxLine = find(edvLine);
 if all(edvLine)
     linewidthBackground = lineWidth;
     linewidthForeground = lineWidth;
@@ -44,7 +50,7 @@ if sum(edvLine) == 1
     uistack(GHandle.Viewer(vIdx).timeplot.lines1(edvLine),'top');
     
     GHandle.Viewer(vIdx).spectrumplot.lines1(edvLine).LineWidth = linewidthForeground;
-    uistack(GHandle.Viewer(vIdx).spectrumplot.lines1(edvLine),'top'); 
+    uistack(GHandle.Viewer(vIdx).spectrumplot.lines1(edvLine),'top');
 else
     GHandle.Viewer(vIdx).timefrequencyplot.bigaxes.Visible = 'off';
     cla(GHandle.Viewer(vIdx).timefrequencyplot.bigaxes);
@@ -65,5 +71,52 @@ for iEvents = 1 : 1 : nEvents
 end
 
 GHandle.Viewer.WatchList.timeLim = xRange;
+
+
+%% edv the probe
+if all(edvLine)
+    set(GHandle.Viewer(vIdx).probeplot.source , 'MarkerSize', notEdvMarkerSize);
+    set(GHandle.Viewer(vIdx).probeplot.detector, 'MarkerSize', notEdvMarkerSize);
+    set(GHandle.Viewer(vIdx).probeplot.channel, 'LineWidth', notEdvLineWidth, 'Color', notEdvColor);
+else
+    srcTag = {GHandle.Viewer(vIdx).probeplot.source.Tag}';
+    detTag = {GHandle.Viewer(vIdx).probeplot.detector.Tag}';
+    chTag = strcat(srcTag(GHandle.Viewer(vIdx).Probe.channel.pairs(:,1)),'_',detTag(GHandle.Viewer(vIdx).Probe.channel.pairs(:,2)));
+    lineTag = {GHandle.Viewer(vIdx).timeplot.lines1(edvLine).Tag}';
+    for iSource = 1 : length(srcTag)
+        maxSrc = sum(contains({GHandle.Viewer(vIdx).timeplot.lines1.Tag},srcTag(iSource)));
+        mask = contains(lineTag,srcTag(iSource));
+        if sum(mask) == maxSrc
+            GHandle.Viewer(vIdx).probeplot.source(iSource).MarkerSize = edvMarkerSize;
+        else
+            GHandle.Viewer(vIdx).probeplot.source(iSource).MarkerSize = notEdvMarkerSize;
+        end
+    end
+    for iDetector = 1 : length(detTag)
+        maxDet = sum(contains({GHandle.Viewer(vIdx).timeplot.lines1.Tag},detTag(iDetector)));
+        mask = contains(lineTag,detTag(iDetector));
+        if sum(mask) == maxDet
+            GHandle.Viewer(vIdx).probeplot.detector(iDetector).MarkerSize = edvMarkerSize;
+        else
+            GHandle.Viewer(vIdx).probeplot.detector(iDetector).MarkerSize = notEdvMarkerSize;
+        end
+    end
+    for iChannel = 1 : length(chTag)
+        mask = contains(lineTag,chTag(iChannel));
+        if sum(mask)>1
+            GHandle.Viewer(vIdx).probeplot.channel(iChannel).LineWidth = edvLineWidth;
+        else
+            GHandle.Viewer(vIdx).probeplot.channel(iChannel).LineWidth = notEdvLineWidth;
+        end
+        
+        if sum(mask)== 1
+            GHandle.Viewer(vIdx).probeplot.channel(iChannel).Color = GHandle.Viewer(vIdx).timeplot.lines1(idxLine(mask)).Color;
+        else
+            GHandle.Viewer(vIdx).probeplot.channel(iChannel).Color = notEdvColor;
+        end
+    end
+end
+
+
 end
 

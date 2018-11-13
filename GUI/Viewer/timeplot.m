@@ -98,8 +98,6 @@ else
     GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
 end
 
-
-
 end
 
 
