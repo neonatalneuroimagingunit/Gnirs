@@ -8,17 +8,17 @@ function h = frecciona(point,vector,varargin)
 propertyNames = {'EdgeColor'};
 propertyValues = {'none'};    
 for nArg = 1:2:nargin-2
-    switch varargin{nArg}
-        case 'Color'
+    switch lower(varargin{nArg})
+        case 'color'
             propertyNames = {propertyNames{:},'Facecolor'};
             propertyValues = {propertyValues{:},varargin{nArg+1}};
-        case 'Style'
+        case 'style'
             if ischar(varargin{nArg+1})
                 style = varargin{nArg+1};
             else
                 style = 'up';
             end
-        case 'Size'
+        case 'size'
             if isnumeric(varargin{nArg+1})
                 arrowSize = varargin{nArg+1};
             else
@@ -45,14 +45,15 @@ ppbc = 250; % (points per big circle)
 %% ensure column vectors
 p1 = point;
 p2 = point+vector;
-p1 = p1(:);
-p2 = p2(:);
+
 
 if strcmp(style,'down')
-    spam = p2;
-    p2 = p1;
-    p1 = spam;
+    p1 = p1-vector;
+    p2 = p2-vector;
 end
+
+p1 = p1(:);
+p2 = p2(:);
 %% basic lengths and vectors
 x = (p2-p1)/norm(p2-p1); % (unit vector in arrow direction)
 y = cross(x,[0;0;1]);    % (y and z are unit vectors orthogonal to arrow)
@@ -128,14 +129,4 @@ for propno = 1:numel(propertyNames)
     end
 end
 
-%%
-% x = point(1);
-% y = point(2);
-% z = point(3);
-% 
-% u = vector(1);
-% v = vector(2);
-% w = vector(3);
-% 
-% quiver3(x,y,z,u,v,w, 'Color', 'g', 'MarkerSize', 10, 'LineWidth', 5);
-% end
+end
