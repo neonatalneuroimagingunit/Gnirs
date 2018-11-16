@@ -10,8 +10,8 @@ propertyValues = {'none'};
 for nArg = 1:2:nargin-2
     switch lower(varargin{nArg})
         case 'color'
-            propertyNames = {propertyNames{:},'Facecolor'};
-            propertyValues = {propertyValues{:},varargin{nArg+1}};
+            propertyNames = [propertyNames, {'Facecolor'}];
+            propertyValues = [propertyValues, varargin(nArg+1)];
         case 'style'
             if ischar(varargin{nArg+1})
                 style = varargin{nArg+1};
@@ -25,8 +25,8 @@ for nArg = 1:2:nargin-2
                 arrowSize = [1 0.05];
             end
         otherwise
-            propertyNames = {propertyNames{:}, varargin{nArg}};
-            propertyValues = {propertyValues{:}, varargin{nArg+1}};
+            propertyNames = [propertyNames, varargin(nArg)];
+            propertyValues = [propertyValues(:), varargin(nArg+1)];
     end
 end     
 
@@ -125,7 +125,6 @@ for propno = 1:numel(propertyNames)
     try
         set(h,propertyNames{propno},propertyValues{propno});
     catch
-        disp(lasterr)
     end
 end
 
