@@ -1,6 +1,7 @@
 function PlotHandle = plotsensitivityslice(HeadMesh, varargin)
 Parent
 SegmentationLabel
+Sensitivity
 
 
 for iArgIn = 1 : 1: nargin
