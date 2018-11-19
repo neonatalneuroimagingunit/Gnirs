@@ -48,8 +48,9 @@ p2 = point+vector;
 
 
 if strcmp(style,'down')
-    p1 = p1-vector;
-    p2 = p2-vector;
+    temp = p2;
+    p2 = p1;
+    p1 = temp;
 end
 
 p1 = p1(:);

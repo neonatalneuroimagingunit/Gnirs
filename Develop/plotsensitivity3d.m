@@ -1,7 +1,7 @@
 function PlotHandle = plotsensitivity3d(HeadMesh,sensitivity, varargin)
 maxMarkerSize = 10;
 Parent = gca;
-sensitivityTrashHold = -inf;
+sensitivityThresHold = -inf;
 Atlas = [];
 sensitivityColormap =parula(128);
 atlasAlpha = [0.2 0.3 0.4];
@@ -15,8 +15,8 @@ for iArgIn = 1 : 2: (nargin - 2)
             Parent =  varargin{iArgIn + 1};
         case 'maxmarkersize'
             maxMarkerSize =  varargin{iArgIn + 1};
-        case 'sensitivitytrashhold'
-            sensitivityTrashHold =  varargin{iArgIn + 1};
+        case 'sensitivitythreshold'
+            sensitivityThresHold =  varargin{iArgIn + 1};
         case 'atlas'
             Atlas =  varargin{iArgIn + 1};
         case 'sensitivitycolormap'
@@ -33,8 +33,7 @@ for iArgIn = 1 : 2: (nargin - 2)
 end
 
 
-
-sensitivityMask = sensitivity > sensitivityTrashHold;
+sensitivityMask = sensitivity > sensitivityThresHold;
 sensitivity2Plot = sensitivity(sensitivityMask);
 
 minSensitivity = min(sensitivity2Plot);

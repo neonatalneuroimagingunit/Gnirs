@@ -1,15 +1,12 @@
-function PlotHandle = plotsensitivityslice(HeadMesh, varargin)
+function PlotHandle = plot_an_cin(HeadMesh, varargin)
 Parent
 SegmentationLabel
 Sensitivity
-
 
 for iArgIn = 1 : 1: nargin
     Parent
     
 end
-
-
 
 no = HeadMesh.node(:,1:3);
 segmentationLabel = HeadMesh.node(:,4);
