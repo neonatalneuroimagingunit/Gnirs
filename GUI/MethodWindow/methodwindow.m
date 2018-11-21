@@ -96,8 +96,8 @@ end
 		 'Position',pos...
 		);
 	
-	GHandle.MethodWindow.methodListListener = addlistener(GHandle.MethodWindow.WatchList,...
-		'listMethod','PostSet',@(src,evnt)methodboxplot(src,evnt,GHandle));
+% 	GHandle.MethodWindow.methodListListener = addlistener(GHandle.MethodWindow.WatchList,...
+% 		'listMethod','PostSet',@(src,evnt)methodboxplot(src,evnt,GHandle));
 
 end
 function clickcallback(~, Event, GHandle) 
@@ -112,13 +112,41 @@ function clickcallback(~, Event, GHandle)
 					methodIdx = strcmp({GHandle.MethodWindow.MethodList.tag},...
 						Event.Nodes.Value);
 					method2Add = GHandle.MethodWindow.MethodList(methodIdx);
-					GHandle.MethodWindow.WatchList.listMethod =...
-						[GHandle.MethodWindow.WatchList.listMethod ;method2Add];
+					add_method_box(GHandle, method2Add);
 
 					
 				case 'alt' 
 					%'dxstudy	
 			end 
-		end
-
+        end
 end
+
+function add_method_box(GHandle, method2Add)
+
+	fontSize = GHandle.Preference.Font.sizeL;
+	EdgeColor = 'k';
+	BackGroundColor = 'g';
+	LineWidth = 3;
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

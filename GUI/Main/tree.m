@@ -254,6 +254,7 @@ for iProbe = 1:GHandle.DataBase.nProbe
     % add right click callback
     GHandle.Main.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
     uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Delete','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@delete_callback ,GHandle});
+   uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Forward Simulation','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@probe_simulation ,GHandle});
     set(GHandle.Main.Tree.Probe(iProbe).MainNode,'UIContextMenu',GHandle.Main.Tree.Probe(iProbe).ContextMenu);
     
 end
@@ -307,6 +308,15 @@ function modify(~, ~, GHandle)
     id = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
     populatedisplay(id, GHandle, true)
 end
+
+function probe_simulation(handle, ~, GHandle)
+id = handle.Tag;
+DBProbe = GHandle.DataBase.findid(id);
+GHandle.CurrentDataSet.Probe = DBProbe.load;
+probesimulationwindow(GHandle);
+end
+
+
 
 
 
