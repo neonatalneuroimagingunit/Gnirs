@@ -99,6 +99,7 @@ sensitivity = log(abs(sum(fluxx.data,2))./ max(abs(sum(fluxx.data,2))));
 
 % get the half sensitivity to see the section in plot
 com = centerofmass(He.node, sum(fluxx.data,2)); % center of mass of sensitivity
+coff = points2plane(cfg1.srcpos,cfg2.srcpos,com);
 n = [coff(1)/coff(4),coff(2)/coff(4),coff(3)/coff(4)] ./ norm([coff(1)/coff(4),coff(2)/coff(4),coff(3)/coff(4)]);
 mask1 = dot(He.node(:,1:3)-com, repmat(n,[size(He.node,1) 1]),2) > 0;
 half_sensitivity = sensitivity;
