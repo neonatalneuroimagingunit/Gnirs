@@ -140,3 +140,19 @@ function close_request(Handle, ~, GHandle)
 delete(Handle);
 GHandle.TempWindow = [];
 end
+
+%% Also consider this alternative
+% ax(1) = GHandle.Viewer(1).timeplot.bigaxes1;
+% ax(2) = GHandle.Viewer(1).timeplot.bigaxes2;
+% hfig = ancestor(ax(1), 'figure');
+% 
+% rect = hgconvertunits(hfig, get(ax, 'OuterPosition'), ...
+%     get(ax, 'Units'), 'pixels', get(ax, 'Parent'));
+% 
+% fr = getframe(hfig, rect);
+% imwrite(fr.cdata, 'image.png');
+% 
+% f_new = figure('Visible','off','Position',hfig.Position);
+% ax_new = copyobj(ax,f_new);
+% set(ax_new,'Position','default');
+% print(f_new,'AxesOnly','-dpng','-r300')
