@@ -1,4 +1,4 @@
-figure
+f = figure;
 hold on
 
 trisurf(Scalp.face,...
@@ -38,6 +38,8 @@ frecciona(cfg2.srcpos-20*cfg2.srcdir,cfg2.srcdir,'Style','up','Size',[20 0.3],'C
 axis equal
 axis off
 axis vis3d
+
+%print(f,'autoExample', '-dpng', '-r300');
 
 % x = [-50 -50 -25 -25.5];
 % y = [-50 10 10 -50];
