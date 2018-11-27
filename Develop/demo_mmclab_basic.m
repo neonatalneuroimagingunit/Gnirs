@@ -110,11 +110,11 @@ mask2 = abs(dot(He.node(:,1:3)-com, repmat(n,[size(He.node,1) 1]),2)) < 1;
 mask3 = half_sensitivity > -1e1;
 mask4 = and(mask2,mask3);
 %plot3(He.node(mask4,1),He.node(mask4,2),He.node(mask4,3), '.k')
-x = He.node(mask4,1);
-y = He.node(mask4,2);
-z = 
-[n,c] = hist3([x', y']);
-contour(c{1},c{2},n)
+% x = He.node(mask4,1);
+% y = He.node(mask4,2);
+% z = 
+% [n,c] = hist3([x', y']);
+% contour(c{1},c{2},n)
 
 %% Plots
 scatter3(com(1),com(2),com(3), 25, [0 1 0], 'filled')
