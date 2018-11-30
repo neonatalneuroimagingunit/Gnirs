@@ -4,15 +4,17 @@
 %g = 0.89;
 %n = 1.37;
 
+%cfg1.srcpos = [-35.75, -26.22, 25.23];
+%cfg1.srcpos = [-14.81, -26.1, 49.23];
+%pos = [-22.2521, -24.2601, 44.9243];
+
 %% 1
-cfg1.nphoton=1e6;
+cfg1.nphoton = 1e6;
 cfg1.node = He.node(:,1:3);
 cfg1.face = He.face;
 cfg1.elem = He.elem;
-cfg1.elemprop=ones(size(cfg1.elem,1),1);
-%cfg1.srcpos = [-35.75, -26.22, 25.23];
-%cfg1.srcpos = [-14.81, -26.1, 49.23];
-cfg1.srcpos = [ -22.2521  -24.2601   44.9243];
+cfg1.elemprop = ones(size(cfg1.elem,1),1);
+cfg1.srcpos = pos;
 distsrpos = vecnorm(Scalp.node - cfg1.srcpos,2,2);
 pointmak = distsrpos < 10;
 p = fit([Scalp.node(pointmak,1),Scalp.node(pointmak,2)],Scalp.node(pointmak,3),'poly11');
@@ -24,19 +26,19 @@ cfg1.srcdir = [-p.p10  -p.p01 1]./norm([-p.p10  -p.p01 1]);
 %              0.004  0.009 0.89 n; ...     % CSF
 %              0.020  9.000 0.89 n; ...     % GM
 %              0.080 40.900 0.84 n; ...     % WM
-%              mua mus g n; ...             % B
+%              mua mus g n; ...             % Brainstem
 %              mua mus g n];                % Cerebellum
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fukui 2013 - 800 nm - Human newborn
-cfg1.prop = [0 0 1 1; ...                 % Air
-             0.017  17.5  0.9 1.3; ...     % ECT
-             0.0041 0.32  0.9 1.3; ...     % CSF
-             0.048  5.000 0.9 1.3; ...     % GM
-             0.037 10     0.9 1.3; ...     % WM
-             0.037 10     0.9 1.3; ...             % B
-             0.037 10     0.9 1.3];                % Cerebellum
+cfg1.prop = [0.0000  0.00 1.0 1.0; ...    % Air
+             0.0170 17.50 0.9 1.3; ...     % ECT
+             0.0041  0.32 0.9 1.3; ...     % CSF
+             0.0480  5.00 0.9 1.3; ...     % GM
+             0.0370 10.00 0.9 1.3; ...     % WM
+             0.0370 10.00 0.9 1.3; ...     % Brainstem
+             0.0370 10.00 0.9 1.3];        % Cerebellum
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
@@ -46,19 +48,19 @@ cfg1.prop = [0 0 1 1; ...                 % Air
 %              0.004  0.009 0.01 n; ...     % CSF
 %              0.020  9.000 0.01 n; ...     % GM
 %              0.080 40.900 0.01 n; ...     % WM
-%              mua mus 0.01 n; ...             % B
-%              mua mus 0.01 n];                % Cerebellum
+%              mua mus 0.01 n; ...          % Brainstem
+%              mua mus 0.01 n];             % Cerebellum
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%         
 % test no anisotropy g and no scattering      
-% cfg1.prop = [0 0 1 1; ...                 % Air
+% cfg1.prop = [0 0 1 1; ...             % Air
 %              0.019  0 0.01 n; ...     % ECT
 %              0.004  0 0.01 n; ...     % CSF
 %              0.020  0 0.01 n; ...     % GM
-%              0.080 0 0.01 n; ...     % WM
-%              mua 0 0.01 n; ...             % B
-%              mua 0 0.01 n];                % Cerebellum
+%              0.080 0 0.01 n; ...      % WM
+%              mua 0 0.01 n; ...        % Brainstem
+%              mua 0 0.01 n];           % Cerebellum
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 cfg1.tstart=0;
