@@ -5,9 +5,10 @@ eventColor = lines(size(GHandle.Viewer(vIdx).Event.Dictionary,1));
 eventRatio = 0.8;
 
 
-
+Probe =  GHandle.Viewer(vIdx).Probe;
 Data = eventData.AffectedObject.time2Plot;
 lineLabels = Data.Properties.VariableNames(2:end);
+
 
 
 
@@ -16,7 +17,6 @@ nLines = size(Data,2) - 1;% one is the time column
 cla(GHandle.Viewer(vIdx).timeplot.bigaxes1);
 cla(GHandle.Viewer(vIdx).timeplot.smallaxes);
 %% plot the events
-yMax = max(Data{:,2:end},[],'all');
 yMax = GHandle.Viewer(vIdx).timeplot.bigaxes1.YLim(2);
 nEventType = size(GHandle.Viewer(vIdx).Event.Dictionary,1);
 for iEventType = 1 : nEventType
@@ -30,6 +30,11 @@ for iEventType = 1 : nEventType
 end
 
 %% plot the line in the main and small axes
+srcIdx = zeros(nLines,1);
+detIdx = zeros(nLines,1);
+detLabel = zeros(nLines,1);
+srcLabel = zeros(nLines,1);
+waveLength = zeros(nLines,1);
 for iLines = 1 : nLines
     GHandle.Viewer(vIdx).timeplot.lines1(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
         'LineWidth', 1, 'LineStyle', '-',...
@@ -39,14 +44,18 @@ for iLines = 1 : nLines
         'Tag', lineLabels{iLines},...
         'Parent', GHandle.Viewer(vIdx).timeplot.bigaxes1);
     
-    
-    
-    
     GHandle.Viewer(vIdx).timeplot.lines2(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
         'LineWidth', 1, 'LineStyle', '-',...
         'Color', GHandle.Viewer(vIdx).WatchList.colorLine(iLines,:),...
         'HitTest', 'off',...
         'Parent', GHandle.Viewer(vIdx).timeplot.smallaxes);
+    
+    srcIdx(iLines) = str2double(lineLabels{iLines}(11:13));
+    detIdx(iLines) = str2double(lineLabels{iLines}(16:18));
+    waveLength(iLines) = str2double(lineLabels{iLines}(6:8));
+    srcLabel(iLines) = srcIdx(iLines);
+    detLabel(iLines) = detIdx(iLines);
+    
 end
 GHandle.Viewer(vIdx).timeplot.lines1((nLines+1):end) = [];
 GHandle.Viewer(vIdx).timeplot.lines2((nLines+1):end) = [];
@@ -63,7 +72,7 @@ GHandle.Viewer(vIdx).timeplot.bigaxes1.XLabel.String = 'Time (s)';
 GHandle.Viewer(vIdx).timeplot.bigaxes1.YLabel.String = 'Intensity (a.u.)';
 
 GHandle.Viewer(vIdx).timeplot.bigaxes2.XLabel.String = 'Time (samples)';
-GHandle.Viewer(vIdx).timeplot.bigaxes2.YTickLabel = [];
+GHandle.Viewer(vIdx).timeplProbeot.bigaxes2.YTickLabel = [];
 GHandle.Viewer(vIdx).timeplot.bigaxes2.XLim = [1 size(Data,1)];
 
 
@@ -97,6 +106,34 @@ if isempty(GHandle.Viewer(vIdx).WatchList.edvLine)
 else
     GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
 end
+
+
+
+
+%% Channel table
+% GHandle.Viewer(vIdx).channelPanel.channeltable.Data = [...
+%     GHandle.Viewer(vIdx).Probe.channel.label, ...
+%     GHandle.Viewer(vIdx).Probe.source.label(GHandle.Viewer(vIdx).Probe.channel.pairs(:,1)), ...
+%     GHandle.Viewer(vIdx).Probe.detector.label(GHandle.Viewer(vIdx).Probe.channel.pairs(:,2)),...
+%     num2cell(GHandle.Viewer(vIdx).Probe.channel.distance)...
+%     ];
+distance =  vecnorm((Probe.source.position(srcIdx,:)-Probe.detector.position(detIdx,:)),2,2);
+GHandle.Viewer(vIdx).channelPanel.channeltable.Data = [...
+    num2cell(srcLabel), ...
+    num2cell(detLabel),...
+    num2cell(waveLength),...
+    num2cell(distance),...
+    lineLabels', ...
+    ];
+
+%% Event table
+GHandle.Viewer(vIdx).channelPanel.eventtable.Data = [...
+    GHandle.Viewer(vIdx).Event.Dictionary(GHandle.Viewer(vIdx).Event.type,2), ...
+    GHandle.Viewer(vIdx).Event.Dictionary(GHandle.Viewer(vIdx).Event.type,1), ...
+    num2cell(GHandle.Viewer(vIdx).Event.startTime), ...
+    num2cell(GHandle.Viewer(vIdx).Event.durationTime), ...
+    ];
+GHandle.Viewer(vIdx).channelPanel.eventtable.BackgroundColor = eventColor(GHandle.Viewer(vIdx).Event.type,:);
 
 end
 
