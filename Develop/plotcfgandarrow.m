@@ -28,16 +28,16 @@ ones(size(WM.node(:,3))),...
 light('Position',[100 0 100]);     % x is left->right, y is back->front
 light('Position',[-100 0 100]);
 
+axis equal
+axis off
+axis vis3d
+
 %plot3(Scalp.node(pointmak,1),Scalp.node(pointmak,2),Scalp.node(pointmak,3),'.g', 'MarkerSize',5)
 
 plot3(cfg1.srcpos(:,1),cfg1.srcpos(:,2),cfg1.srcpos(:,3),'.r', 'MarkerSize',10)
 plot3(cfg2.srcpos(:,1),cfg2.srcpos(:,2),cfg2.srcpos(:,3),'.b', 'MarkerSize',10)
 frecciona(cfg1.srcpos,cfg1.srcdir,'Style','down','Size',[20 0.3],'Color',[1 0 0])
 frecciona(cfg2.srcpos-20*cfg2.srcdir,cfg2.srcdir,'Style','up','Size',[20 0.3],'Color',[0 0 1])
-
-axis equal
-axis off
-axis vis3d
 
 %print(f,'autoExample', '-dpng', '-r300');
 
