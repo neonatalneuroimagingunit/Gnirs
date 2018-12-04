@@ -1,0 +1,243 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration build-checksum="976796667" file="/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/demo/rherhwe.prj" location="/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/demo" name="rherhwe" target="target.mlapps" target-name="Package App">
+    <param.appname>rherhwe</param.appname>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.icon />
+    <param.icons />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.output>/home/pagno/Desktop/MyProg</param.output>
+    <param.guid>8f6a0eb3-9e76-4716-bf48-1ee795b3a914</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.icon />
+      <param.icons />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+    </unset>
+    <fileset.main>
+      <file>/home/pagno/Desktop/MyProg/Gnirs.m</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsAnalysis/NirsAnalysis.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsAnalysis/guidisp.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsAtlas/NirsAtlas.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsAtlas/guidisp.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsMeasure/NirsMeasure.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsMeasure/guidisp.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsProbe/NirsProbe.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsProbe/guidisp.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsStudy/NirsStudy.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsStudy/guidisp.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsSubject/NirsSubject.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/@NirsSubject/guidisp.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/GnirsHandle.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/LoadingBar.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/MethodWatchList.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/NirsEvent.m</file>
+      <file>/home/pagno/Desktop/MyProg/Classes/ViewerWatchList.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/GDBAnalysis.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/eq.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/id2postfix.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/loaddata.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/modify.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAnalysis/substitute.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAtlas/GDBAtlas.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAtlas/eq.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAtlas/id2atlaspostfix.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAtlas/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBAtlas/substitute.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBMeasure/GDBMeasure.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBMeasure/eq.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBMeasure/id2postfix.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBMeasure/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBMeasure/modify.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBMeasure/substitute.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBProbe/GDBProbe.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBProbe/eq.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBProbe/id2postfix.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBProbe/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBProbe/modify.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBProbe/substitute.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBStudy/GDBStudy.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBStudy/eq.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBStudy/id2postfix.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBStudy/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBStudy/modify.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBStudy/substitute.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/GDBSubject.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/anonymize.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/eq.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/id2postfix.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/modify.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDBSubject/substitute.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/GDataBase.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/add.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/create.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/delete.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/finddependence.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/findid.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/id2databaseid.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/load.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/newanalysis.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/newatlas.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/newmeasure.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/newprobe.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/newstudy.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/newsubject.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/@GDataBase/save.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/idtype.m</file>
+      <file>/home/pagno/Desktop/MyProg/DatabaseFunction/makeanalysiscurrent.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Main/maingui.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Main/populatedisplay.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Main/resizecheck.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Main/toolbar.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Main/tree.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/MethodWindow/methodwindow.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewMeasure/newmeasdispmeasure.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewMeasure/newmeasdispprobe.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewMeasure/newmeasdispsubject.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewMeasure/newmeasmodsubject.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewMeasure/newmeasure.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewProbe/atlaswidgetcallback.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewProbe/landmarkcallback.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewProbe/newprobe.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/NewProbe/tempplotfunc.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/newatlas.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/NewElement/newstudy.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/change_width.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/move_spectrum_window.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/move_time_window.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/set_freq_lim.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/set_time_lim.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/sorting_colors.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/spectrumplot.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/timefreqplot.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/timeplot.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/Viewer/viewer.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/geditabletext.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/gtextbox.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/gtextedit.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/loadigfigure.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/newdatabasewindow.m</file>
+      <file>/home/pagno/Desktop/MyProg/GUI/probesimulationwindow.m</file>
+      <file>/home/pagno/Desktop/MyProg/IO/eventdecoder.m</file>
+      <file>/home/pagno/Desktop/MyProg/IO/loadatlasfrommat.m</file>
+      <file>/home/pagno/Desktop/MyProg/IO/loadimagentISS.m</file>
+      <file>/home/pagno/Desktop/MyProg/IO/loadmeasure.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+abstract/BaseContainer.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+abstract/EditableTextControl.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+abstract/EditableTextWithButton.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+abstract/JavaControl.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+abstract/JavaEditableText.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+abstract/WidgetContainer.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+event/EventData.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+event/MouseEvent.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+mixin/AssignPVPairs.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+mixin/HasCallback.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+mixin/HasContainer.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+mixin/HasEditableText.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+mixin/HasLabel.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+mixin/HasPanel.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+utility/getRelativeFilePath.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+utility/interpretColor.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+utility/loadIcon.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+utility/setPropsIfDifferent.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+utility/tf2onoff.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/EditablePopup.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/EditableText.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/FileSelector.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/FolderSelector.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/Toolstrip.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/Tree.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/+uiw/+widget/TreeNode.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/resource/+uix/Container.m</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/resource/folder_24.png</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/resource/folder_file_24.png</file>
+      <file>/home/pagno/Desktop/MyProg/ToolBox/JavaUITollbox/widgetsRoot.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/Copy_of_atlas105maker.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/calculateLength.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/findCz.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/linecoffgen.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/linemeshintersect.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/nearest2line.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/nearestlinepoint.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/pathonmesh.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/planelineintersec.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/point2line.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/points2mdpoints.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/points2plane.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/pointsrelpos.m</file>
+      <file>/home/pagno/Desktop/MyProg/Utilities/positivepoint.m</file>
+      <file>/home/pagno/Desktop/MyProg/loadpreferences.m</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="/home/pagno/Desktop" name="MyProg" optional="false">/home/pagno/Desktop/MyProg</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/usr/local/MATLAB/R2018b</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>false</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>true</linux>
+      <solaris>false</solaris>
+      <osver>4.15.0-39-generic</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>glnxa64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

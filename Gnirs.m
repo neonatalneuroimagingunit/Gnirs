@@ -1,4 +1,4 @@
-%function Gnirs()
+% function Gnirs()
 
 %% only for test
 

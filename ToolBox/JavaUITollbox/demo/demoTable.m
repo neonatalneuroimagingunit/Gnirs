@@ -39,7 +39,7 @@ columnFormatsAndData = {
     ''          []
     'logical'   []
     'integer'   []
-    'numeric'   []
+    'logical'   []
     'bank'      '$ #,##0.00'
     'custom'    '0.000'
     'date'      'yyyy-MM-dd'
@@ -59,9 +59,13 @@ longStr = repmat('abcdefg ',1,100); % A really long string
 [~,iconPath1] = uiw.utility.loadIcon('save_24.png');
 [~,iconPath2] = uiw.utility.loadIcon('add_24.png');
 
+
+a = '<html><center>Any period<br />returns</center></html>';
+
+
 w.Data = {
     %''   logical integer numeric bank   custom date     char    longchar popup     popupcheckbox              color    imageicon
-    20    false   20      20      20     20     datetime 'abc'   'abc'    'bananas' 'fork'                     [0 1 1]  iconPath1
+    20    false   20      20      20     20     datetime a   a    'bananas' 'fork'                     [0 1 1]  iconPath1
     1.5   true    1.5     1.5     1.5    1.5    datetime ''      longStr  'apples'  {'fork','knife','spatula'} [1 1 0]  iconPath1
     1/8   false   10000   22/7    3.256  3.256  datetime 'defgh' longStr  'oranges' {}                         [0 0 0]  iconPath2
     true  true    1e9     0.525   1000.2 1000.2 datetime 'ddd'   'efghi'  'apples'  {'spoon'}                  [1 1 1]  iconPath1
@@ -76,7 +80,7 @@ w.sizeColumnsToData();
 %% Make some columns non-editable
 
 editFlags = true(1, length(columnFormatsAndData));
-editFlags([1 2 4]) = false;
+editFlags([1 2 4 ]) = false;
 w.ColumnEditable = editFlags;
 
 
@@ -99,4 +103,19 @@ w.Sortable = true;
 w.sortColumn(7);
 
 % Sort an additional column in descending order
+
 w.sortColumn(5,true,true)
+bacon = size(w.Data);
+nriga = bacon(1);
+ncol = bacon(2);
+
+col = lines(100);
+for jj= 1 : nriga
+    tcol = col(jj,:);
+    for ii = 1 : ncol
+        w.setCellColor(jj,ii,tcol);
+    end
+end
+
+w.getJFont
+

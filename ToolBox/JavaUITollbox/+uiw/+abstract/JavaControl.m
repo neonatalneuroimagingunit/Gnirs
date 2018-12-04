@@ -61,7 +61,7 @@ classdef (Abstract) JavaControl < uiw.abstract.WidgetContainer
     
     
     %% Sealed Protected methods
-    methods (Sealed, Access=protected)
+    methods ...(Sealed, Access=protected)
         
         function value = getJFont(obj)
             % Return a Java font object matching the widget's font settings

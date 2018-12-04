@@ -57,9 +57,9 @@ else
     GHandle.Viewer(vIdx).timefrequencyplot.text.Visible = 'on';
 end
 
- xRange = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim;
+xRange = GHandle.Viewer(vIdx).timeplot.bigaxes1.XLim;
 if  GHandle.Viewer(vIdx).Preference.YAutoscale.Value
-   
+    
     xVal = cat(1,GHandle.Viewer(vIdx).timeplot.lines1(edvLine).XData)';
     yVal = cat(1,GHandle.Viewer(vIdx).timeplot.lines1(edvLine).YData)';
     mask = any((xVal>xRange(1) & xVal<xRange(2)),2);
@@ -118,7 +118,5 @@ else
         end
     end
 end
-
-
 end
 
