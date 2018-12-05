@@ -9,9 +9,10 @@ function [planeCoff, eigVal] = planefitfromcloud(points)
 p = mean(points,1);
 % calculate the difference between the points and p
 R = points - p;
-%calculate the covariance matrix and his eighenvector/value
-[eigVec,eigVal] = eig(R'*R);
+% calculate the covariance matrix and its eigenvector/value
+[eigVec, eigVal] = eig(R'*R);
 
 planeCoff = eigVec(:,1);
+planeCoff(4) = -dot(planeCoff,p);
 end
 
