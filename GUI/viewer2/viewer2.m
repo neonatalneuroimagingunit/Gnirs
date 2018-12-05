@@ -57,8 +57,36 @@ GHandle.Viewer(vIdx).mainFigure = figure('Position', viewerC.figurePosition, ...
 viewerpanel(viewerC,GHandle, vIdx);
 viewermenu(viewerC,GHandle, vIdx);
 vewertoolbar(viewerC,GHandle, vIdx);
-viewertrackpref(viewerC, GHandle, vIdx)
+viewertrackpref(viewerC, GHandle, vIdx);
+viewertime(viewerC, GHandle, vIdx);
+viewerfrequency(viewerC, GHandle, vIdx);
+viewertimefrequency(viewerC, GHandle, vIdx);
+viewerprobe(viewerC, GHandle, vIdx)
 
+
+%% trovare modo furbo di inscatolare sto schifo
+% colors = sorting_colors((size(GHandle.Viewer(vIdx).Data,2)-1), sortingmethod{1});
+% GHandle.Viewer(vIdx).WatchList.colorLine = colors;
+% 
+% GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'time2Plot','PostSet',@(src,evnt)timeplot(src,evnt,GHandle, vIdx));
+% GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'spectrum2Plot','PostSet',@(src,evnt)spectrumplot(src,evnt,GHandle, vIdx));
+% GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'timefreq2Plot','PostSet',@(src,evnt)timefreqplot(src,evnt,GHandle, vIdx));
+% 
+% dataIdx = contains(GHandle.Viewer(vIdx).Data.Properties.VariableNames , ['Time',dataType(1)]);
+% GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'timeLim','PostSet',@(src,evnt)set_time_lim(src,evnt,GHandle, vIdx));
+% GHandle.Viewer(vIdx).WatchList.time2Plot = GHandle.Viewer(vIdx).Data(:,dataIdx);
+% 
+% dataIdx = contains(GHandle.Viewer(vIdx).Data.Properties.VariableNames ,dataType(1));
+% GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'freqLim','PostSet',@(src,evnt)set_freq_lim(src, evnt, GHandle, vIdx));
+% 
+% [power, freq] = pspectrum(GHandle.Viewer(vIdx).Data{:,dataIdx}, updateRate);
+% spectrumTable = array2table([freq, power],'VariableNames',[{'Frequency'},GHandle.Viewer(vIdx).Data(:,dataIdx).Properties.VariableNames]);
+% GHandle.Viewer(vIdx).WatchList.spectrum2Plot = spectrumTable;
+% 
+% GHandle.Viewer(vIdx).listener = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)change_width(src,evnt,GHandle, vIdx));
+% 
+%% Turn figure on
+GHandle.Viewer(vIdx).mainFigure  = 'on';
 end
 
     
