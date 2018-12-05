@@ -26,19 +26,18 @@ end
 
 function yautoscale_callback(handle, ~, GHandle, vIdx)
 if handle.Value
-    GHandle.Viewer(vIdx).timeplot.editmaxY.Visible = 'off';
-    GHandle.Viewer(vIdx).timeplot.editminY.Visible = 'off';
+    GHandle.Viewer(vIdx).PlotPanel.Time.YEditMax.Visible = 'off';
+    GHandle.Viewer(vIdx).PlotPanel.Time.YEditMin.Visible = 'off';
     GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
 else
-    GHandle.Viewer(vIdx).timeplot.editmaxY.Visible = 'on';
-    GHandle.Viewer(vIdx).timeplot.editminY.Visible = 'on';
-    GHandle.Viewer(vIdx).timeplot.editmaxY.String = 'max';
-    GHandle.Viewer(vIdx).timeplot.editminY.String = 'min';
+    GHandle.Viewer(vIdx).PlotPanel.Time.YEditMax.Visible = 'on';
+    GHandle.Viewer(vIdx).PlotPanel.Time.YEditMin.Visible = 'on';
+    GHandle.Viewer(vIdx).PlotPanel.Time.YEditMax.String = 'max';
+    GHandle.Viewer(vIdx).PlotPanel.Time.YEditMin.String = 'min';
 end
 end
 
 function sortingmethod_callback(~, Event, GHandle, vIdx)
-
 sortingmethod = Event.Source.String{Event.Source.Value};
 colors = sorting_colors((size(GHandle.Viewer(vIdx).Data,2)-1), sortingmethod);
 GHandle.Viewer(vIdx).WatchList.colorLine = colors;
