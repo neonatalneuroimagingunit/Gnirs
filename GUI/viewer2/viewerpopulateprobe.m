@@ -1,4 +1,4 @@
-function  viewerprobe(viewerC, GHandle, vIdx)
+function  viewerpopulateprobe(viewerC, GHandle, vIdx)
 markerSize = 15;
 flag3D = 1;
 
