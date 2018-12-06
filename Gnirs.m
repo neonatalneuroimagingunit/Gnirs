@@ -1,5 +1,22 @@
 % function Gnirs()
 
+%{
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+06-Dec-2018 17:36:01 (Stardate -304069.2237125825)
+
+Yottanirs used to be Gnirs.
+
+We choose the name yottanirs for a number of reasons, among which:
+    1) It sounds cool
+    2) We googled it and got no results
+    3) It sounds cool
+    4) It reflects the megalomaniac spirit of our code
+    5) It's a good estimation of the order of magnitude of our software's bugs
+    7) ...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%}
+
 %% only for test
 
 close all
@@ -114,3 +131,6 @@ GHandle.TempWindow = [];
 GHandle.Temp = [];
 clearvars('-except','GHandle');
 
+%{
+    6) It sounds cool
+%}

@@ -31,6 +31,7 @@ freqTable = array2table([freq, power],'VariableNames',[{'Frequency'},viewerC.Dat
 viewerC.Data.Freq = freqTable;
 
 viewerC.sortingMethod = {'sortnomo','wavelength','channel'};
+GHandle.Viewer(vIdx).WatchList.colorLine = sortingcolors(width(viewerC.Data.Time)-1, viewerC.sortingMethod{1});
 
 % Set color theme
 viewerC.figurePosition = GHandle.Preference.Figure.sizeLarge;
@@ -61,7 +62,8 @@ GHandle.Viewer(vIdx).mainFigure = figure('Position', viewerC.figurePosition, ...
     'DoubleBuffer', 'on', ...
     'DockControls', 'off', ...
     'Renderer', 'OpenGL');
-%% create all the figure feature
+
+%% Create features
 viewerpanel(viewerC,GHandle, vIdx);
 viewermenu(viewerC,GHandle, vIdx);
 vewertoolbar(viewerC,GHandle, vIdx);
@@ -69,29 +71,31 @@ viewertrackpref(viewerC, GHandle, vIdx);
 viewertime(viewerC, GHandle, vIdx);
 viewerfrequency(viewerC, GHandle, vIdx);
 viewertimefrequency(viewerC, GHandle, vIdx);
-%% popolate the figure
+
+%% Populate figure
 viewerpopulateprobe(viewerC, GHandle, vIdx);
 viewerpopulateinfo(viewerC, GHandle, vIdx);
 
-%% Activate Lissener
-% GHandle.Viewer(vIdx).Listener.TimePlot = addlistener(GHandle.Viewer(vIdx).WatchList,'time2Plot','PostSet',@(src,evnt)vewertime(src,evnt,GHandle, vIdx));
-% GHandle.Viewer(vIdx).Listener.SpectrumPlot = addlistener(GHandle.Viewer(vIdx).WatchList,'spectrum2Plot','PostSet',@(src,evnt)spectrumplot(src,evnt,GHandle, vIdx));
-% GHandle.Viewer(vIdx).Listener.TimeFreqPlot = addlistener(GHandle.Viewer(vIdx).WatchList,'timefreq2Plot','PostSet',@(src,evnt)timefreqplot(src,evnt,GHandle, vIdx));
-% GHandle.Viewer(vIdx).Listener.TimeWindow = addlistener(GHandle.Viewer(vIdx).WatchList,'timeLim','PostSet',@(src,evnt)set_time_lim(src,evnt,GHandle, vIdx));
-% GHandle.Viewer(vIdx).Listener.FreqWindow = addlistener(GHandle.Viewer(vIdx).WatchList,'freqLim','PostSet',@(src,evnt)set_freq_lim(src, evnt, GHandle, vIdx));
-% GHandle.Viewer(vIdx).Listener.SelectedLine = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)change_width(src,evnt,GHandle, vIdx));
-% 
+%% Activate Listener
+GHandle.Viewer(vIdx).Listener.TimePlot = addlistener(GHandle.Viewer(vIdx).WatchList,'time2Plot','PostSet',@(src,evnt)viewerpopulatetime(src,evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.SpectrumPlot = addlistener(GHandle.Viewer(vIdx).WatchList,'spectrum2Plot','PostSet',@(src,evnt)viewerpopulatefrequency(src,evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.TimeFreqPlot = addlistener(GHandle.Viewer(vIdx).WatchList,'timefreq2Plot','PostSet',@(src,evnt)viewerpopulatetimefrequency(src,evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.TimeWindow = addlistener(GHandle.Viewer(vIdx).WatchList,'timeLim','PostSet',@(src,evnt)viewertimesetlim(src,evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.FreqWindow = addlistener(GHandle.Viewer(vIdx).WatchList,'freqLim','PostSet',@(src,evnt)viewerfrequencysetlim(src, evnt, GHandle, vIdx, viewerC));
+
 % %assign the data to plot and activate the lissener
-% dataIdx = contains(viewerC.Data.Properties.VariableNames ,viewerC.dataType(1));
-% GHandle.Viewer(vIdx).WatchList.time2Plot = viewerC.Data.Time(:,dataIdx);
-% GHandle.Viewer(vIdx).WatchList.spectrum2Plot = viewerC.Data.Freq(:,dataIdx);
+dataIdx = contains(viewerC.Data.Time.Properties.VariableNames ,[viewerC.dataType(1) 'Time']);
+GHandle.Viewer(vIdx).WatchList.time2Plot = viewerC.Data.Time(:,dataIdx);
+GHandle.Viewer(vIdx).WatchList.spectrum2Plot = viewerC.Data.Freq(:,dataIdx);
+
+GHandle.Viewer(vIdx).Listener.SelectedLine = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)viewerselectedtrack(src,evnt,GHandle, vIdx, viewerC));
 
 %% Set default splits
 GHandle.Viewer(vIdx).mainLayout.Heights = defaultHSplit;
 GHandle.Viewer(vIdx).PlotInfoLayout.Widths = defaultVTopSplit;
 GHandle.Viewer(vIdx).ViewLayout.Widths = defaultVBotSplit;
-
 movegui(GHandle.Viewer(vIdx).mainFigure, 'center')
+
 %% Turn figure on
 GHandle.Viewer(vIdx).mainFigure.Visible  = 'on';
 end
