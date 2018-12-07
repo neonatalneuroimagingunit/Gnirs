@@ -24,19 +24,19 @@ end
 
 color = GHandle.Viewer(vIdx).WatchList.colorLine;
 
-for lineIdx = 1 : length(edvLine)
+for lineIdx = 1:1:length(edvLine)
     if (edvLine(lineIdx))
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(:,lineIdx).Color = [color(lineIdx,:), alphaForeground];
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(:,lineIdx,:).LineWidth = lineWidth;
+        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
+        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).LineWidth = lineWidth;
         
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(:,lineIdx).Color = [color(lineIdx,:), alphaForeground];
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(:,lineIdx,:).LineWidth = lineWidth;
+        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
+        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).LineWidth = lineWidth;
     else
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(:,lineIdx).Color = [colorBackground, alphaBackground];
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(:,lineIdx).LineWidth = linewidthBackground;
+        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).Color = [colorBackground, alphaBackground];
+        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).LineWidth = linewidthBackground;
         
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(:,lineIdx).Color = [colorBackground, alphaBackground];
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(:,lineIdx).LineWidth = linewidthBackground;
+        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).Color = [colorBackground, alphaBackground];
+        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).LineWidth = linewidthBackground;
     end
 end
 
@@ -47,19 +47,17 @@ if sum(edvLine) == 1
     GHandle.Viewer(vIdx).WatchList.timefreq2Plot = edvLine;
     
     GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).LineWidth = linewidthForeground;
-    uistack(GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine),'top');
-    
     GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(edvLine).LineWidth = linewidthForeground;
-    uistack(GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(edvLine),'top');
 else
     GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes.Visible = 'off';
     cla(GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes);
     GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.Text.Visible = 'on';
 end
+uistack(GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine),'top');
+uistack(GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(edvLine),'top');
 
 xRange = GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.XLim;
 if  GHandle.Viewer(vIdx).PreferencePanel.YAutoscale.Value
-    
     xVal = cat(1,GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).XData)';
     yVal = cat(1,GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).YData)';
     mask = any((xVal>xRange(1) & xVal<xRange(2)),2);
@@ -67,7 +65,7 @@ if  GHandle.Viewer(vIdx).PreferencePanel.YAutoscale.Value
     GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YLim = yLimit;
     nEvents = length(GHandle.Viewer(vIdx).PlotPanel.Time.Events);
     
-    for iEvents = 1 : 1 : nEvents
+    for iEvents = 1:1:nEvents
         GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEvents).YData = ...
             eventRatio.*yLimit(2).*ones( [1, length(GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEvents).XData)]);
     end
@@ -75,8 +73,7 @@ end
 
 GHandle.Viewer(vIdx).WatchList.timeLim = xRange;
 
-
-%% edv the probe
+%% Update probe
 if ~isempty(viewerC.Probe)
     if all(edvLine)
         set(GHandle.Viewer(vIdx).ProbePanel.Source, 'MarkerSize', notEdvMarkerSize);
@@ -119,6 +116,15 @@ if ~isempty(viewerC.Probe)
                 GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = notEdvColor;
             end
         end
+    end
+end
+
+%% Update channel table
+% tableIdx = find(contains(GHandle.Viewer.DataPanel.TrackTable.Data(:,end),{GHandle.Viewer.PlotPanel.Time.Lines(edvLine).Tag}));
+for iRow = 1:size(GHandle.Viewer.DataPanel.TrackTable.Data,1)
+    lineMask = strcmp({GHandle.Viewer.PlotPanel.Time.Lines.Tag}, GHandle.Viewer.DataPanel.TrackTable.Data(iRow,end));
+    for iCol = 1:5
+        GHandle.Viewer.DataPanel.TrackTable.setCellColor(iRow,iCol,GHandle.Viewer.PlotPanel.Time.Lines(lineMask).Color);
     end
 end
 end

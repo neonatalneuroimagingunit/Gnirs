@@ -186,7 +186,7 @@ GHandle.Viewer(vIdx).PlotPanel.Time.ButtonForwardS = uicontrol('Parent', GHandle
 
 end
 
-function editY_callback(handle, ~, GHandle, vIdx,viewerC)
+function editY_callback(handle, ~, GHandle, vIdx, viewerC)
 mask = contains({'min', 'max'}, handle.Tag);
 GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YLim(mask) = str2double(handle.String);
 GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine; % replace with reset/redraw

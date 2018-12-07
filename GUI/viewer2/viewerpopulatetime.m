@@ -85,14 +85,6 @@ GHandle.Viewer(vIdx).PlotPanel.Time.TxtSamples = text(0, 0, '',...
     'FontSize', 8,...
     'Parent', GHandle.Viewer(vIdx).PlotPanel.Time.SmallAxes);
 
-GHandle.Viewer(vIdx).WatchList.timeLim = [viewerC.Data.Time.Time(1),...
-    viewerC.Data.Time.Time(end)];
-
-if isempty(GHandle.Viewer(vIdx).WatchList.edvLine)
-    GHandle.Viewer(vIdx).WatchList.edvLine = true(size(GHandle.Viewer(vIdx).PlotPanel.Time.SmallLines));
-else
-    GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
-end
 
 %% Channel table
 srcIdx = zeros(nLines,1);
@@ -127,7 +119,14 @@ GHandle.Viewer(vIdx).DataPanel.EventTable.Data = [...
     viewerC.Event.Dictionary(viewerC.Event.type,1), ...
     num2cell(viewerC.Event.startTime), ...
     num2cell(viewerC.Event.durationTime), ...
-    ];
+    ];GHandle.Viewer(vIdx).WatchList.timeLim = [viewerC.Data.Time.Time(1),...
+    viewerC.Data.Time.Time(end)];
+
+if isempty(GHandle.Viewer(vIdx).WatchList.edvLine)
+    GHandle.Viewer(vIdx).WatchList.edvLine = true(size(GHandle.Viewer(vIdx).PlotPanel.Time.SmallLines));
+else
+    GHandle.Viewer(vIdx).WatchList.edvLine = GHandle.Viewer(vIdx).WatchList.edvLine;
+end
 end
 
 function line_callback(hObject, ~, GHandle, vIdx)

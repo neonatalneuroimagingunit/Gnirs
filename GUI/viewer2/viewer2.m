@@ -14,28 +14,30 @@ else
 end
 
 %% prepare aux variable
-GHandle.Viewer(vIdx).WatchList = ViewerWatchList; % create the watchlist
+GHandle.Viewer(vIdx).WatchList = ViewerWatchList; % Create the watchlist
+GHandle.Viewer(vIdx).Undocked = struct;
 
 %% Load and prepare data for viever
-viewerC.Data.Time = GHandle.CurrentDataSet.Data; %Load Data in Time
-viewerC.Measure = GHandle.CurrentDataSet.Measure; %Load Measure
-viewerC.Analysis = GHandle.CurrentDataSet.Analysis; %Load Measure
-viewerC.Event = GHandle.CurrentDataSet.Measure.Event; %Load Event
+viewerC.Data.Time = GHandle.CurrentDataSet.Data;       % Load Data in Time
+viewerC.Measure = GHandle.CurrentDataSet.Measure;      % Load Measure
+viewerC.Analysis = GHandle.CurrentDataSet.Analysis;    % Load Measure
+viewerC.Event = GHandle.CurrentDataSet.Measure.Event;  % Load Event
 
 if isempty(GHandle.DataBase.findid(GHandle.CurrentDataSet.Measure.id).probeId)
     viewerC.Probe = [];
 else
-    viewerC.Probe = GHandle.CurrentDataSet.Probe; %Load Probe
+    viewerC.Probe = GHandle.CurrentDataSet.Probe; % Load Probe
 end
 
-viewerC.dataType = GHandle.CurrentDataSet.Measure.InstrumentType.datatype; %Loada Data type
-viewerC.updateRate = GHandle.CurrentDataSet.Measure.InstrumentType.UpdateRate; %Load update rate
+viewerC.dataType = GHandle.CurrentDataSet.Measure.InstrumentType.datatype;      %Load Data type
+viewerC.updateRate = GHandle.CurrentDataSet.Measure.InstrumentType.UpdateRate;  %Load update rate
 
-[power, freq] = pspectrum(viewerC.Data.Time{:,2:end}, viewerC.updateRate); %% calculate The spectrum
-freqTable = array2table([freq, power], 'VariableNames', [{'Frequency'}, viewerC.Data.Time.Properties.VariableNames(2:end)]);
+[power, freq] = pspectrum(viewerC.Data.Time{:,2:end}, viewerC.updateRate);      % Calculate The spectrum
+freqTable = array2table([freq, power], ...
+    'VariableNames', [{'Frequency'}, viewerC.Data.Time.Properties.VariableNames(2:end)]);
 viewerC.Data.Frequency = freqTable;
 
-viewerC.sortingMethod = {'sortnomo','wavelength','channel'};
+viewerC.sortingMethod = {'sortnomo', 'wavelength', 'channel'};
 GHandle.Viewer(vIdx).WatchList.colorLine = sortingcolors(width(viewerC.Data.Time)-1, viewerC.sortingMethod{1});
 
 % Set color theme
@@ -83,18 +85,24 @@ end
 viewerpopulateinfo(viewerC, GHandle, vIdx);
 
 %% Activate Listener
-GHandle.Viewer(vIdx).Listener.TimePlot = addlistener(GHandle.Viewer(vIdx).WatchList,'time2Plot','PostSet',@(src,evnt)viewerpopulatetime(src,evnt,GHandle, vIdx, viewerC));
-GHandle.Viewer(vIdx).Listener.SpectrumPlot = addlistener(GHandle.Viewer(vIdx).WatchList,'spectrum2Plot','PostSet',@(src,evnt)viewerpopulatefrequency(src,evnt,GHandle, vIdx, viewerC));
-GHandle.Viewer(vIdx).Listener.TimeFreqPlot = addlistener(GHandle.Viewer(vIdx).WatchList,'timefreq2Plot','PostSet',@(src,evnt)viewerpopulatetimefrequency(src,evnt,GHandle, vIdx, viewerC));
-GHandle.Viewer(vIdx).Listener.TimeWindow = addlistener(GHandle.Viewer(vIdx).WatchList,'timeLim','PostSet',@(src,evnt)viewertimesetlim(src,evnt,GHandle, vIdx, viewerC));
-GHandle.Viewer(vIdx).Listener.FreqWindow = addlistener(GHandle.Viewer(vIdx).WatchList,'freqLim','PostSet',@(src,evnt)viewerfrequencysetlim(src, evnt, GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.TimePlot = addlistener(GHandle.Viewer(vIdx).WatchList, 'time2Plot', ...
+    'PostSet', @(src,evnt)viewerpopulatetime(src, evnt, GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.SpectrumPlot = addlistener(GHandle.Viewer(vIdx).WatchList, 'spectrum2Plot', ...
+    'PostSet', @(src,evnt)viewerpopulatefrequency(src, evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.TimeFreqPlot = addlistener(GHandle.Viewer(vIdx).WatchList, 'timefreq2Plot', ...
+    'PostSet', @(src,evnt)viewerpopulatetimefrequency(src, evnt, GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.TimeWindow = addlistener(GHandle.Viewer(vIdx).WatchList, 'timeLim', ...
+    'PostSet', @(src,evnt)viewertimesetlim(src,evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.FreqWindow = addlistener(GHandle.Viewer(vIdx).WatchList, 'freqLim', ...
+    'PostSet', @(src,evnt)viewerfrequencysetlim(src, evnt, GHandle, vIdx, viewerC));
 
-% %assign the data to plot and activate the lissener
+%% Assign the data to plot and activate the listener
 dataIdx = contains(viewerC.Data.Time.Properties.VariableNames ,[viewerC.dataType(1) 'Time']);
 GHandle.Viewer(vIdx).WatchList.time2Plot = viewerC.Data.Time(:,dataIdx);
 GHandle.Viewer(vIdx).WatchList.spectrum2Plot = viewerC.Data.Frequency(:,dataIdx);
 
-GHandle.Viewer(vIdx).Listener.SelectedLine = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)viewerselectedtrack(src,evnt,GHandle, vIdx, viewerC));
+GHandle.Viewer(vIdx).Listener.SelectedLine = addlistener(GHandle.Viewer(vIdx).WatchList, 'edvLine', ...
+    'PostSet', @(src,evnt)viewerselectedtrack(src, evnt, GHandle, vIdx, viewerC));
 
 %% Set default splits
 GHandle.Viewer(vIdx).mainLayout.Heights = viewerC.defaultHSplit;
@@ -104,12 +112,13 @@ movegui(GHandle.Viewer(vIdx).mainFigure, 'center')
 
 %% Turn figure on
 GHandle.Viewer(vIdx).mainFigure.Visible  = 'on';
+
 end
 
 function close_request(Handle, ~, GHandle, vIdx)
 figToBeClosed = fieldnames(GHandle.Viewer(vIdx).Undocked);
 for iClose = 1:1:length(figToBeClosed)
-    delete(GHandle.Viewer(vIdx).Undocked.(figToBeClosed{iClose})); % deletes all open undocked figures of viewer
+    delete(GHandle.Viewer(vIdx).Undocked.(figToBeClosed{iClose})); % delete all open undocked figures of viewer
 end
 delete(Handle);
 GHandle.Temp.vIdxList(GHandle.Temp.vIdxList == vIdx) = [];
@@ -118,5 +127,5 @@ if isempty (GHandle.Temp.vIdxList)
 end
 end
 
-    
+
 
