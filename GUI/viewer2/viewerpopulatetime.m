@@ -3,6 +3,7 @@ function viewerpopulatetime(~, eventData, GHandle, vIdx, viewerC)
 foregroundColor = viewerC.foregroundColor;
 eventColor = lines(size(viewerC.Event.Dictionary,1));
 eventRatio = 0.8;
+showEvents = {'off', 'on'};
 
 Probe =  viewerC.Probe;
 Data = eventData.AffectedObject.time2Plot;
@@ -12,20 +13,23 @@ nLines = size(Data,2) - 1; % one is the time column
 
 cla(GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes);
 cla(GHandle.Viewer(vIdx).PlotPanel.Time.SmallAxes);
-%% plot the events
+
+%% Plot events
 yMax = GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YLim(2);
 nEventType = size(viewerC.Event.Dictionary,1);
 for iEventType = 1 : nEventType
     eventMask = viewerC.Event.type == iEventType;
     GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEventType) = stem(GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes,...
         viewerC.Event.startTime(eventMask), eventRatio.*yMax.*ones(size(viewerC.Event.startTime(eventMask))),...
-        'Color',eventColor(iEventType,:), ...
+        'Color', eventColor(iEventType,:), ...
         'Marker', '.', ...
         'MarkerSize', 30, ...
+        'ShowBaseLine', 'off', ...
+        'Visible', showEvents{GHandle.Viewer(vIdx).PreferencePanel.ShowEvent.Value + 1}, ...
         'LineWidth', 2);
 end
 
-%% plot the line in the main and small axes
+%% Plot lines in main and support axes
 srcIdx = zeros(nLines,1);
 detIdx = zeros(nLines,1);
 detLabel = zeros(nLines,1);
@@ -56,14 +60,13 @@ end
 GHandle.Viewer(vIdx).PlotPanel.Time.Lines((nLines+1):end) = [];
 GHandle.Viewer(vIdx).PlotPanel.Time.SmallLines((nLines+1):end) = [];
 
-%% resize event height
+%% Resize event height
 yVal = GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YLim(2);
 for iEvents = 1:1:nEventType
     GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEvents).YData = ...
         eventRatio.*max(yVal).*ones( [1, length(GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEvents).XData)]);
 end
-%% set the axes
-
+%% Set axes properties
 GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YAxis.Exponent = 0;
 GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.XLabel.String = 'Time (s)';
 GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YLabel.String = 'Intensity (a.u.)';
@@ -72,8 +75,7 @@ GHandle.Viewer(vIdx).PlotPanel.Time.SupportAxes.XLabel.String = 'Time (samples)'
 GHandle.Viewer(vIdx).PlotPanel.Time.SupportAxes.YTickLabel = [];
 GHandle.Viewer(vIdx).PlotPanel.Time.SupportAxes.XLim = [1 size(Data,1)];
 
-
-%% build up the small aexes object
+%% Create stuff in support axes
 GHandle.Viewer(vIdx).PlotPanel.Time.Rectangle = rectangle(...
     'Parent', GHandle.Viewer(vIdx).PlotPanel.Time.SmallAxes,...
     'Curvature', [0 0], 'EdgeColor', foregroundColor,...

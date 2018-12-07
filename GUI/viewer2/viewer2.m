@@ -28,7 +28,7 @@ viewerC.updateRate = GHandle.CurrentDataSet.Measure.InstrumentType.UpdateRate; %
 
 [power, freq] = pspectrum(viewerC.Data.Time{:,2:end}, viewerC.updateRate); %% calculate The spectrum
 freqTable = array2table([freq, power],'VariableNames',[{'Frequency'},viewerC.Data.Time.Properties.VariableNames(2:end)]);
-viewerC.Data.Freq = freqTable;
+viewerC.Data.Frequency = freqTable;
 
 viewerC.sortingMethod = {'sortnomo','wavelength','channel'};
 GHandle.Viewer(vIdx).WatchList.colorLine = sortingcolors(width(viewerC.Data.Time)-1, viewerC.sortingMethod{1});
@@ -67,7 +67,7 @@ GHandle.Viewer(vIdx).mainFigure = figure('Position', viewerC.figurePosition, ...
 viewerpanel(viewerC,GHandle, vIdx);
 viewermenu(viewerC,GHandle, vIdx);
 vewertoolbar(viewerC,GHandle, vIdx);
-viewertrackpref(viewerC, GHandle, vIdx);
+viewerpopulatepreferences(viewerC, GHandle, vIdx);
 viewertime(viewerC, GHandle, vIdx);
 viewerfrequency(viewerC, GHandle, vIdx);
 viewertimefrequency(viewerC, GHandle, vIdx);
@@ -86,7 +86,7 @@ GHandle.Viewer(vIdx).Listener.FreqWindow = addlistener(GHandle.Viewer(vIdx).Watc
 % %assign the data to plot and activate the lissener
 dataIdx = contains(viewerC.Data.Time.Properties.VariableNames ,[viewerC.dataType(1) 'Time']);
 GHandle.Viewer(vIdx).WatchList.time2Plot = viewerC.Data.Time(:,dataIdx);
-GHandle.Viewer(vIdx).WatchList.spectrum2Plot = viewerC.Data.Freq(:,dataIdx);
+GHandle.Viewer(vIdx).WatchList.spectrum2Plot = viewerC.Data.Frequency(:,dataIdx);
 
 GHandle.Viewer(vIdx).Listener.SelectedLine = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)viewerselectedtrack(src,evnt,GHandle, vIdx, viewerC));
 
