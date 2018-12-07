@@ -1,8 +1,8 @@
 function viewer2(GHandle)
 
-defaultHSplit = -[70; 30];
-defaultVTopSplit = -[80; 20];
-defaultVBotSplit = -[25; 25; 25; 25];
+viewerC.defaultHSplit = -[70; 30];
+viewerC.defaultVTopSplit = -[80; 20];
+viewerC.defaultVBotSplit = -[25; 25; 25; 25];
 
 %% create the viewer idx
 if (isempty(GHandle.Viewer))
@@ -97,9 +97,9 @@ GHandle.Viewer(vIdx).WatchList.spectrum2Plot = viewerC.Data.Frequency(:,dataIdx)
 GHandle.Viewer(vIdx).Listener.SelectedLine = addlistener(GHandle.Viewer(vIdx).WatchList,'edvLine','PostSet',@(src,evnt)viewerselectedtrack(src,evnt,GHandle, vIdx, viewerC));
 
 %% Set default splits
-GHandle.Viewer(vIdx).mainLayout.Heights = defaultHSplit;
-GHandle.Viewer(vIdx).PlotInfoLayout.Widths = defaultVTopSplit;
-GHandle.Viewer(vIdx).ViewLayout.Widths = defaultVBotSplit;
+GHandle.Viewer(vIdx).mainLayout.Heights = viewerC.defaultHSplit;
+GHandle.Viewer(vIdx).PlotInfoLayout.Widths = viewerC.defaultVTopSplit;
+GHandle.Viewer(vIdx).ViewLayout.Widths = viewerC.defaultVBotSplit;
 movegui(GHandle.Viewer(vIdx).mainFigure, 'center')
 
 %% Turn figure on
@@ -107,6 +107,10 @@ GHandle.Viewer(vIdx).mainFigure.Visible  = 'on';
 end
 
 function close_request(Handle, ~, GHandle, vIdx)
+figToBeClosed = fieldnames(GHandle.Viewer(vIdx).Undocked);
+for iClose = 1:1:length(figToBeClosed)
+    delete(GHandle.Viewer(vIdx).Undocked.(figToBeClosed{iClose})); % deletes all open undocked figures of viewer
+end
 delete(Handle);
 GHandle.Temp.vIdxList(GHandle.Temp.vIdxList == vIdx) = [];
 if isempty (GHandle.Temp.vIdxList)
