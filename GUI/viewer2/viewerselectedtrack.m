@@ -77,45 +77,47 @@ GHandle.Viewer(vIdx).WatchList.timeLim = xRange;
 
 
 %% edv the probe
-if all(edvLine)
-    set(GHandle.Viewer(vIdx).ProbePanel.Source, 'MarkerSize', notEdvMarkerSize);
-    set(GHandle.Viewer(vIdx).ProbePanel.Detector, 'MarkerSize', notEdvMarkerSize);
-    set(GHandle.Viewer(vIdx).ProbePanel.Channel, 'LineWidth', notEdvLineWidth, 'Color', notEdvColor);
-else
-    srcTag = {GHandle.Viewer(vIdx).ProbePanel.Source.Tag}';
-    detTag = {GHandle.Viewer(vIdx).ProbePanel.Detector.Tag}';
-    chTag = strcat(srcTag(viewerC.Probe.channel.pairs(:,1)), '_', detTag(viewerC.Probe.channel.pairs(:,2)));
-    lineTag = {GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).Tag}';
-    for iSource = 1:length(srcTag)
-        maxSrc = sum(contains({GHandle.Viewer(vIdx).PlotPanel.Time.Lines.Tag}, srcTag(iSource)));
-        mask = contains(lineTag, srcTag(iSource));
-        if sum(mask) == maxSrc
-            GHandle.Viewer(vIdx).ProbePanel.Source(iSource).MarkerSize = edvMarkerSize;
-        else
-            GHandle.Viewer(vIdx).ProbePanel.Source(iSource).MarkerSize = notEdvMarkerSize;
+if ~isempty(viewerC.Probe)
+    if all(edvLine)
+        set(GHandle.Viewer(vIdx).ProbePanel.Source, 'MarkerSize', notEdvMarkerSize);
+        set(GHandle.Viewer(vIdx).ProbePanel.Detector, 'MarkerSize', notEdvMarkerSize);
+        set(GHandle.Viewer(vIdx).ProbePanel.Channel, 'LineWidth', notEdvLineWidth, 'Color', notEdvColor);
+    else
+        srcTag = {GHandle.Viewer(vIdx).ProbePanel.Source.Tag}';
+        detTag = {GHandle.Viewer(vIdx).ProbePanel.Detector.Tag}';
+        chTag = strcat(srcTag(viewerC.Probe.channel.pairs(:,1)), '_', detTag(viewerC.Probe.channel.pairs(:,2)));
+        lineTag = {GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).Tag}';
+        for iSource = 1:length(srcTag)
+            maxSrc = sum(contains({GHandle.Viewer(vIdx).PlotPanel.Time.Lines.Tag}, srcTag(iSource)));
+            mask = contains(lineTag, srcTag(iSource));
+            if sum(mask) == maxSrc
+                GHandle.Viewer(vIdx).ProbePanel.Source(iSource).MarkerSize = edvMarkerSize;
+            else
+                GHandle.Viewer(vIdx).ProbePanel.Source(iSource).MarkerSize = notEdvMarkerSize;
+            end
         end
-    end
-    for iDetector = 1:length(detTag)
-        maxDet = sum(contains({GHandle.Viewer(vIdx).PlotPanel.Time.Lines.Tag}, detTag(iDetector)));
-        mask = contains(lineTag, detTag(iDetector));
-        if sum(mask) == maxDet
-            GHandle.Viewer(vIdx).ProbePanel.Detector(iDetector).MarkerSize = edvMarkerSize;
-        else
-            GHandle.Viewer(vIdx).ProbePanel.Detector(iDetector).MarkerSize = notEdvMarkerSize;
+        for iDetector = 1:length(detTag)
+            maxDet = sum(contains({GHandle.Viewer(vIdx).PlotPanel.Time.Lines.Tag}, detTag(iDetector)));
+            mask = contains(lineTag, detTag(iDetector));
+            if sum(mask) == maxDet
+                GHandle.Viewer(vIdx).ProbePanel.Detector(iDetector).MarkerSize = edvMarkerSize;
+            else
+                GHandle.Viewer(vIdx).ProbePanel.Detector(iDetector).MarkerSize = notEdvMarkerSize;
+            end
         end
-    end
-    for iChannel = 1:length(chTag)
-        mask = contains(lineTag,chTag(iChannel));
-        if sum(mask)>1
-            GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).LineWidth = edvLineWidth;
-        else
-            GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).LineWidth = notEdvLineWidth;
-        end
-        
-        if sum(mask)== 1
-            GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = GHandle.Viewer(vIdx).PlotPanel.Time.Lines(idxLine(mask)).Color;
-        else
-            GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = notEdvColor;
+        for iChannel = 1:length(chTag)
+            mask = contains(lineTag,chTag(iChannel));
+            if sum(mask)>1
+                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).LineWidth = edvLineWidth;
+            else
+                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).LineWidth = notEdvLineWidth;
+            end
+            
+            if sum(mask)== 1
+                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = GHandle.Viewer(vIdx).PlotPanel.Time.Lines(idxLine(mask)).Color;
+            else
+                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = notEdvColor;
+            end
         end
     end
 end

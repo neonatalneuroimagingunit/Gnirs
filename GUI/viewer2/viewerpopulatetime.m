@@ -30,11 +30,6 @@ for iEventType = 1 : nEventType
 end
 
 %% Plot lines in main and support axes
-srcIdx = zeros(nLines,1);
-detIdx = zeros(nLines,1);
-detLabel = zeros(nLines,1);
-srcLabel = zeros(nLines,1);
-waveLength = zeros(nLines,1);
 for iLines = 1 : nLines
     GHandle.Viewer(vIdx).PlotPanel.Time.Lines(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
         'LineWidth', 1, 'LineStyle', '-',...
@@ -49,13 +44,6 @@ for iLines = 1 : nLines
         'Color', GHandle.Viewer(vIdx).WatchList.colorLine(iLines,:),...
         'HitTest', 'off',...
         'Parent', GHandle.Viewer(vIdx).PlotPanel.Time.SmallAxes);
-    
-    srcIdx(iLines) = str2double(lineLabels{iLines}(11:13));
-    detIdx(iLines) = str2double(lineLabels{iLines}(16:18));
-    waveLength(iLines) = str2double(lineLabels{iLines}(6:8));
-    srcLabel(iLines) = srcIdx(iLines);
-    detLabel(iLines) = detIdx(iLines);
-    
 end
 GHandle.Viewer(vIdx).PlotPanel.Time.Lines((nLines+1):end) = [];
 GHandle.Viewer(vIdx).PlotPanel.Time.SmallLines((nLines+1):end) = [];
@@ -107,7 +95,24 @@ else
 end
 
 %% Channel table
-distance =  vecnorm((Probe.source.position(srcIdx,:)-Probe.detector.position(detIdx,:)),2,2);
+srcIdx = zeros(nLines,1);
+detIdx = zeros(nLines,1);
+detLabel = zeros(nLines,1);
+srcLabel = zeros(nLines,1);
+waveLength = zeros(nLines,1);
+distance = zeros(nLines,1);
+
+if ~isempty(Probe)
+    for iLines = 1:1:nLines
+        srcIdx(iLines) = str2double(lineLabels{iLines}(11:13));
+        detIdx(iLines) = str2double(lineLabels{iLines}(16:18));
+        waveLength(iLines) = str2double(lineLabels{iLines}(6:8));
+        srcLabel(iLines) = srcIdx(iLines);
+        detLabel(iLines) = detIdx(iLines);
+    end
+    distance =  vecnorm((Probe.source.position(srcIdx,:)-Probe.detector.position(detIdx,:)),2,2);
+end
+
 GHandle.Viewer(vIdx).DataPanel.TrackTable.Data = [...
     num2cell(srcLabel), ...
     num2cell(detLabel),...

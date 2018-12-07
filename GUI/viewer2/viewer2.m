@@ -18,16 +18,21 @@ GHandle.Viewer(vIdx).WatchList = ViewerWatchList; % create the watchlist
 
 %% Load and prepare data for viever
 viewerC.Data.Time = GHandle.CurrentDataSet.Data; %Load Data in Time
-viewerC.Event = GHandle.CurrentDataSet.Measure.Event; %Load Event
-viewerC.Probe = GHandle.CurrentDataSet.Probe; %Load Probe
 viewerC.Measure = GHandle.CurrentDataSet.Measure; %Load Measure
 viewerC.Analysis = GHandle.CurrentDataSet.Analysis; %Load Measure
+viewerC.Event = GHandle.CurrentDataSet.Measure.Event; %Load Event
+
+if isempty(GHandle.DataBase.findid(GHandle.CurrentDataSet.Measure.id).probeId)
+    viewerC.Probe = [];
+else
+    viewerC.Probe = GHandle.CurrentDataSet.Probe; %Load Probe
+end
 
 viewerC.dataType = GHandle.CurrentDataSet.Measure.InstrumentType.datatype; %Loada Data type
 viewerC.updateRate = GHandle.CurrentDataSet.Measure.InstrumentType.UpdateRate; %Load update rate
 
 [power, freq] = pspectrum(viewerC.Data.Time{:,2:end}, viewerC.updateRate); %% calculate The spectrum
-freqTable = array2table([freq, power],'VariableNames',[{'Frequency'},viewerC.Data.Time.Properties.VariableNames(2:end)]);
+freqTable = array2table([freq, power], 'VariableNames', [{'Frequency'}, viewerC.Data.Time.Properties.VariableNames(2:end)]);
 viewerC.Data.Frequency = freqTable;
 
 viewerC.sortingMethod = {'sortnomo','wavelength','channel'};
@@ -54,11 +59,10 @@ GHandle.Viewer(vIdx).mainFigure = figure('Position', viewerC.figurePosition, ...
     'Resize', 'on',...
     'Name', 'Viewer', ...
     'Numbertitle', 'off', ...
-    'Tag', 'sensors_viewer', ...
     'Color', viewerC.backgroundColor, ...
     'Toolbar', 'none', ...
     'Menubar', 'none', ...
-    ...'CloseRequestFcn', @(handle, evnt)close_request(handle, evnt, GHandle, vIdx),...
+    'CloseRequestFcn', @(handle, evnt)close_request(handle, evnt, GHandle, vIdx),...
     'DoubleBuffer', 'on', ...
     'DockControls', 'off', ...
     'Renderer', 'OpenGL');
@@ -73,7 +77,9 @@ viewerfrequency(viewerC, GHandle, vIdx);
 viewertimefrequency(viewerC, GHandle, vIdx);
 
 %% Populate figure
-viewerpopulateprobe(viewerC, GHandle, vIdx);
+if ~isempty(viewerC.Probe)
+    viewerpopulateprobe(viewerC, GHandle, vIdx);
+end
 viewerpopulateinfo(viewerC, GHandle, vIdx);
 
 %% Activate Listener
@@ -98,6 +104,14 @@ movegui(GHandle.Viewer(vIdx).mainFigure, 'center')
 
 %% Turn figure on
 GHandle.Viewer(vIdx).mainFigure.Visible  = 'on';
+end
+
+function close_request(Handle, ~, GHandle, vIdx)
+delete(Handle);
+GHandle.Temp.vIdxList(GHandle.Temp.vIdxList == vIdx) = [];
+if isempty (GHandle.Temp.vIdxList)
+    GHandle.Viewer = [];
+end
 end
 
     

@@ -139,9 +139,10 @@ GHandle.Viewer(vIdx).DataPanel.EventTable = uiw.widget.Table(...
 
 
 end
-function channel_table_selection_callback(a,b)
+function channel_table_selection_callback(a,b,c,d)
+disp('sciao')
 end
-function event_table_selection_callback(a,b)
+function event_table_selection_callback(a,b,c,d)
 end
 
 function onDemoHelp(a,b,c)
