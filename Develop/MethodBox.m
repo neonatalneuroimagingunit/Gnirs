@@ -6,10 +6,10 @@ classdef MethodBox < handle & matlab.mixin.SetGet
     
     properties
         Box
-        TopB
-        BotB
-        ArrB
-        ArrU
+        ButtonInput
+        ButtonOutput
+        ArrowOutput
+        ArrowInput
         
         Position_
     end
@@ -28,8 +28,8 @@ classdef MethodBox < handle & matlab.mixin.SetGet
             posBB = [HPos, Pos(2), BtSize, BtSize];
             
             set(obj.Box,'Position',Pos);
-            set(obj.TopB,'Position',posTB);
-            set(obj.BotB,'Position',posBB);
+            set(obj.ButtonInput,'Position',posTB);
+            set(obj.ButtonOutput,'Position',posBB);
         end
         %% constructor
         function  obj = MethodBox(Pos,Par)
@@ -40,29 +40,30 @@ classdef MethodBox < handle & matlab.mixin.SetGet
             posTB = [HPos, Pos(2)+Pos(4)-BtSize, BtSize, BtSize];
             posBB = [HPos, Pos(2), BtSize, BtSize];
             obj.Box = annotation(Par,'textbox','Units','normalized','Position',Pos);
-            obj.TopB = uicontrol('Style', 'radiobutton','Parent',Par,'Units','normalized',...
-                'Position', posTB, 'Callback',@(h,evnt)stop_mooving(h,evnt,obj));
-            obj.BotB = uicontrol('Style', 'radiobutton','Parent',Par,'Units','normalized',...
-                'Position', posBB, 'Callback',@(h,evnt)line_draw(h,evnt,obj));
+            obj.ButtonInput = uicontrol('Style', 'pushbutton','Parent',Par,'Units','normalized',...
+                'String', 'o', 'Position', posTB, 'Callback',@(h,evnt)stop_mooving(h,evnt,obj));
+            obj.ButtonOutput = uicontrol('Style', 'pushbutton','Parent',Par,'Units','normalized',...
+                'String', 'o', 'Position', posBB, 'Callback',@(h,evnt)line_draw(h,evnt,obj));
         end
     end
     
 end
 
 function line_draw(h,~,obj)
-    obj.ArrB = BrokenArrow(h.Parent, [h.Position(1:2), h.Position(1:2)]);
+    obj.ArrowOutput = BrokenArrow(h.Parent, [h.Position(1:2) + h.Position(3:4)/2, h.Position(1:2) + h.Position(3:4)/2]);
     fig = ancestor(h,'Figure');
-    fig.CurrentArrow = obj.ArrB;
+    fig.CurrentArrow = obj.ArrowOutput;
     fig.WindowButtonMotionFcn = @(h,e)mouse_mooving(h,e,obj);
 end
 
 function mouse_mooving(h,~,obj)
     pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.8, 1]);%sistemare;
-    obj.ArrB.Position(3:4) = pos;   
+    obj.ArrowOutput.Position(3:4) = pos;   
 end
 
 function stop_mooving(handle,~,obj)
     fig = ancestor(handle,'Figure');
     fig.WindowButtonMotionFcn = [];
-    obj.ArrU = fig.CurrentArrow;
+    obj.ArrowInput = fig.CurrentArrow;
+    fig.CurrentArrow.Position(3:4) = [obj.ButtonInput.Position(1) + obj.ButtonInput.Position(3)/2, obj.ButtonInput.Position(2) + obj.ButtonInput.Position(4)];
 end

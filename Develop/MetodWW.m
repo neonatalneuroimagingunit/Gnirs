@@ -41,5 +41,5 @@ classdef MetodWW < handle & matlab.mixin.SetGet
 end
 
 function add_method(~,~,obj)
-    obj.MethodBoxList = [ obj.MethodBoxList; MethodBox([rand rand 0.25 0.15],obj.MethodPanel)];
+    obj.MethodBoxList = [obj.MethodBoxList; MethodBox([rand-0.125 rand-0.075 0.25 0.15],obj.MethodPanel)];
 end
