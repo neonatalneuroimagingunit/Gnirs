@@ -87,11 +87,11 @@ h.WindowButtonMotionFcn = [];
 h.WindowButtonUpFcn = [];
 end
 function moving_arrow(h,~,ArrowHandle)
-pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.8, 1]);%sistemare;
+pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemarebasta abìvere il parent;
 ArrowHandle.Position(3:4) = pos;
 end
 function moving_box(h,~,obj)
-pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.8, 1]);%sistemare;
+pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemare basta abìvere il parent;
 pos = pos - obj.Position(3:4)/2;
 obj.Position(1:2) = pos;
 end
