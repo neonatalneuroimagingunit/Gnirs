@@ -1,0 +1,73 @@
+classdef MethodTree < handle & matlab.mixin.SetGet
+    
+    properties (Transient)
+        Position
+    end
+    
+    properties
+        Root
+        TypeNode(1,1) struct
+        SubTypeNode(1,1) struct
+        MethodTagNode
+        
+        
+        Position_
+    end
+    
+    methods
+        function Value = get.Position(obj)
+            Value = obj.Position_;
+        end
+        function set.Position(obj,Pos)
+            
+        end
+        %% constructor
+        function  obj = MethodTree(Pos,Par,MethodList)
+            obj.Root = uiw.widget.Tree(...
+                'Parent',Par,...
+                'Label','Database:', ...
+                'LabelLocation','top',...
+                'LabelHeight',18,...
+                'Units', 'normalized', ...
+                'Position', Pos,...
+                'RootVisible', 'false'...
+                );
+            
+            nMethod = length(MethodList);
+            for iMethod = 1:nMethod
+                CurrentMethod = MethodList(iMethod);
+                if ~isfield(obj.TypeNode, CurrentMethod.type) %Create new Type
+                    obj.TypeNode.(CurrentMethod.type) =...
+                        uiw.widget.TreeNode('Name', CurrentMethod.type,...
+                        'Parent',obj.Root...
+                        );
+                end
+                if ~isempty(CurrentMethod.subType) %Create new SubType
+                    if ~isfield(obj.SubTypeNode, CurrentMethod.subType)
+                        obj.SubTypeNode.(CurrentMethod.subType) =...
+                            uiw.widget.TreeNode('Name', CurrentMethod.subType,...
+                            'Parent', obj.TypeNode.(CurrentMethod.type)...
+                            );
+                    end
+                    obj.MethodTagNode.(CurrentMethod.tag) =...
+                        uiw.widget.TreeNode('Name', CurrentMethod.name,...
+                        'Parent',  obj.SubTypeNode.(CurrentMethod.subType),...
+                        'Value', CurrentMethod.tag...
+                        );
+                else
+                    obj.MethodTagNode.(CurrentMethod.tag) =...
+                        uiw.widget.TreeNode('Name', CurrentMethod.name,...
+                        'Parent',  obj.TypeNode.(CurrentMethod.type),...
+                        'Value', CurrentMethod.tag...
+                        );
+                end
+            end
+        end
+    end
+end
+
+
+
+
+
+
