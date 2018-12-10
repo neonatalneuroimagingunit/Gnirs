@@ -5,6 +5,7 @@ classdef MethodBox < handle & matlab.mixin.SetGet
     end
     
     properties
+        Tag
         Method
         
         Box
@@ -49,6 +50,7 @@ classdef MethodBox < handle & matlab.mixin.SetGet
         %% constructor
         function  obj = MethodBox(Pos,Par,Method)
             obj.Method = Method;
+            obj.Tag = Method.tag;
             BtRatio = 0.1;
             BtSize = Pos(3)*BtRatio;
             HPos = Pos(1)+(1-BtRatio)*Pos(3)/2;
@@ -72,6 +74,9 @@ end
 function line_draw(h,~,obj)
 fig = ancestor(h,'Figure');
 ArrowHandle = BrokenArrow(h.Parent, [h.Position(1:2) + h.Position(3:4)/2, h.Position(1:2) + h.Position(3:4)/2]);
+if ~isempty(fig.CurrentArrow)
+    fig.CurrentArrow.delete;
+end
 fig.CurrentArrow = ArrowHandle;
 obj.ArrowOutput = [obj.ArrowOutput; ArrowHandle];
 ArrowHandle.BoxOutput = obj;
@@ -87,11 +92,11 @@ h.WindowButtonMotionFcn = [];
 h.WindowButtonUpFcn = [];
 end
 function moving_arrow(h,~,ArrowHandle)
-pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemarebasta abìvere il parent;
+pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemarebasta abï¿½vere il parent;
 ArrowHandle.Position(3:4) = pos;
 end
 function moving_box(h,~,obj)
-pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemare basta abìvere il parent;
+pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemare basta abï¿½vere il parent;
 pos = pos - obj.Position(3:4)/2;
 obj.Position(1:2) = pos;
 end

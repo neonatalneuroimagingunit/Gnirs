@@ -14,9 +14,10 @@ classdef MetodWW < handle & matlab.mixin.SetGet
         TreePanel
         InfoSetPanel
         MethodPanel
-        Divider
         ResizeButton1
         ResizeButton2
+        
+        BigRedButton
         
         Position_
     end
@@ -40,12 +41,13 @@ classdef MetodWW < handle & matlab.mixin.SetGet
                 'Units','normalized','Position',[0.21 0 0.59 1]);
             obj.InfoSetPanel = uipanel('Parent',obj.MainFigure,...
                 'Units','normalized','Position',[0.81 0 0.2 1]);
-            obj.Tree = MethodTree([ 0 0 1 1 ],obj.TreePanel,MethodList);
+            obj.Tree = MethodTree([ 0 0.1 1 0.9 ],obj.TreePanel,MethodList);
             obj.Tree.Root.MouseClickedCallback = @(h,e)add_method(h,e,obj);
             
             obj.ResizeButton1 = annotation(obj.MainFigure,'textbox','Units','normalized','Position',[0.2 0 0.01 1],'ButtonDownFcn' ,@(h,e)resize_1(h,e,obj));
             obj.ResizeButton2 = annotation(obj.MainFigure,'textbox','Units','normalized','Position',[0.8 0 0.01 1],'ButtonDownFcn' ,@(h,e)resize_2(h,e,obj));
             
+            obj.BigRedButton = uicontrol('Callback',@(h,e)add_output(h,e,obj),'Style','pushbutton','Parent',obj.TreePanel,'Units','normalized','Position',[0 0 1 0.1]);
             
             InputMethod = NirsMethod('tag', 'Input');
             obj.MethodBoxList = MethodBox([0.4 0.8 0.16 0.08],obj.MethodPanel,InputMethod); %sistemare inputmethod
@@ -53,6 +55,12 @@ classdef MetodWW < handle & matlab.mixin.SetGet
         end
     end
     
+end
+function add_output(~, ~, obj)
+OutputMethod = NirsMethod('tag', 'Output');
+TempMethodBox = MethodBox([rand-0.08 0 0.16 0.08],obj.MethodPanel,OutputMethod);
+obj.MethodBoxList = [obj.MethodBoxList; TempMethodBox];
+TempMethodBox.ButtonOutput.Visible = 'off';
 end
 
 function add_method(~, Event, obj)
