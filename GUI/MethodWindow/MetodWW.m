@@ -84,9 +84,9 @@ obj.MainFigure.WindowButtonUpFcn = @(h,e)stop_resizing(h,e);
 end
 function panel_resizing1(h,~,obj)
 relXPos = h.CurrentPoint(1)./h.Position(3);
-obj.TreePanel.Position(3) = relXPos - 0.005;
-obj.ResizeButton1.Position(1) = relXPos - 0.005;
-obj.MethodPanel.Position(1) = relXPos + 0.005;
+obj.ResizeButton1.Position(1) = max(relXPos - 0.005,0);
+obj.TreePanel.Position(3) = obj.ResizeButton1.Position(1);
+obj.MethodPanel.Position(1) = obj.ResizeButton1.Position(1) + 0.01;
 obj.MethodPanel.Position(3) = obj.ResizeButton2.Position(1) - obj.MethodPanel.Position(1);
 end
 
@@ -96,7 +96,7 @@ obj.MainFigure.WindowButtonUpFcn = @(h,e)stop_resizing(h,e);
 end
 function panel_resizing2(h,~,obj)
 relXPos = h.CurrentPoint(1)./h.Position(3);
-obj.InfoSetPanel.Position(1) = relXPos + 0.005;
+obj.InfoSetPanel.Position(1) = min(relXPos + 0.005,1);
 obj.InfoSetPanel.Position(3) = 1 - obj.InfoSetPanel.Position(1);
 obj.ResizeButton2.Position(1) = obj.InfoSetPanel.Position(1) - 0.01;
 obj.MethodPanel.Position(3) = obj.ResizeButton2.Position(1) - obj.MethodPanel.Position(1);

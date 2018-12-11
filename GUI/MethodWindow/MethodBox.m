@@ -2,6 +2,7 @@ classdef MethodBox < handle & matlab.mixin.SetGet
     
     properties (Transient)
         Position
+        Parent
     end
     
     properties
@@ -15,9 +16,19 @@ classdef MethodBox < handle & matlab.mixin.SetGet
         ArrowInput BrokenArrow
         
         Position_
+        Parent_
     end
     
     methods
+        function set.Parent(obj,Par)
+            obj.Parent_ = Par;
+            obj.Box.Parent = Par;
+            obj.ButtonInput.Parent = Par;
+            obj.ButtonOutput.Parent = Par;
+        end
+        function Value = get.Parent(obj)
+            Value = obj.Parent_;
+        end
         function Value = get.Position(obj)
             Value = obj.Position_;
         end
@@ -54,7 +65,8 @@ classdef MethodBox < handle & matlab.mixin.SetGet
             BtRatio = 0.1;
             BtSize = Pos(3)*BtRatio;
             HPos = Pos(1)+(1-BtRatio)*Pos(3)/2;
-            obj.Position = Pos;
+            obj.Position_ = Pos;
+            obj.Parent_ = Par;
             posTB = [HPos, Pos(2)+Pos(4)-BtSize, BtSize, BtSize];
             posBB = [HPos, Pos(2), BtSize, BtSize];
             obj.Box = annotation(Par,'textbox',...
@@ -71,7 +83,7 @@ classdef MethodBox < handle & matlab.mixin.SetGet
     
 end
 
-function line_draw(h,~,obj)
+function line_draw(h,~, obj)
 fig = ancestor(h,'Figure');
 ArrowHandle = BrokenArrow(h.Parent, [h.Position(1:2) + h.Position(3:4)/2, h.Position(1:2) + h.Position(3:4)/2]);
 if ~isempty(fig.CurrentArrow)
@@ -80,7 +92,7 @@ end
 fig.CurrentArrow = ArrowHandle;
 obj.ArrowOutput = [obj.ArrowOutput; ArrowHandle];
 ArrowHandle.BoxOutput = obj;
-fig.WindowButtonMotionFcn = @(h,e)moving_arrow(h,e,ArrowHandle);
+fig.WindowButtonMotionFcn = @(h,e)moving_arrow(h,e,ArrowHandle, obj);
 end
 function start_moving_box(h,~,obj)
 fig = ancestor(h,'Figure');
@@ -91,12 +103,14 @@ function stop_moving_box(h,~)
 h.WindowButtonMotionFcn = [];
 h.WindowButtonUpFcn = [];
 end
-function moving_arrow(h,~,ArrowHandle)
-pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemarebasta ab�vere il parent;
+function moving_arrow(h,~,ArrowHandle, obj)
+panPos = obj.Parent.Position;
+pos = ((h.CurrentPoint./h.Position(3:4))-panPos(1:2))./(panPos(3:4));
 ArrowHandle.Position(3:4) = pos;
 end
 function moving_box(h,~,obj)
-pos = ((h.CurrentPoint./h.Position(3:4))-[0.2, 0])./([0.6, 1]);%sistemare basta ab�vere il parent;
+panPos = obj.Parent.Position;
+pos = ((h.CurrentPoint./h.Position(3:4))-panPos(1:2))./(panPos(3:4));
 pos = pos - obj.Position(3:4)/2;
 obj.Position(1:2) = pos;
 end
