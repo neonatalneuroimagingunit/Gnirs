@@ -114,7 +114,7 @@ mask4 = and(mask2,mask3);
 %plot3(He.node(mask4,1),He.node(mask4,2),He.node(mask4,3), '.k')
 % x = He.node(mask4,1);
 % y = He.node(mask4,2);
-% z = 
+% z = He.node(mask4,3);
 % [n,c] = hist3([x', y']);
 % contour(c{1},c{2},n)
 
