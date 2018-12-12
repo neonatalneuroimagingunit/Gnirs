@@ -81,8 +81,7 @@ if any(fileIdx)
 	RPA = tempPoint(3,:);
 	LPA = tempPoint(4,:);
 	GHandle.TempWindow.loadingBar.LandMarks.loadingPerc = 0.1;
-	%Atlas.LandMarks = atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,GHandle.TempWindow.loadingBar.LandMarks);
-	Atlas.LandMarks = Copy_of_atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,GHandle.TempWindow.loadingBar.LandMarks);
+	Atlas.LandMarks = atlas105maker(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,GHandle.TempWindow.loadingBar.LandMarks);
     GHandle.TempWindow.loadingBar.GrayMatter.loadingText = 'Landmarks generated.';
 	fclose(landmarkFile);
 end
