@@ -1,7 +1,7 @@
 function methodwindow(GHandle)
 	
 	methodPath = fullfile(GHandle.Preference.Path.currentPath, 'Method', 'MethodList.mat');
-	GHandle.MethodWindow = load(methodPath); % it wipe out also the field
+	GHandle.MethodWindow = load(methodPath); % it wipes out also the field
 	
 	fontSize = GHandle.Preference.Font.sizeL;
 	EdgeColor = 'k';

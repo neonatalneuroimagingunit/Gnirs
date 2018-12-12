@@ -155,7 +155,7 @@ for iMeasure = 1:GHandle.DataBase.nMeasure %for each measure in the study create
     
     uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
         'Label','Add Analysis',...
-        'callback',{@new_alysis ,GHandle});
+        'callback',{@new_analysis ,GHandle});
     uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
         'Label','Modify',...
         'callback',{@modify ,GHandle});
@@ -274,7 +274,7 @@ if ~isempty(Event.Nodes) % click on a node
         case 'open'
             if idtype(Event.Nodes.Value, 'Analysis')
                 makeanalysiscurrent(GHandle, Event.Nodes.Value);
-                viewer(GHandle);
+                viewer2(GHandle);
             end
             
         case 'alt'
@@ -293,10 +293,12 @@ end
 function develop_analysis(~, ~, GHandle)
 analysisId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
 makeanalysiscurrent(GHandle, analysisId)
-methodwindow(GHandle)
+methodPath = fullfile(GHandle.Preference.Path.currentPath, 'Method', 'MethodList.mat');
+GHandle.MethodWindow = load(methodPath); % it wipes out also the field
+GHandle.MethodWindow = MetodWW(GHandle.MethodWindow.MethodList);
 end
 
-function new_alysis (~, ~, GHandle)
+function new_analysis (~, ~, GHandle)
 measureId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
 DBMeasure = GHandle.DataBase.findid(measureId);
 analysisId = DBMeasure.analysisId(1,:);
