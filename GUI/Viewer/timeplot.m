@@ -72,7 +72,7 @@ GHandle.Viewer(vIdx).timeplot.bigaxes1.XLabel.String = 'Time (s)';
 GHandle.Viewer(vIdx).timeplot.bigaxes1.YLabel.String = 'Intensity (a.u.)';
 
 GHandle.Viewer(vIdx).timeplot.bigaxes2.XLabel.String = 'Time (samples)';
-GHandle.Viewer(vIdx).timeplProbeot.bigaxes2.YTickLabel = [];
+GHandle.Viewer(vIdx).timeplot.bigaxes2.YTickLabel = [];
 GHandle.Viewer(vIdx).timeplot.bigaxes2.XLim = [1 size(Data,1)];
 
 
