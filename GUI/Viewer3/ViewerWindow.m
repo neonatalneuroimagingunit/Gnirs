@@ -135,20 +135,49 @@ end
 
 function undock_video(~, ~, obj)
 if isempty(obj.UndockedVideo)
-    obj.UndockedVideo = figure;
-    obj.UndockVideo.String = '↘';
+    obj.UndockedVideo = figure('CloseRequestFcn',@(h,e)undock_video(h, e, obj));
+    obj.UndockVideo.Units = 'pixels';
     obj.PanelVideo.Parent = obj.UndockedVideo;
+    obj.UndockVideo.String = '↘';
+    obj.UndockVideo.Position(1:2) = obj.UndockedVideo.Position(3:4)-obj.UndockVideo.Position(3:4);
+    obj.DockVideo.Units = 'pixels';
+    obj.ResizeVideoPreference.Units = 'pixels';
+    obj.PanelPreference.Units = 'pixels';
+    obj.DockVideo.Position(3) = 0;
+    obj.ResizeVideoPreference.Position(1) = 0;
+    obj.ResizeVideoPreference.Position(3) = 0;
+    obj.PanelPreference.Position(3) =  obj.PanelPreference.Position(1)+ obj.PanelPreference.Position(3);
+    obj.PanelPreference.Position(1) = obj.ResizeVideoPreference.Position(1);
+    obj.DockVideo.Units = 'normalized';
+    obj.ResizeVideoPreference.Units = 'normalized';
+    obj.PanelPreference.Units = 'normalized';
+    
 else
+    obj.DockVideo.Units = 'pixels';
+    obj.ResizeVideoPreference.Units = 'pixels';
+    obj.PanelPreference.Units = 'pixels';
+    obj.ResizeVideoPreference.Position(3) = 5;
+    obj.DockVideo.Position(3) = max(obj.PanelPreference.Position(3)/2 - 5,0);
+    obj.ResizeVideoPreference.Position(1) = obj.DockVideo.Position(1) + obj.DockVideo.Position(3);
+    obj.PanelPreference.Position(3) = max((obj.PanelPreference.Position(3) + obj.PanelPreference.Position(1)) - (obj.ResizeVideoPreference.Position(1) + obj.ResizeVideoPreference.Position(3)),1);
+    obj.PanelPreference.Position(1) = obj.PanelPreference.Position(1) + obj.PanelPreference.Position(3)/2;
+    obj.PanelPreference.Position(1) = (obj.ResizeVideoPreference.Position(1) + obj.ResizeVideoPreference.Position(3));
+    
     obj.PanelVideo.Parent = obj.DockVideo;
     obj.UndockedVideo.delete;
     obj.UndockedVideo = [];
     obj.UndockVideo.String = '↗';
+    obj.UndockVideo.Position(1:2) = obj.DockVideo.Position(3:4)-obj.UndockVideo.Position(3:4);
+    obj.UndockVideo.Units = 'normalized';
+    obj.DockVideo.Units = 'normalized';
+    obj.ResizeVideoPreference.Units = 'normalized';
+    obj.PanelPreference.Units = 'normalized';
 end
 end
 function undock_probe(~, ~, obj)
 if isempty(obj.UndockedProbe)
-    obj.UndockedProbe = figure;
-       obj.UndockProbe.String = '↘';
+    obj.UndockedProbe = figure('CloseRequestFcn',@(h,e)undock_video(h, e, obj));
+    obj.UndockProbe.String = '↘';
     obj.PanelProbe.Parent = obj.UndockedProbe;
 else
     obj.PanelProbe.Parent = obj.DockProbe;
@@ -159,8 +188,8 @@ end
 end
 function undock_data(~, ~, obj)
 if isempty(obj.UndockedData)
-    obj.UndockedData = figure;
-       obj.UndockData.String = '↘';
+    obj.UndockedData = figure('CloseRequestFcn',@(h,e)undock_video(h, e, obj));
+    obj.UndockData.String = '↘';
     obj.PanelData.Parent = obj.UndockedData;
 else
     obj.PanelData.Parent = obj.DockData;
@@ -170,6 +199,9 @@ else
 end
 end
 
+
+
+
 function resize_lr(Div, ~, obj,LPan,RPan)
 obj.MainFigure.WindowButtonMotionFcn = @(h,e)panel_resizing_lr(h,e,LPan,Div,RPan);
 obj.MainFigure.WindowButtonUpFcn = @(h,e)stop_resizing(h,e);
@@ -178,7 +210,7 @@ function panel_resizing_lr(h,~,LPan,Div,RPan)
 LPan.Units = 'pixels';
 Div.Units = 'pixels';
 RPan.Units = 'pixels';
-LPan.Position(3) =  min(max(h.CurrentPoint(1) - LPan.Position(1),0),RPan.Position(1)+RPan.Position(3)-LPan.Position(1)-Div.Position(3));
+LPan.Position(3) =  min(max(h.CurrentPoint(1) - LPan.Position(1),1),RPan.Position(1)+RPan.Position(3)-LPan.Position(1)-Div.Position(3)-1);
 Div.Position(1) = min(max(LPan.Position(3) + LPan.Position(1),LPan.Position(1)),RPan.Position(1)+RPan.Position(3)-Div.Position(3));
 RPan.Position(3) =  RPan.Position(1)+RPan.Position(3) - (Div.Position(1)+Div.Position(3));
 RPan.Position(1) = (Div.Position(1)+Div.Position(3));
