@@ -4,20 +4,18 @@ classdef NirsMethod
 	
 	properties
 		tag (1,:) char
-		
 		name(1,:) char
-		
 		type(1,:) char
-		
 		subType(1,:) char
 		
 		description(1,:) char
 		
 		parameters struct
-		
 		methodFunction  function_handle
-
 		plotFunction  function_handle
+        
+        inputType
+        outputType
 		
 		note(1,:) char
 	end
