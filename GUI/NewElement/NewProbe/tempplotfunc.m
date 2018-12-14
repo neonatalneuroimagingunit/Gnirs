@@ -4,7 +4,7 @@ landmarkColor = GHandle.Preference.Theme.landmarkColor;
 
 sourceColor = [1 0 0];
 detectorColor = [0 0 1];
-lineShrinkFactor = 5; 
+lineShrinkFactor = 2;
 Atlas =  GHandle.TempWindow.SelectedAtlas;
 
 if GHandle.TempWindow.MirrorProbe.Value
@@ -24,11 +24,10 @@ scalpMask = GHandle.TempWindow.NewProbeAxes.Children == GHandle.TempWindow.Scalp
 
 delete(GHandle.TempWindow.NewProbeAxes.Children(~scalpMask))
 
-
-
 sourceTag = GHandle.TempWindow.SelectedAtlas.LandMarks.names(GHandle.TempWindow.Mask.Source);
 sourcePos = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(repmat(GHandle.TempWindow.Mask.Source,1,1,3)),[],3);
 GHandle.TempWindow.SourceList.String = sourceTag;
+
 detectorTag = GHandle.TempWindow.SelectedAtlas.LandMarks.names(GHandle.TempWindow.Mask.Detector);
 detectorPos = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(repmat(GHandle.TempWindow.Mask.Detector,1,1,3)),[],3);
 GHandle.TempWindow.DetectorList.String = detectorTag;
@@ -41,10 +40,10 @@ nDetector = size(detectorTag,1);
 channelPairsIdx = combvec(1:nSource, 1:nDetector)';
 nChannel = size(channelPairsIdx,1);
 
-
-
-
 thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistance.String);
+
+GHandle.TempWindow.DetectorListTitle.String = ['Detectors (' num2str(nDetector) ')'];
+GHandle.TempWindow.SourceListTitle.String = ['Sources (' num2str(nSource) ')'];
 
 for iChannel = 1:1:nChannel
     tempCoordSource = sourcePos(channelPairsIdx(iChannel,1),:);
@@ -57,6 +56,13 @@ for iChannel = 1:1:nChannel
     GHandle.TempWindow.ChannelList.Data{iChannel,4} = tempChannelDistance;
     GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
 end
+
+if nChannel == 0
+    nChannelActive = 0;
+else
+    nChannelActive = sum([GHandle.TempWindow.ChannelList.Data{:,5}]);
+end
+GHandle.TempWindow.ChannelListTitle.String = ['Channels (' num2str(nChannel) ' total, ' num2str(nChannelActive) ' active)'];
 
 if  GHandle.TempWindow.LandmarkLabels.Value
     GHandle.TempWindow.Source = text(sourcePos(:,1),...
@@ -99,20 +105,26 @@ if nChannel
     longIdx = setdiff(1:nChannel , shortIdx);
     
     if GHandle.TempWindow.ShowInactive.Value
-        longLineStyle = ':k';
+        longLineStyle = ':';
     else
-        longLineStyle = 'r';
+        longLineStyle = 'none';
     end
     
-    GHandle.TempWindow.Channel = plot3(xChannel(:,shortIdx),...
-        yChannel(:,shortIdx),...
+    GHandle.TempWindow.Channel(shortIdx) = plot3(...
+        xChannel(:,shortIdx), ...
+        yChannel(:,shortIdx), ...
         zChannel(:,shortIdx), ...
-        '-k',...
-        xChannel(:,longIdx),...
-        yChannel(:,longIdx),...
-        zChannel(:,longIdx), ...
-        longLineStyle,...
         'LineWidth', 2, ...
+        'Color', [0 0 0],...
+        'HitTest', 'off'...
+        );
+    GHandle.TempWindow.Channel(longIdx) = plot3(...
+        xChannel(:,longIdx), ...
+        yChannel(:,longIdx), ...
+        zChannel(:,longIdx), ...
+        'LineWidth', 2, ...
+        'Color', [0 0 0],...
+        'LineStyle', longLineStyle,...
         'HitTest', 'off'...
         );
     

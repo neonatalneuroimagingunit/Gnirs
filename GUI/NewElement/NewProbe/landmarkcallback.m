@@ -1,6 +1,5 @@
 function landmarkcallback(~,Evnt,GHandle)
 
-
 pt = Evnt.IntersectionPoint;
 
 XData = GHandle.TempWindow.SelectedAtlas.LandMarks.coord(:,:,1);
@@ -24,7 +23,6 @@ if GHandle.TempWindow.Zoom
         % toglierlo appena abbiamo il 2d
         
     else
-        
         iPointMin = max(iPoint-5,1);
         iPointMax = min(iPoint+5,101);
         jPointMin = max(jPoint-5,1);

@@ -204,7 +204,6 @@ GHandle.TempWindow.light(2) = light(GHandle.TempWindow.NewProbeAxes,...
 GHandle.TempWindow.NewProbeFigure.Visible = 'on';
 end
 
-
 function save_probe(~, ~, GHandle)
 probeName = GHandle.TempWindow.NewProbeName.Value;
 note = GHandle.TempWindow.NewProbeNote.Value;
@@ -235,7 +234,6 @@ Channel.distance = [GHandle.TempWindow.ChannelList.Data{idxChannel,4}]';
 channelPairsIdx = combvec(1:size(Source.label,1), 1:size(Detector.label,1))';
 Channel.pairs = channelPairsIdx(idxChannel,:);
 
-
 NewProbe = NirsProbe('name', probeName, 'atlasid', atlasID, 'note', note, 'detector', Detector, 'source', Source, 'channel', Channel);
 DataBase = GHandle.DataBase.add(NewProbe);
 GHandle.DataBase = DataBase;
@@ -243,8 +241,6 @@ GHandle.DataBase = DataBase;
 tree(GHandle);
 close(GHandle.TempWindow.NewProbeFigure);
 end
-
-
 
 function delete_source(~, ~, GHandle)
 idx2Delete = GHandle.TempWindow.SourceList.Value;
@@ -299,8 +295,7 @@ else
     GHandle.TempWindow.Zoom = false;
     
     idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
-    
-    
+      
     GHandle.TempWindow.Mask.LandMark(setdiff(1:1:10201,idxM)) = false;
     tempplotfunc([],[],GHandle)
 end
