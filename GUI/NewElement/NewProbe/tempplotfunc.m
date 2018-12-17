@@ -31,7 +31,7 @@ detectorTag = GHandle.TempWindow.SelectedAtlas.LandMarks.names(GHandle.TempWindo
 detectorPos = reshape(GHandle.TempWindow.SelectedAtlas.LandMarks.coord(repmat(GHandle.TempWindow.Mask.Detector,1,1,3)),[],3);
 GHandle.TempWindow.DetectorList.String = detectorTag;
 
-GHandle.TempWindow.ChannelList.Data = {};
+tempData = cell(0,5);
 
 nSource = size(sourceTag,1);
 nDetector = size(detectorTag,1);
@@ -51,14 +51,19 @@ for iChannel = 1:1:nChannel
     tempCoordDetector = detectorPos(channelPairsIdx(iChannel,2),:);
     tempChannelDistance = round(roundFactor*norm(tempCoordSource-tempCoordDetector))/roundFactor;
     
-    GHandle.TempWindow.ChannelList.Data{iChannel,1} = ['Ch' num2str(iChannel)];
-    GHandle.TempWindow.ChannelList.Data{iChannel,2} = sourceTag{channelPairsIdx(iChannel,1)};
-    GHandle.TempWindow.ChannelList.Data{iChannel,3} = detectorTag{channelPairsIdx(iChannel,2)};
-    GHandle.TempWindow.ChannelList.Data{iChannel,4} = tempChannelDistance;
+    tempData{iChannel,1} = ['Ch' num2str(iChannel)];
+    tempData{iChannel,2} = sourceTag{channelPairsIdx(iChannel,1)};
+    tempData{iChannel,3} = detectorTag{channelPairsIdx(iChannel,2)};
+    tempData{iChannel,4} = tempChannelDistance;
     if GHandle.TempWindow.ThresholdDistanceButton.Value
-        GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
+        tempData{iChannel,5} = tempChannelDistance <= thresholdDistance;
+    elseif GHandle.TempWindow.ChannelList.Data
+        
+    else 
+        
     end
 end
+GHandle.TempWindow.ChannelList.Data = tempData;
 
 if nChannel == 0
     nChannelActive = 0;
