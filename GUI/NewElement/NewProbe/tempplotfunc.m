@@ -39,21 +39,25 @@ nDetector = size(detectorTag,1);
 channelPairsIdx = combvec(1:nSource, 1:nDetector)';
 nChannel = size(channelPairsIdx,1);
 
-thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistance.String);
+thresholdDistance = str2double(GHandle.TempWindow.ThresholdDistanceEdit.String);
 
 GHandle.TempWindow.DetectorListTitle.String = ['Detectors (' num2str(nDetector) ')'];
 GHandle.TempWindow.SourceListTitle.String = ['Sources (' num2str(nSource) ')'];
 
+roundFactor = 10;
+
 for iChannel = 1:1:nChannel
     tempCoordSource = sourcePos(channelPairsIdx(iChannel,1),:);
     tempCoordDetector = detectorPos(channelPairsIdx(iChannel,2),:);
-    tempChannelDistance = norm(tempCoordSource-tempCoordDetector);
+    tempChannelDistance = round(roundFactor*norm(tempCoordSource-tempCoordDetector))/roundFactor;
     
     GHandle.TempWindow.ChannelList.Data{iChannel,1} = ['Ch' num2str(iChannel)];
     GHandle.TempWindow.ChannelList.Data{iChannel,2} = sourceTag{channelPairsIdx(iChannel,1)};
     GHandle.TempWindow.ChannelList.Data{iChannel,3} = detectorTag{channelPairsIdx(iChannel,2)};
     GHandle.TempWindow.ChannelList.Data{iChannel,4} = tempChannelDistance;
-    GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
+    if GHandle.TempWindow.ThresholdDistanceButton.Value
+        GHandle.TempWindow.ChannelList.Data{iChannel,5} = tempChannelDistance <= thresholdDistance;
+    end
 end
 
 if nChannel == 0
