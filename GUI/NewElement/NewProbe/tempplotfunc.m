@@ -11,6 +11,13 @@ if GHandle.TempWindow.MirrorProbe.Value
     GHandle.TempWindow.Mask.Source = GHandle.TempWindow.Mask.Source(:,end:-1:1) | GHandle.TempWindow.Mask.Source(:,:);
     GHandle.TempWindow.Mask.Detector = GHandle.TempWindow.Mask.Detector(:,end:-1:1) | GHandle.TempWindow.Mask.Detector(:,:);
 end
+if GHandle.TempWindow.ThresholdDistanceButton.Value
+    GHandle.TempWindow.ThresholdDistanceEdit.Enable = 'on';
+    GHandle.TempWindow.ChannelList.ColumnEditable(5) = false;
+else
+    GHandle.TempWindow.ThresholdDistanceEdit.Enable = 'off';
+    GHandle.TempWindow.ChannelList.ColumnEditable(5) = true;
+end
 
 idxLM = GHandle.TempWindow.Mask.LandMark(:);
 idxSrc = GHandle.TempWindow.Mask.Source(:);
@@ -57,10 +64,13 @@ for iChannel = 1:1:nChannel
     tempData{iChannel,4} = tempChannelDistance;
     if GHandle.TempWindow.ThresholdDistanceButton.Value
         tempData{iChannel,5} = tempChannelDistance <= thresholdDistance;
-    elseif GHandle.TempWindow.ChannelList.Data
-        
-    else 
-        
+    else
+        maskOldChannel =  strcmp(GHandle.TempWindow.ChannelList.Data(:,2),tempData{iChannel,2}) & strcmp(GHandle.TempWindow.ChannelList.Data(:,3),tempData{iChannel,3});
+        if any(maskOldChannel)
+            tempData{iChannel,5} = GHandle.TempWindow.ChannelList.Data{maskOldChannel,5};
+        else
+            tempData{iChannel,5} = true;
+        end
     end
 end
 GHandle.TempWindow.ChannelList.Data = tempData;
