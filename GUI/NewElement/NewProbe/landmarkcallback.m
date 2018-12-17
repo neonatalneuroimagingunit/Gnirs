@@ -31,6 +31,9 @@ if GHandle.TempWindow.Zoom
     end
     GHandle.TempWindow.Zoom = false;
 else
+    GHandle.TempWindow.SourceList.Value = [];
+    GHandle.TempWindow.DetectorList.Value = [];
+    
     if GHandle.TempWindow.Mask.Source(idxPoint)
         GHandle.TempWindow.Mask.Source(idxPoint) = false;
         GHandle.TempWindow.Mask.Detector(idxPoint) = true;
