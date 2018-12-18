@@ -3,7 +3,6 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
     properties (Transient)
         Position
         
-        
     end
     
     properties
@@ -11,6 +10,10 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
     end
     
     properties
+        WatchList
+        Dataset
+        Preference
+        
         MainFigure
         UndockedProbe
         UndockedData
@@ -34,8 +37,13 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
         
         Position_
     end
-    
     methods
+        createpanel(obj)
+        loaddataset(obj)
+        loadpreference(obj)
+    end
+    methods
+        
         function Value = get.Position(obj)
             Value = obj.Position_;
         end
@@ -45,7 +53,12 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
         %% constructor
         function  obj = ViewerWindow(GHandle)
             obj.GHandle = GHandle;
+            obj.createpanel;
+            obj.WatchList = ViewerWatchList; % Create the watchlist
+            obj.loaddataset;
+            obj.loadpreference;
         end
+        
     end
 end
 
