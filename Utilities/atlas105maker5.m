@@ -1,8 +1,9 @@
 function tenFive = atlas105maker5(meshPoints,Nz,Iz,RPA,LPA,nStep,LoadingBarAtlas)
 
-nPonintAnyDirections = 12;
+nPointAnyDirections = 1;
+nStep = 100;
 
-intraPoint = nPonintAnyDirections*2;
+intraPoint = nPointAnyDirections*2;
 mainDim = intraPoint+1;
 
 dPerc = 1/(21*(mainDim));
@@ -169,45 +170,71 @@ tempname = repmat({'POO7h'; 'POO5'; 'POO5h'; 'POO3'; 'POO3h'; 'POO1'; 'POO1h'; .
 tempname = repmat(tempname(:),1,mainDim);
 tempNameMatrix(1+17*mainDim : 1 : 18*mainDim,1+3*mainDim : 1 : 18*mainDim) = tempname';
 
-postFixMatrix = post_fix_matrix_maker(nPonintAnyDirections); % left 2 right
+postFixMatrix = post_fix_matrix_maker(nPointAnyDirections); % left 2 right
+postFixMatrixMedial = post_fix_matrix_medial_maker(nPointAnyDirections);
 
-postFixMatrix = repmat(postFixMatrix,[21,21]);
-tempNameMatrixWhitPostFix = strcat(tempNameMatrix,postFixMatrix);
+postFixMatrixLeft = repmat(postFixMatrix(:,end:-1:1),[21,10]);
+postFixMatrixCentral = repmat(postFixMatrixMedial,[21,1]);
+postFixMatrixRight = repmat(postFixMatrix,[21,10]);
+
+tempNameMatrixWhitPostFix = strcat(tempNameMatrix,[postFixMatrixLeft postFixMatrixCentral postFixMatrixRight]);
 tempNameMatrixWhitPostFix(cellfun('isempty',tempNameMatrix)) = {''};
 
-tenFive.names = tempNameMatrixWhitPostFix(1+nPonintAnyDirections : matDimension + nPonintAnyDirections,1+nPonintAnyDirections : matDimension + nPonintAnyDirections);
+tenFive.names = tempNameMatrixWhitPostFix(1+nPointAnyDirections : matDimension + nPointAnyDirections,1+nPointAnyDirections : matDimension + nPointAnyDirections);
 end
 
 function postFixMatrix = post_fix_matrix_maker(nPonintAnyDirections)
-
 postFixMatrix = cell(1+2*nPonintAnyDirections, 1+2*nPonintAnyDirections);
 postFixMatrix(:) = {''};
 for ii = -nPonintAnyDirections : 1 : nPonintAnyDirections
     iIdx = ii+nPonintAnyDirections+1;
     if ii < 0
-        tempIStr = ['_F' num2str(-ii)];
+        tempIStr = ['_R' num2str(-ii)]; %Rostral
     elseif ii > 0
-        tempIStr = ['_B' num2str(ii)];
+        tempIStr = ['_C' num2str(ii)]; %Caudal
     else
         tempIStr = '';
     end
     for jj = -nPonintAnyDirections : 1 : nPonintAnyDirections
         jIdx = jj+nPonintAnyDirections+1;
         if jj < 0
-            tempJStr = ['_L' num2str(-jj)];
+            tempJStr = ['_M' num2str(-jj)]; %Medial
         elseif jj > 0
-            tempJStr = ['_R' num2str(jj)];
+            tempJStr = ['_L' num2str(jj)]; %Lateral
         else
             tempJStr = '';
         end
         postFixMatrix{iIdx,jIdx} = [tempJStr tempIStr];
     end
 end
-
 end
 
 
 
-
+function postFixMatrix = post_fix_matrix_medial_maker(nPonintAnyDirections)
+postFixMatrix = cell(1+2*nPonintAnyDirections, 1+2*nPonintAnyDirections);
+postFixMatrix(:) = {''};
+for ii = -nPonintAnyDirections : 1 : nPonintAnyDirections
+    iIdx = ii+nPonintAnyDirections+1;
+    if ii < 0
+        tempIStr = ['_R' num2str(-ii)]; %Rostral
+    elseif ii > 0
+        tempIStr = ['_C' num2str(ii)]; %Caudal
+    else
+        tempIStr = '';
+    end
+    for jj = -nPonintAnyDirections : 1 : nPonintAnyDirections
+        jIdx = jj+nPonintAnyDirections+1;
+        if jj < 0
+            tempJStr = ['_l' num2str(-jj)]; %left
+        elseif jj > 0
+            tempJStr = ['_r' num2str(jj)]; %right
+        else
+            tempJStr = '';
+        end
+        postFixMatrix{iIdx,jIdx} = [tempJStr tempIStr];
+    end
+end
+end
 
 
