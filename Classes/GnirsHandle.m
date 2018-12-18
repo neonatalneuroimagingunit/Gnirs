@@ -13,6 +13,9 @@ classdef GnirsHandle < handle
    end
 
    methods
-	   
+       function deleteviewer(obj, viewerhandle)
+           obj.Viewer(obj.Viewer == viewerhandle) = [];
+       end
    end
 end
+
