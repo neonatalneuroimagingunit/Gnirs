@@ -1,77 +1,23 @@
-classdef ViewerWindow < handle & matlab.mixin.SetGet
-    
-    properties (Transient)
-        Position
-        
-        
-    end
-    
-    properties
-        GHandle
-    end
-    
-    properties
-        MainFigure
-        UndockedVideo
-        UndockedProbe
-        UndockedData
-        
-        DockVideo
-        DockProbe
-        DockData
-        
-        PanelPlot
-        PanelInfo
-        PanelVideo
-        PanelPreference
-        PanelProbe
-        PanelData
-        
-        ResizeHorizontal
-        ResizePlotInfo
-        ResizeVideoPreference
-        ResizePreferenceProbe
-        ResizeProbeData
-        
-        UndockVideo
-        UndockProbe
-        UndockData
-        
-        
-        Position_
-    end
-    
-    methods
-        function Value = get.Position(obj)
-            Value = obj.Position_;
-        end
-        function set.Position(obj,Pos)
-            obj.Position_ = Pos;
-        end
-        %% constructor
-        function  obj = ViewerWindow(GHandle)
-            obj.GHandle = GHandle;
-            borderColor = [0 0 0];
+function createpanel(obj)
+
+borderColor = [0 0 0];
             dividerSize = 5; %pixels
             figureSize = GHandle.Preference.Figure.sizeLarge;
             obj.MainFigure = figure('Position', figureSize); % cambiare con g handle
             hB = (figureSize(4) - dividerSize)/4;
             hT = hB * 3;
-            wB = (figureSize(3) - 3*dividerSize)/4;
-            wTR = (figureSize(3) - dividerSize)/4;
+            wB = (figureSize(3) - 2*dividerSize)/3;
+            wTR = (figureSize(3) - dividerSize)/3;
             
             wTot = wB + dividerSize;
-            wTL = 3*wTot - dividerSize;
+            wTL = 2*wTot - dividerSize;
             
             obj.PanelPlot = uipanel('Parent',obj.MainFigure,...
                 'BorderType','line','HighLightColor',borderColor,...
                 'Units','pixels','Position',[0 hB+dividerSize wTL hT], 'Units','normalized');
             obj.PanelInfo = uipanel('Parent',obj.MainFigure,...
                 'BorderType','line','HighLightColor',borderColor,...
-                'Units','pixels','Position',[3*wTot hB+dividerSize wTR hT], 'Units','normalized');
-            obj.DockVideo = uipanel('Parent',obj.MainFigure,...
-                'BorderType','line','HighLightColor',borderColor,...
-                'Units','pixels','Position',[0 0 wB hB], 'Units','normalized');
+                'Units','pixels','Position',[2*wTot hB+dividerSize wTR hT], 'Units','normalized');
             obj.PanelPreference = uipanel('Parent',obj.MainFigure,...
                 'BorderType','line','HighLightColor',borderColor,...
                 'Units','pixels','Position',[wTot  0 wB hB], 'Units','normalized');
@@ -80,11 +26,9 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
                 'Units','pixels','Position',[2*wTot 0 wB hB], 'Units','normalized');
             obj.DockData = uipanel('Parent',obj.MainFigure,...
                 'BorderType','line','HighLightColor',borderColor,...
-                'Units','pixels','Position',[3*wTot 0 wB hB], 'Units','normalized');
+                'Units','pixels','Position',[0 0 wB hB], 'Units','normalized');
             
-            obj.PanelVideo = uipanel('Parent',obj.DockVideo,...
-                'BorderType','none',...
-                'Units','normalized','Position',[0 0 1 1]);
+            
             obj.PanelProbe = uipanel('Parent',obj.DockProbe,...
                 'BorderType','none',...
                 'Units','normalized','Position',[0 0 1 1]);
@@ -100,25 +44,17 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
                 'LineStyle','none',...
                 'Units','pixels','Position',[wTL hB+dividerSize dividerSize figureSize(4)-(hB+dividerSize)],'Units','normalized',...
                 'ButtonDownFcn' ,@(h,e)resize_lr(h,e,obj,obj.PanelPlot,obj.PanelInfo));
-            obj.ResizeVideoPreference = annotation(obj.MainFigure,'textbox',...
-                'LineStyle','none',...
-                'Units','pixels','Position',[wB 1 dividerSize hB-1],'Units','normalized',...
-                'ButtonDownFcn' ,@(h,e)resize_lr(h,e,obj,obj.DockVideo,obj.PanelPreference));
             obj.ResizePreferenceProbe = annotation(obj.MainFigure,'textbox',...
                 'LineStyle','none',...
                 'Units', 'pixels','Position',[wB+wTot 1 dividerSize hB-1],'Units','normalized',...
                 'ButtonDownFcn' ,@(h,e)resize_lr(h,e,obj,obj.PanelPreference,obj.DockProbe));
-            obj.ResizeProbeData = annotation(obj.MainFigure,'textbox',...
+            obj.ResizeDataPreference = annotation(obj.MainFigure,'textbox',...
                 'LineStyle','none',...
-                'Units','pixels','Position',[wB+2*wTot 1 dividerSize hB-1],'Units','normalized',...
-                'ButtonDownFcn' ,@(h,e)resize_lr(h,e,obj,obj.DockProbe,obj.DockData));
+                'Units','pixels','Position',[wB 1 dividerSize hB-1],'Units','normalized',...
+                'ButtonDownFcn' ,@(h,e)resize_lr(h,e,obj,obj.DockData,obj.PanelPreference));
             
             
             undockButtonPosition = [0.9 0.9 0.1 0.1];
-            obj.UndockVideo = uicontrol('Parent', obj.PanelVideo, 'Style','pushbutton', ...
-                'Units','normalized','Position',undockButtonPosition,...
-                'String','↗',...
-                'Callback',@(h,e)undock_video(h,e,obj));
             obj.UndockProbe = uicontrol('Parent', obj.PanelProbe, 'Style','pushbutton', ...
                 'Units','normalized','Position',undockButtonPosition, ...
                 'String','↗',...
@@ -128,74 +64,86 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
                 'String','↗',...
                 'Callback',@(h,e)undock_data(h,e,obj));
         end
-    end
-    
-end
 
 
-function undock_video(~, ~, obj)
-if isempty(obj.UndockedVideo)
-    obj.UndockedVideo = figure('CloseRequestFcn',@(h,e)undock_video(h, e, obj));
-    obj.UndockVideo.Units = 'pixels';
-    obj.PanelVideo.Parent = obj.UndockedVideo;
-    obj.UndockVideo.String = '↘';
-    obj.UndockVideo.Position(1:2) = obj.UndockedVideo.Position(3:4)-obj.UndockVideo.Position(3:4);
-    obj.DockVideo.Units = 'pixels';
-    obj.ResizeVideoPreference.Units = 'pixels';
-    obj.PanelPreference.Units = 'pixels';
-    obj.DockVideo.Position(3) = 0;
-    obj.ResizeVideoPreference.Position(1) = 0;
-    obj.ResizeVideoPreference.Position(3) = 0;
-    obj.PanelPreference.Position(3) =  obj.PanelPreference.Position(1)+ obj.PanelPreference.Position(3);
-    obj.PanelPreference.Position(1) = obj.ResizeVideoPreference.Position(1);
-    obj.DockVideo.Units = 'normalized';
-    obj.ResizeVideoPreference.Units = 'normalized';
-    obj.PanelPreference.Units = 'normalized';
-    
-else
-    obj.DockVideo.Units = 'pixels';
-    obj.ResizeVideoPreference.Units = 'pixels';
-    obj.PanelPreference.Units = 'pixels';
-    obj.ResizeVideoPreference.Position(3) = 5;
-    obj.DockVideo.Position(3) = max(obj.PanelPreference.Position(3)/2 - 5,0);
-    obj.ResizeVideoPreference.Position(1) = obj.DockVideo.Position(1) + obj.DockVideo.Position(3);
-    obj.PanelPreference.Position(3) = max((obj.PanelPreference.Position(3) + obj.PanelPreference.Position(1)) - (obj.ResizeVideoPreference.Position(1) + obj.ResizeVideoPreference.Position(3)),1);
-    obj.PanelPreference.Position(1) = obj.PanelPreference.Position(1) + obj.PanelPreference.Position(3)/2;
-    obj.PanelPreference.Position(1) = (obj.ResizeVideoPreference.Position(1) + obj.ResizeVideoPreference.Position(3));
-    
-    obj.PanelVideo.Parent = obj.DockVideo;
-    obj.UndockedVideo.delete;
-    obj.UndockedVideo = [];
-    obj.UndockVideo.String = '↗';
-    obj.UndockVideo.Position(1:2) = obj.DockVideo.Position(3:4)-obj.UndockVideo.Position(3:4);
-    obj.UndockVideo.Units = 'normalized';
-    obj.DockVideo.Units = 'normalized';
-    obj.ResizeVideoPreference.Units = 'normalized';
-    obj.PanelPreference.Units = 'normalized';
-end
-end
+
 function undock_probe(~, ~, obj)
 if isempty(obj.UndockedProbe)
-    obj.UndockedProbe = figure('CloseRequestFcn',@(h,e)undock_video(h, e, obj));
-    obj.UndockProbe.String = '↘';
+    obj.UndockedProbe = figure('CloseRequestFcn',@(h,e)undock_probe(h, e, obj));
+    obj.UndockProbe.Units = 'pixels';
     obj.PanelProbe.Parent = obj.UndockedProbe;
+    obj.UndockProbe.String = '↘';
+    obj.UndockProbe.Position(1:2) = obj.UndockedProbe.Position(3:4)-obj.UndockProbe.Position(3:4);
+    obj.DockProbe.Units = 'pixels';
+    obj.ResizePreferenceProbe.Units = 'pixels';
+    obj.PanelPreference.Units = 'pixels';
+    obj.DockProbe.Position(3) = 0;
+    obj.ResizePreferenceProbe.Position(1) = 0;
+    obj.ResizePreferenceProbe.Position(3) = 0;
+    obj.PanelPreference.Position(3) = obj.MainFigure.Position(3)- obj.PanelPreference.Position(1) ;
+    obj.DockProbe.Units = 'normalized';
+    obj.ResizePreferenceProbe.Units = 'normalized';
+    obj.PanelPreference.Units = 'normalized';
+    
 else
+    obj.DockProbe.Units = 'pixels';
+    obj.ResizePreferenceProbe.Units = 'pixels';
+    obj.PanelPreference.Units = 'pixels';
+    obj.ResizePreferenceProbe.Position(3) = 5;
+    obj.DockProbe.Position(3) = max(obj.PanelPreference.Position(3)/2 - 5,0);
+    obj.PanelPreference.Position(3) = max(obj.PanelPreference.Position(3)/2 ,0);
+    obj.ResizePreferenceProbe.Position(1) = obj.PanelPreference.Position(1) + obj.PanelPreference.Position(3);
+    obj.DockProbe.Position(1) = max(obj.ResizePreferenceProbe.Position(1) + obj.ResizePreferenceProbe.Position(3) , 0 );
+    
     obj.PanelProbe.Parent = obj.DockProbe;
     obj.UndockedProbe.delete;
-    obj.UndockedProbe = [];
+    obj.UndockedProbe= [];
     obj.UndockProbe.String = '↗';
+    obj.UndockProbe.Position(1:2) = obj.DockProbe.Position(3:4)-obj.UndockProbe.Position(3:4);
+    obj.UndockProbe.Units = 'normalized';
+    obj.DockProbe.Units = 'normalized';
+    obj.ResizePreferenceProbe.Units = 'normalized';
+    obj.PanelPreference.Units = 'normalized';
 end
 end
 function undock_data(~, ~, obj)
 if isempty(obj.UndockedData)
-    obj.UndockedData = figure('CloseRequestFcn',@(h,e)undock_video(h, e, obj));
-    obj.UndockData.String = '↘';
+obj.UndockedData = figure('CloseRequestFcn',@(h,e)undock_data(h, e, obj));
+    obj.UndockData.Units = 'pixels';
     obj.PanelData.Parent = obj.UndockedData;
+    obj.UndockData.String = '↘';
+    obj.UndockData.Position(1:2) = obj.UndockedData.Position(3:4)-obj.UndockData.Position(3:4);
+    obj.DockData.Units = 'pixels';
+    obj.ResizeDataPreference.Units = 'pixels';
+    obj.PanelPreference.Units = 'pixels';
+    obj.DockData.Position(3) = 0;
+    obj.ResizeDataPreference.Position(1) = 0;
+    obj.ResizeDataPreference.Position(3) = 0;
+    obj.PanelPreference.Position(3) =  obj.PanelPreference.Position(1)+ obj.PanelPreference.Position(3);
+    obj.PanelPreference.Position(1) = obj.ResizeDataPreference.Position(1);
+    obj.DockData.Units = 'normalized';
+    obj.ResizeDataPreference.Units = 'normalized';
+    obj.PanelPreference.Units = 'normalized';
+    
 else
+    obj.DockData.Units = 'pixels';
+    obj.ResizeDataPreference.Units = 'pixels';
+    obj.PanelPreference.Units = 'pixels';
+    obj.ResizeDataPreference.Position(3) = 5;
+    obj.DockData.Position(3) = max(obj.PanelPreference.Position(3)/2 - 5,0);
+    obj.ResizeDataPreference.Position(1) = obj.DockData.Position(1) + obj.DockData.Position(3);
+    obj.PanelPreference.Position(3) = max((obj.PanelPreference.Position(3) + obj.PanelPreference.Position(1)) - (obj.ResizeDataPreference.Position(1) + obj.ResizeDataPreference.Position(3)),1);
+    obj.PanelPreference.Position(1) = (obj.ResizeDataPreference.Position(1) + obj.ResizeDataPreference.Position(3));
+    
     obj.PanelData.Parent = obj.DockData;
     obj.UndockedData.delete;
     obj.UndockedData = [];
     obj.UndockData.String = '↗';
+    obj.UndockData.Position(1:2) = obj.DockData.Position(3:4)-obj.UndockData.Position(3:4);
+    obj.UndockData.Units = 'normalized';
+    obj.DockData.Units = 'normalized';
+    obj.ResizeDataPreference.Units = 'normalized';
+    obj.PanelPreference.Units = 'normalized';
 end
 end
 
@@ -271,4 +219,3 @@ function stop_resizing(h,~)
 h.WindowButtonMotionFcn = [];
 h.WindowButtonUpFcn = [];
 end
-
