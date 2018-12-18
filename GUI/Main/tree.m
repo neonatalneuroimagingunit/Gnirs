@@ -2,30 +2,20 @@ function tree(GHandle)
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
-position = [0 0 0.2 0.90];
+
 studyIcon = fullfile(matlabroot,'toolbox','matlab','icons','pagesicon.gif');
 measureIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 analysisIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 probeIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
 atlasIcon = fullfile(matlabroot,'toolbox','matlab','icons','pageicon.gif');
-textForegroundColor = [0 0 0];
+
 
 
 selectedTabIdx = 1;
 if isfield(GHandle.Main,'Tree')
     selectedTabIdx =  GHandle.Main.Tree.TabGroup.SelectedTab == GHandle.Main.Tree.TabGroup.Children;
 end
-% create the tab
-GHandle.Main.Tree.TabGroup = uitabgroup(GHandle.Main.Figure,'Position',position);
-GHandle.Main.Tree.StudyTab = uitab(GHandle.Main.Tree.TabGroup,'Title','Study', ...
-    'BackgroundColor', GHandle.Preference.Theme.backgroundColor, ...
-    'ForegroundColor',  textForegroundColor);
-GHandle.Main.Tree.ProbeTab = uitab(GHandle.Main.Tree.TabGroup,'Title','Probe', ...
-    'BackgroundColor', GHandle.Preference.Theme.backgroundColor, ...
-    'ForegroundColor',  textForegroundColor);
-GHandle.Main.Tree.AtlasTab = uitab(GHandle.Main.Tree.TabGroup,'Title','Atlas', ...
-    'BackgroundColor', GHandle.Preference.Theme.backgroundColor, ...
-    'ForegroundColor',  textForegroundColor);
+
 
 % create the tree
 GHandle.Main.Tree.StudyTree = uiw.widget.Tree(...
