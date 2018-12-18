@@ -34,27 +34,27 @@ LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
 [pathT10CzT9Points, ~, pathT10CzT9relativeLength] = pathonmesh(meshPoints, T10, Cz , T9, nStep);
 main_RightLeft_Points = pointsrelpos(pathT10CzT9Points, pathT10CzT9relativeLength, arcMainPerc);
 LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
-%% find 
+%% find
 
 
 for ii = 1 : lateralBand
-	LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
-	[tempPoints, ~, tempLength] = pathonmesh(meshPoints, main_BackFront_Points(end-ii+1,:), main_RightLeft_Points(end-ii+1,:) , main_BackFront_Points(ii,:), nStep);
-	tenFive.coord(:,ii,:) = pointsrelpos(tempPoints, tempLength, arcMainPerc);
+    LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
+    [tempPoints, ~, tempLength] = pathonmesh(meshPoints, main_BackFront_Points(end-ii+1,:), main_RightLeft_Points(end-ii+1,:) , main_BackFront_Points(ii,:), nStep);
+    tenFive.coord(:,ii,:) = pointsrelpos(tempPoints, tempLength, arcMainPerc);
 end
 for ii = 1 : lateralBand
-	LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
-	[tempPoints, ~, tempLength] = pathonmesh(meshPoints, main_BackFront_Points(end-ii+1,:), main_RightLeft_Points(ii,:) , main_BackFront_Points(ii,:), nStep);
-	tenFive.coord(:,end-ii+1,:) = pointsrelpos(tempPoints, tempLength, arcMainPerc);
+    LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
+    [tempPoints, ~, tempLength] = pathonmesh(meshPoints, main_BackFront_Points(end-ii+1,:), main_RightLeft_Points(ii,:) , main_BackFront_Points(ii,:), nStep);
+    tenFive.coord(:,end-ii+1,:) = pointsrelpos(tempPoints, tempLength, arcMainPerc);
 end
 secondaryBackFrontPoints = tenFive.coord(:,lateralBand,:);
 secondaryFrontBackPoints = tenFive.coord(:,end - lateralBand + 1,:);
 %% Landmarks for arcs
 
 for ii = 1+(3+5*intraPoint/2) : 1 : matDimension-(3 + 5*intraPoint/2) %controlla e' sbagliato
-	LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
-	[tempPoints, ~, tempLength] = pathonmesh(meshPoints, secondaryFrontBackPoints(ii,:), main_BackFront_Points(end - ii + 1,:) , secondaryBackFrontPoints(ii,:), nStep);
-	tenFive.coord(ii, lateralBand+1 : end-lateralBand ,:) = pointsrelpos(tempPoints, tempLength, arcSecondaryPerc);
+    LoadingBarAtlas.loadingPerc = LoadingBarAtlas.loadingPerc + dPerc;
+    [tempPoints, ~, tempLength] = pathonmesh(meshPoints, secondaryFrontBackPoints(ii,:), main_BackFront_Points(end - ii + 1,:) , secondaryBackFrontPoints(ii,:), nStep);
+    tenFive.coord(ii, lateralBand+1 : end-lateralBand ,:) = pointsrelpos(tempPoints, tempLength, arcSecondaryPerc);
 end
 
 tempNameMatrix = repmat({''},21*(intraPoint+1),21*(intraPoint+1));
@@ -98,7 +98,7 @@ tempname = repmat({'AFp7h'; 'AFp5'; 'AFp5h'; 'AFp3'; 'AFp3h'; 'AFp1'; 'AFp1h'; .
     'AFpz'; 'AFp2h'; 'AFp2'; 'AFp4h'; 'AFp4'; 'AFp6h'; 'AFp6'; 'AFp8h'}',mainDim,1);
 tempname = repmat(tempname(:),1,mainDim);
 tempNameMatrix(1+3*mainDim : 1 : 4*mainDim,1+3*mainDim : 1 : 18*mainDim) = tempname';
- 
+
 tempname = repmat({'AF7h'; 'AF5'; 'AF5h'; 'AF3'; 'AF3h'; 'AF1'; 'AF1h'; ...
     'AFz'; 'AF2h'; 'AF2'; 'AF4h'; 'AF4'; 'AF6h'; 'AF6'; 'AF8h'}',mainDim,1);
 tempname = repmat(tempname(:),1,mainDim);
@@ -113,7 +113,7 @@ tempname = repmat({'F7h'; 'F5'; 'F5h'; 'F3'; 'F3h'; 'F1'; 'F1h'; ...
     'Fz'; 'F2h'; 'F2'; 'F4h'; 'F4'; 'F6h'; 'F6'; 'F8h'}',mainDim,1);
 tempname = repmat(tempname(:),1,mainDim);
 tempNameMatrix(1+6*mainDim : 1 : 7*mainDim,1+3*mainDim : 1 : 18*mainDim) = tempname';
- 
+
 tempname = repmat({'FFT7h'; 'FFC5'; 'FFC5h'; 'FFC3'; 'FFC3h'; 'FFC1'; 'FFC1h'; ...
     'FFCz'; 'FFC2h'; 'FFC2'; 'FFC4h'; 'FFC4'; 'FFC6h'; 'FFC6'; 'FFT8h'}',mainDim,1);
 tempname = repmat(tempname(:),1,mainDim);
@@ -138,7 +138,7 @@ tempname = repmat({'TTP7h'; 'CCP5'; 'CCP5h'; 'CCP3'; 'CCP3h'; 'CCP1'; 'CCP1h'; .
     'CCPz'; 'CCP2h'; 'CCP2'; 'CCP4h'; 'CCP4'; 'CCP6h'; 'CCP6'; 'TTP8h'}',mainDim,1);
 tempname = repmat(tempname(:),1,mainDim);
 tempNameMatrix(1+11*mainDim : 1 : 12*mainDim,1+3*mainDim : 1 : 18*mainDim) = tempname';
- 
+
 tempname = repmat({'TP7h'; 'CP5'; 'CP5h'; 'CP3'; 'CP3h'; 'CP1'; 'CP1h'; ...
     'CPz'; 'CP2h'; 'CP2'; 'CP4h'; 'CP4'; 'CP6h'; 'CP6'; 'TP8h'}',mainDim,1);
 tempname = repmat(tempname(:),1,mainDim);
@@ -169,19 +169,45 @@ tempname = repmat({'POO7h'; 'POO5'; 'POO5h'; 'POO3'; 'POO3h'; 'POO1'; 'POO1h'; .
 tempname = repmat(tempname(:),1,mainDim);
 tempNameMatrix(1+17*mainDim : 1 : 18*mainDim,1+3*mainDim : 1 : 18*mainDim) = tempname';
 
-postFixMatrix = {'_L2F2', '_L1F2', '_F2', '_R1F2', '_R2F2';...
-    '_L2F1', '_L1F1', '_F1', '_R1F1', '_R2F1';...
-    '_L2', '_L1', '', '_R1', '_R2';...
-    '_L2B1', '_L1B1', '_B1', '_R1B1', '_R2B1';...
-    '_L2B2', '_L1B2', '_B2', '_R1B2', '_R2B2'}; % left 2 right
-
-
-
+postFixMatrix = post_fix_matrix_maker(nPonintAnyDirections); % left 2 right
 
 postFixMatrix = repmat(postFixMatrix,[21,21]);
 tempNameMatrixWhitPostFix = strcat(tempNameMatrix,postFixMatrix);
 tempNameMatrixWhitPostFix(cellfun('isempty',tempNameMatrix)) = {''};
 
-tenFive.names = tempNameMatrixWhitPostFix(3:103,3:103);
+tenFive.names = tempNameMatrixWhitPostFix(1+nPonintAnyDirections : matDimension + nPonintAnyDirections,1+nPonintAnyDirections : matDimension + nPonintAnyDirections);
 end
+
+function postFixMatrix = post_fix_matrix_maker(nPonintAnyDirections)
+
+postFixMatrix = cell(1+2*nPonintAnyDirections, 1+2*nPonintAnyDirections);
+postFixMatrix(:) = {''};
+for ii = -nPonintAnyDirections : 1 : nPonintAnyDirections
+    iIdx = ii+nPonintAnyDirections+1;
+    if ii < 0
+        tempIStr = ['_F' num2str(-ii)];
+    elseif ii > 0
+        tempIStr = ['_B' num2str(ii)];
+    else
+        tempIStr = '';
+    end
+    for jj = -nPonintAnyDirections : 1 : nPonintAnyDirections
+        jIdx = jj+nPonintAnyDirections+1;
+        if jj < 0
+            tempJStr = ['_L' num2str(-jj)];
+        elseif jj > 0
+            tempJStr = ['_R' num2str(jj)];
+        else
+            tempJStr = '';
+        end
+        postFixMatrix{iIdx,jIdx} = [tempJStr tempIStr];
+    end
+end
+
+end
+
+
+
+
+
 
