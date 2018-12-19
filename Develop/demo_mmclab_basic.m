@@ -9,7 +9,7 @@
 %pos = [-22.2521, -24.2601, 44.9243];
 
 %% 1
-cfg1.nphoton = 1e6;
+cfg1.nphoton = 5e8;
 cfg1.node = He.node(:,1:3);
 cfg1.face = He.face;
 cfg1.elem = He.elem;
