@@ -264,7 +264,7 @@ if ~isempty(Event.Nodes) % click on a node
         case 'open'
             if idtype(Event.Nodes.Value, 'Analysis')
                 makeanalysiscurrent(GHandle, Event.Nodes.Value);
-                viewer2(GHandle);
+                GHandle.Viewer =   [GHandle.Viewer ViewerWindow(GHandle)];
             end
             
         case 'alt'
@@ -293,7 +293,7 @@ measureId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
 DBMeasure = GHandle.DataBase.findid(measureId);
 analysisId = DBMeasure.analysisId(1,:);
 makeanalysiscurrent(GHandle, analysisId);
-methodwindow(GHandle)
+GHandle.MethodWindow = MetodWW(GHandle.MethodWindow.MethodList);
 end
 
 function modify(~, ~, GHandle)
