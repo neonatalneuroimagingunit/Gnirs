@@ -73,10 +73,11 @@ GHandle.Viewer(vIdx).mainFigure = figure('Position', viewerC.figurePosition, ...
 viewerpanel(viewerC,GHandle, vIdx);
 viewermenu(viewerC,GHandle, vIdx);
 vewertoolbar(viewerC,GHandle, vIdx);
-viewerpopulatepreferences(viewerC, GHandle, vIdx);
+
 viewertime(viewerC, GHandle, vIdx);
 viewerfrequency(viewerC, GHandle, vIdx);
 viewertimefrequency(viewerC, GHandle, vIdx);
+viewerpopulatepreferences(viewerC, GHandle, vIdx);
 
 %% Populate figure
 if ~isempty(viewerC.Probe)
