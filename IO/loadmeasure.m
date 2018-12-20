@@ -34,7 +34,14 @@ NewAnalysis = NirsAnalysis(GHandle.CurrentDataSet.Analysis,...
 DataBase = GHandle.DataBase.add(NewAnalysis);
 GHandle.DataBase = DataBase;
 
-Data = GHandle.CurrentDataSet.Data;
+Data.Time = GHandle.CurrentDataSet.Data;
+
+updateRate = GHandle.CurrentDataSet.Measure.InstrumentType.UpdateRate;  %Load update rate
+[power, freq] = pspectrum(Data.Time{:,2:end}, updateRate);      % Calculate The spectrum
+freqTable = array2table([freq, power], ...
+    'VariableNames', [{'Frequency'}, Data.Time.Properties.VariableNames(2:end)]);
+Data.Frequency = freqTable;
+
 path = GHandle.DataBase.Analysis(end).path;
 if ~isempty(Data)
     save(path,'Data','-append')
