@@ -72,7 +72,7 @@ function sortingmethod_callback(~, Event, obj)
 sortingmethod = Event.NewValue;
 colors = sorting_colors((width(obj.Dataset.Data.Time)-1), sortingmethod);
 obj.WatchList.colorLine = colors;
-obj.WatchList.edvLine = ones(size(obj.WatchList.edvLine));
+obj.WatchList.edvLine = true(size(obj.WatchList.edvLine));
 end
 
 function typeselector_callback(Source, ~, obj)
