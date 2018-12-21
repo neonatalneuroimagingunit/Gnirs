@@ -277,7 +277,7 @@ end
 
 
 function resize_lr(Div, ~, obj,LPan,RPan)
-obj.MainFigure.WindowButtonMotionFcn = @(h,e)panel_resizing_lr(h,e,LPan,Div,RPan, obj);
+obj.MainFigure.WindowButtonMotionFcn = @(h,e)panel_resizing_lr(h,e,LPan,Div,RPan);
 obj.MainFigure.WindowButtonUpFcn = @(h,e)stop_resizing(h,e);
 end
 function panel_resizing_lr(h,~,LPan,Div,RPan)

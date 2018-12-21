@@ -1,4 +1,4 @@
-function viewerselectedtrack(~,evnt, GHandle, vIdx, viewerC)
+function setselectedtrack(obj, ~, evnt)
 
 colorBackground = [200 200 200]/255;
 alphaBackground = 0.03;
@@ -22,98 +22,98 @@ else
     linewidthBackground = lineWidth/linewidthFactor;
 end
 
-color = GHandle.Viewer(vIdx).WatchList.colorLine;
+color = obj.WatchList.colorLine;
 
 for lineIdx = 1:1:length(edvLine)
     if (edvLine(lineIdx))
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).LineWidth = lineWidth;
+        obj.Panel.Plot.Time.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
+        obj.Panel.Plot.Time.Lines(lineIdx).LineWidth = lineWidth;
         
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).LineWidth = lineWidth;
+        obj.Panel.Plot.Frequency.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
+        obj.Panel.Plot.Frequency.Lines(lineIdx).LineWidth = lineWidth;
     else
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).Color = [colorBackground, alphaBackground];
-        GHandle.Viewer(vIdx).PlotPanel.Time.Lines(lineIdx).LineWidth = linewidthBackground;
+        obj.Panel.Plot.Time.Lines(lineIdx).Color = [colorBackground, alphaBackground];
+        obj.Panel.Plot.Time.Lines(lineIdx).LineWidth = linewidthBackground;
         
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).Color = [colorBackground, alphaBackground];
-        GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(lineIdx).LineWidth = linewidthBackground;
+        obj.Panel.Plot.Frequency.Lines(lineIdx).Color = [colorBackground, alphaBackground];
+        obj.Panel.Plot.Frequency.Lines(lineIdx).LineWidth = linewidthBackground;
     end
 end
 
 if sum(edvLine) == 1
-    GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes.Visible = 'on';
-    cla(GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes);
-    GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.Text.Visible = 'off';
-    GHandle.Viewer(vIdx).WatchList.timefreq2Plot = edvLine;
+    obj.Panel.Plot.TimeFrequency.MainAxes.Visible = 'on';
+    cla(obj.Panel.Plot.TimeFrequency.MainAxes);
+    obj.Panel.Plot.TimeFrequency.Text.Visible = 'off';
+    obj.WatchList.timefreq2Plot = edvLine;
     
-    GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).LineWidth = linewidthForeground;
-    GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(edvLine).LineWidth = linewidthForeground;
+    obj.Panel.Plot.Time.Lines(edvLine).LineWidth = linewidthForeground;
+    obj.Panel.Plot.Frequency.Lines(edvLine).LineWidth = linewidthForeground;
 else
-    GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes.Visible = 'off';
-    cla(GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes);
-    GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.Text.Visible = 'on';
+    obj.Panel.Plot.TimeFrequency.MainAxes.Visible = 'off';
+    cla(obj.Panel.Plot.TimeFrequency.MainAxes);
+    obj.Panel.Plot.TimeFrequency.Text.Visible = 'on';
 end
-uistack(GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine),'top');
-uistack(GHandle.Viewer(vIdx).PlotPanel.Frequency.Lines(edvLine),'top');
+uistack(obj.Panel.Plot.Time.Lines(edvLine),'top');
+uistack(obj.Panel.Plot.Frequency.Lines(edvLine),'top');
 
-xRange = GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.XLim;
-if  GHandle.Viewer(vIdx).PreferencePanel.YAutoscale.Value
-    xVal = cat(1,GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).XData)';
-    yVal = cat(1,GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).YData)';
+xRange = obj.Panel.Plot.Time.MainAxes.XLim;
+if  obj.Panel.Preference.CheckBoxYAutoscale.Value
+    xVal = cat(1,obj.Panel.Plot.Time.Lines(edvLine).XData)';
+    yVal = cat(1,obj.Panel.Plot.Time.Lines(edvLine).YData)';
     mask = any((xVal>xRange(1) & xVal<xRange(2)),2);
     yLimit = [min(yVal(mask,:),[],'all'), max(yVal(mask,:),[],'all')];
-    GHandle.Viewer(vIdx).PlotPanel.Time.MainAxes.YLim = yLimit;
-    nEvents = length(GHandle.Viewer(vIdx).PlotPanel.Time.Events);
+    obj.Panel.Plot.Time.MainAxes.YLim = yLimit;
+    nEvents = length(obj.Panel.Plot.Time.Events);
     
     for iEvents = 1:1:nEvents
-        GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEvents).YData = ...
-            eventRatio.*yLimit(2).*ones( [1, length(GHandle.Viewer(vIdx).PlotPanel.Time.Events(iEvents).XData)]);
+        obj.Panel.Plot.Time.Events(iEvents).YData = ...
+            eventRatio.*yLimit(2).*ones( [1, length(obj.Panel.Plot.Time.Events(iEvents).XData)]);
     end
 end
 
-GHandle.Viewer(vIdx).WatchList.timeLim = xRange;
+obj.WatchList.timeLim = xRange;
 
 %% Update probe
-if ~isempty(viewerC.Probe)
+if ~isempty(obj.Dataset.Probe)
     if all(edvLine)
-        set(GHandle.Viewer(vIdx).ProbePanel.Source, 'MarkerSize', notEdvMarkerSize);
-        set(GHandle.Viewer(vIdx).ProbePanel.Detector, 'MarkerSize', notEdvMarkerSize);
-        set(GHandle.Viewer(vIdx).ProbePanel.Channel, 'LineWidth', notEdvLineWidth, 'Color', notEdvColor);
+        set(obj.Panel.Probe.Source, 'MarkerSize', notEdvMarkerSize);
+        set(obj.Panel.Probe.Detector, 'MarkerSize', notEdvMarkerSize);
+        set(obj.Panel.Probe.Channel, 'LineWidth', notEdvLineWidth, 'Color', notEdvColor);
     else
-        srcTag = {GHandle.Viewer(vIdx).ProbePanel.Source.Tag}';
-        detTag = {GHandle.Viewer(vIdx).ProbePanel.Detector.Tag}';
-        chTag = strcat(srcTag(viewerC.Probe.channel.pairs(:,1)), '_', detTag(viewerC.Probe.channel.pairs(:,2)));
-        lineTag = {GHandle.Viewer(vIdx).PlotPanel.Time.Lines(edvLine).Tag}';
+        srcTag = {obj.Panel.Probe.Source.Tag}';
+        detTag = {obj.Panel.Probe.Detector.Tag}';
+        chTag = strcat(srcTag(obj.Dataset.Probe.channel.pairs(:,1)), '_', detTag(obj.Dataset.Probe.channel.pairs(:,2)));
+        lineTag = {obj.Panel.Plot.Time.Lines(edvLine).Tag}';
         for iSource = 1:length(srcTag)
-            maxSrc = sum(contains({GHandle.Viewer(vIdx).PlotPanel.Time.Lines.Tag}, srcTag(iSource)));
+            maxSrc = sum(contains({obj.Panel.Plot.Time.Lines.Tag}, srcTag(iSource)));
             mask = contains(lineTag, srcTag(iSource));
             if sum(mask) == maxSrc
-                GHandle.Viewer(vIdx).ProbePanel.Source(iSource).MarkerSize = edvMarkerSize;
+                obj.Panel.Probe.Source(iSource).MarkerSize = edvMarkerSize;
             else
-                GHandle.Viewer(vIdx).ProbePanel.Source(iSource).MarkerSize = notEdvMarkerSize;
+                obj.Panel.Probe.Source(iSource).MarkerSize = notEdvMarkerSize;
             end
         end
         for iDetector = 1:length(detTag)
-            maxDet = sum(contains({GHandle.Viewer(vIdx).PlotPanel.Time.Lines.Tag}, detTag(iDetector)));
+            maxDet = sum(contains({obj.Panel.Plot.Time.Lines.Tag}, detTag(iDetector)));
             mask = contains(lineTag, detTag(iDetector));
             if sum(mask) == maxDet
-                GHandle.Viewer(vIdx).ProbePanel.Detector(iDetector).MarkerSize = edvMarkerSize;
+                obj.Panel.Probe.Detector(iDetector).MarkerSize = edvMarkerSize;
             else
-                GHandle.Viewer(vIdx).ProbePanel.Detector(iDetector).MarkerSize = notEdvMarkerSize;
+                obj.Panel.Probe.Detector(iDetector).MarkerSize = notEdvMarkerSize;
             end
         end
         for iChannel = 1:length(chTag)
             mask = contains(lineTag,chTag(iChannel));
             if sum(mask)>1
-                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).LineWidth = edvLineWidth;
+                obj.Panel.Probe.Channel(iChannel).LineWidth = edvLineWidth;
             else
-                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).LineWidth = notEdvLineWidth;
+                obj.Panel.Probe.Channel(iChannel).LineWidth = notEdvLineWidth;
             end
             
             if sum(mask)== 1
-                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = GHandle.Viewer(vIdx).PlotPanel.Time.Lines(idxLine(mask)).Color;
+                obj.Panel.Probe.Channel(iChannel).Color = obj.Panel.Plot.Time.Lines(idxLine(mask)).Color;
             else
-                GHandle.Viewer(vIdx).ProbePanel.Channel(iChannel).Color = notEdvColor;
+                obj.Panel.Probe.Channel(iChannel).Color = notEdvColor;
             end
         end
     end
@@ -121,11 +121,11 @@ end
 
 %% Update channel table
 % tableIdx = find(contains(GHandle.Viewer.DataPanel.TrackTable.Data(:,end),{GHandle.Viewer.PlotPanel.Time.Lines(edvLine).Tag}));
-for iRow = 1:size(GHandle.Viewer.DataPanel.TrackTable.Data,1)
-    lineMask = strcmp({GHandle.Viewer.PlotPanel.Time.Lines.Tag}, GHandle.Viewer.DataPanel.TrackTable.Data(iRow,end));
-    for iCol = 1:5
-        GHandle.Viewer.DataPanel.TrackTable.setCellColor(iRow,iCol,GHandle.Viewer.PlotPanel.Time.Lines(lineMask).Color);
-    end
-end
+% for iRow = 1:size(obj.Panel.Data.Track.Table.Data,1)
+%     lineMask = strcmp({obj.Panel.Plot.Time.Lines.Tag}, obj.Panel.Data.Track.Table.Data(iRow,end));
+%     for iCol = 1:5
+%         GHandle.Viewer.DataPanel.Track.Table.setCellColor(iRow,iCol,GHandle.Viewer.PlotPanel.Time.Lines(lineMask).Color);
+%     end
+% end
 end
 

@@ -17,6 +17,7 @@ cla(obj.Panel.Plot.Time.SmallAxes);
 %% Plot events
 yMax = obj.Panel.Plot.Time.MainAxes.YLim(2);
 nEventType = size(obj.Dataset.Event.Dictionary,1);
+obj.Panel.Plot.Time.Events = [];
 for iEventType = 1 : nEventType
     eventMask = obj.Dataset.Event.type == iEventType;
     obj.Panel.Plot.Time.Events(iEventType) = stem(obj.Panel.Plot.Time.MainAxes,...

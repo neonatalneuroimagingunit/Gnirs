@@ -26,7 +26,7 @@ obj.Toolbar.toggletool3 = uitoggletool(obj.Toolbar.MainToolbar,...
 end
 
 function lockmultiplewiewer_callback(handle, ~, obj)
-state = handle.State;
-state
-obj
+    for VieverList = obj.GHandle.Viewer
+        VieverList.Toolbar.LockMultipleWiewer.State = handle.State;
+    end
 end

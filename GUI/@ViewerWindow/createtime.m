@@ -215,12 +215,12 @@ switch eventData.EventName
                 xmax = obj.WatchList.timeLim(2) + big_step;
                 
             case 'F'
-                xmin = obj.Data.Time.Time(1);
+                xmin = obj.Dataset.Data.Time.Time(1);
                 xmax = obj.WatchList.timeLim(2);
                 
             case 'L'
                 xmin = obj.WatchList.timeLim(1);
-                xmax = obj.Data.Time.Time(end);
+                xmax = obj.Dataset.Data.Time.Time(end);
                 
             case 'max'
                 xmin = obj.WatchList.timeLim(1);
@@ -246,9 +246,9 @@ switch eventData.EventName
         xmin = eventData.IntersectionPoint(1) - xrange/2;
         xmax = xmin + xrange;
 end
-if strcmp(obj.LockMultipleWiewer.State,'on')
-    for vIdx = GHandle.Temp.vIdxList'
-        obj.WatchList.timeLim = [xmin , xmax];
+if strcmp(obj.Toolbar.LockMultipleWiewer.State,'on')
+    for VieverList = obj.GHandle.Viewer
+        VieverList.WatchList.timeLim = [xmin , xmax];
     end
 else
     obj.WatchList.timeLim = [xmin , xmax];
