@@ -67,9 +67,10 @@ classdef ViewerWindow < handle & matlab.mixin.SetGet
             obj.loadpreference;
             obj.loaddataset;
             
+            obj.createpanel;
             obj.createmenu;
             obj.createtoolbar;
-            obj.createpanel;
+            
             
             obj.activatelistener;
             

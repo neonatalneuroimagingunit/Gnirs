@@ -244,9 +244,9 @@ switch eventData.EventName
         xmax = obj.WatchList.freqLim(2) - obj.WatchList.freqLim(1) + xmin;
 end
 
-if strcmp(obj.LockMultipleWiewer.State,'on')
-    for vIdx = GHandle.Temp.vIdxList'
-        obj.WatchList.freqLim = [xmin , xmax];
+if strcmp(obj.Toolbar.LockMultipleWiewer.State,'on')
+    for VieverList = obj.GHandle.Viewer
+        VieverList.WatchList.freqLim = [xmin , xmax];
     end
 else
     obj.WatchList.freqLim = [xmin , xmax];

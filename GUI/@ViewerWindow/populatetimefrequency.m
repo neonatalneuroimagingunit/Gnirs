@@ -1,18 +1,18 @@
-function viewerpopulatetimefrequency(~, eventData, GHandle, vIdx, viewerC)
+function populatetimefrequency(obj, ~, eventData)
 
 maskLine = eventData.AffectedObject.timefreq2Plot;
 
-tagLine = GHandle.Viewer(vIdx).PlotPanel.Time.Lines(maskLine).Tag;
+tagLine =  obj.Panel.Plot.Time.Lines(maskLine).Tag;
 
-[sp,fp,tp] = pspectrum(viewerC.Data.Time.(tagLine), viewerC.updateRate, 'spectrogram');
+[sp,fp,tp] = pspectrum(obj.Dataset.Data.Time.(tagLine), obj.Dataset.updateRate, 'spectrogram');
 
-GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.Surface = surf(tp, fp, sp, sp,...
-		'Parent', GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes,...
+obj.Panel.Plot.TimeFrequency.Surface = surf(tp, fp, sp, sp,...
+		'Parent', obj.Panel.Plot.TimeFrequency.MainAxes,...
 		'Visible', 'on',...
 		'EdgeColor', 'none',...
 		'FaceColor', 'interp');
 	
-GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes.XLabel.String = 'Time (s)';
-GHandle.Viewer(vIdx).PlotPanel.TimeFrequency.MainAxes.YLabel.String = 'Frequency (Hz)';
+obj.Panel.Plot.TimeFrequency.MainAxes.XLabel.String = 'Time (s)';
+obj.Panel.Plot.TimeFrequency.MainAxes.YLabel.String = 'Frequency (Hz)';
 end
 
