@@ -301,7 +301,7 @@ GHandle.TempWindow.ChannelList.CellEditCallback = temp2;
 end
 
 function save_probe(~, ~, GHandle)
-probeName = GHandle.TempWindow.ProbeName.Value;
+probeName = GHandle.TempWindow.ProbeName.String;
 note = GHandle.TempWindow.Note.Value;
 atlasID = GHandle.TempWindow.SelectedAtlas.id;
 landMark = GHandle.TempWindow.SelectedAtlas.LandMarks;
