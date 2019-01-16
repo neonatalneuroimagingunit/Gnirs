@@ -6,13 +6,9 @@ classdef NirsProbe
         id(1,:) char
         
         atlasId(1,:) char
-        
         name(1,:) char
-        
         source(1,1) struct
-        
-        detector(1,1) struct
-        
+        detector(1,1) struct 
         channel(1,1) struct
         
         note(1,:) char

@@ -9,6 +9,8 @@ classdef GDBProbe
         measureId char
         atlasId char
         path(1,:) char
+        
+        forwardFlag(1,1) logical
     end
     
     
@@ -18,6 +20,7 @@ classdef GDBProbe
     
     methods
         Probe = load(DBProbe)
+        ForwardSymulation = loadforward(DBProbe)
         DBProbe = modify(DBProbe,NewProbe)
         DBProbe = substitute(DBProbe,Probe)
     end
