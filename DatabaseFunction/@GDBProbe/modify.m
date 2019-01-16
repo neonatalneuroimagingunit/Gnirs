@@ -1,6 +1,5 @@
 function DBProbe = modify(DBProbe,NewProbe)
 
-%ADDMODIFYSUBJECT add or modify a subject present in the database
 
 
 	if (strcmp(DBProbe.id,NewProbe.id) || isempty(NewProbe.id))

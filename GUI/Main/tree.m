@@ -256,17 +256,22 @@ end
 
 function clickcallback(~, Event, GHandle)
 if ~isempty(Event.Nodes) % click on a node
-    switch Event.SelectionType
-        
+    switch Event.SelectionType    
         case 'normal'
-            populatedisplay(Event.Nodes.Value, GHandle);
-            
+            populatedisplay(Event.Nodes.Value, GHandle);    
         case 'open'
             if idtype(Event.Nodes.Value, 'Analysis')
                 makeanalysiscurrent(GHandle, Event.Nodes.Value);
                 GHandle.Viewer =   [GHandle.Viewer ViewerWindow(GHandle)];
+            elseif idtype(Event.Nodes.Value, 'Probe')
+                DBProbe = GHandle.DataBase.findid(Event.Nodes.Value);
+                GHandle.CurrentDataSet.Probe = DBProbe.load;
+                DBAtlas = GHandle.DataBase.findid(DBProbe.atlasId);
+                GHandle.CurrentDataSet.Atlas = DBAtlas.load;
+                Forward = DBProbe.loadforward;
+                
+                GHandle.TempWindow = ViewForward(GHandle, Forward);
             end
-            
         case 'alt'
             %'dxstudy
     end

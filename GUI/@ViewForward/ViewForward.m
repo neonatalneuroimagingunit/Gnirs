@@ -8,6 +8,8 @@ classdef ViewForward < handle & matlab.mixin.SetGet
     end
     
     properties
+        GHandle
+        
         MainFigure
         InfoPanel
         PlotPanel
@@ -62,11 +64,14 @@ classdef ViewForward < handle & matlab.mixin.SetGet
             obj.Position_ = Pos;
         end
         %% Constructor
-        function  obj = ViewForward(Forward, Probe, Atlas)
-            obj.Forward = Forward;
-            obj.Probe = Probe;
-            obj.Atlas = Atlas;
+        function  obj = ViewForward(GHandle, Forward)
+            obj.GHandle = GHandle;
             
+            obj.Probe = GHandle.CurrentDataSet.Probe;
+            obj.Atlas = GHandle.CurrentDataSet.Atlas;
+            
+            obj.Forward = Forward;
+
             obj.MainFigure = figure('Position', [100 100 1200 600]); % cambiare con g handle
             
             obj.InfoPanel = uipanel('Parent', obj.MainFigure,...
