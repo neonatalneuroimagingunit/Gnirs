@@ -183,6 +183,8 @@ save([GHandle.TempWindow.DBProbe.path,'ForwardSym'], 'ForwardSymulation');
 probeMask = GHandle.DataBase.Probe == GHandle.TempWindow.DBProbe;
 GHandle.DataBase.Probe(probeMask).forwardFlag = true;
 GHandle.DataBase.save;
+
+close(GHandle.TempWindow.SimulationFigure);
 end
 
 function close_figure(Handle, ~, GHandle)
