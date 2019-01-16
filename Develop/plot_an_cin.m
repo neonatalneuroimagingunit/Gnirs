@@ -1,4 +1,8 @@
 function PlotHandle = plot_an_cin(HeadMesh, varargin)
+
+% Smart version of plotmesh (can be used without iso2mesh)
+% Work in progress
+
 Parent
 SegmentationLabel
 Sensitivity
