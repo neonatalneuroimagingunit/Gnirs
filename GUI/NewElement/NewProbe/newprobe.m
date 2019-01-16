@@ -390,9 +390,10 @@ else
     GHandle.TempWindow.NewProbeAxes.CameraViewAngle = GHandle.TempWindow.Temp.CameraViewAngle;
     GHandle.TempWindow.Zoom = false;
     
-    idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
+    stepIdx = linspace(1,size(GHandle.TempWindow.Mask.LandMark,1),21);
     
-    GHandle.TempWindow.Mask.LandMark(setdiff(1:1:10201,idxM)) = false;
+    GHandle.TempWindow.Mask.LandMark(:) = false;
+    GHandle.TempWindow.Mask.LandMark(stepIdx,stepIdx) = true;
     tempplotfunc([],[],GHandle)
 end
 end

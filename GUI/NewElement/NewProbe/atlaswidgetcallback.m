@@ -52,11 +52,9 @@ if any(selectedAtlas)
             'Position',[100 0 50]);
         GHandle.TempWindow.light(2) = light(GHandle.TempWindow.NewProbeAxes,...
             'Position',[-100 0 50]);
-        
-        idxM = reshape(bsxfun(@plus,(1:5:101),(0:505:10100)'),1,[]);
-        idxM(cellfun(@isempty, Atlas.LandMarks.names(idxM))) = [];
-        
-        GHandle.TempWindow.Mask.LandMark(idxM) = true;
+
+        stepIdx = linspace(1,size(Atlas.LandMarks.coord,1),21);
+        GHandle.TempWindow.Mask.LandMark(stepIdx,stepIdx) = true;
         
         tempplotfunc([],[],GHandle)
         

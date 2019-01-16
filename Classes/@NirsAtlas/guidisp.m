@@ -160,7 +160,6 @@ GHandle.Main.Display.SubPanel(idx).White = trisurf(...
     'FaceColor',wmColor);
 
 stepIdx = linspace(1,size(Atlas.LandMarks.coord,1),21);
-
 x = reshape(Atlas.LandMarks.coord(stepIdx,stepIdx,1), [],1);
 y = reshape(Atlas.LandMarks.coord(stepIdx,stepIdx,2), [],1);
 z = reshape(Atlas.LandMarks.coord(stepIdx,stepIdx,3), [],1);
