@@ -1,7 +1,4 @@
-function tenFive = atlas105maker5(meshPoints,Nz,Iz,RPA,LPA,nStep,LoadingBarAtlas)
-
-nPointAnyDirections = 1;
-nStep = 100;
+function tenFive = atlas105maker5(meshPoints,Nz,Iz,RPA,LPA,nStep,nPointAnyDirections,LoadingBarAtlas)
 
 intraPoint = nPointAnyDirections*2;
 mainDim = intraPoint+1;

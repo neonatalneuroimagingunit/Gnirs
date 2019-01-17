@@ -79,7 +79,7 @@ set(GHandle.Main.Tree.ProbeTree,'UIContextMenu',GHandle.Main.Tree.ProbeContextMe
 
 % add the new atlas right click
 GHandle.Main.Tree.AtlasContextMenu = uicontextmenu('Parent',GHandle.Main.Figure);
-uimenu(GHandle.Main.Tree.AtlasContextMenu,'Label','AddAtlas','callback',{@newatlas2, GHandle});
+uimenu(GHandle.Main.Tree.AtlasContextMenu,'Label','AddAtlas','callback',{@newatlas, GHandle});
 set(GHandle.Main.Tree.AtlasTree,'UIContextMenu',GHandle.Main.Tree.AtlasContextMenu);
 
 
