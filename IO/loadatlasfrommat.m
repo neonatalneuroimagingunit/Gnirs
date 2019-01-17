@@ -5,6 +5,8 @@ pathFile = GHandle.TempWindow.location;
 fileList = dir(pathFile);
 
 Atlas = NirsAtlas;
+spam = [1,2,3,5,10];
+landmarkDensity = spam(GHandle.TempWindow.LandmarkDensityPopup.Value);
 
 fileIdx = contains({fileList.name}, 'GMSurfaceMesh');
 filematIdx = contains({fileList.name}, '.mat');
@@ -77,7 +79,7 @@ if any(fileIdx)
 	RPA = tempPoint(3,:);
 	LPA = tempPoint(4,:);
 	GHandle.TempWindow.loadingBar.LandMarks.loadingPerc = 0.1;
-	Atlas.LandMarks = atlas105maker5(Atlas.Scalp.node,Nz,Iz,RPA,LPA,500,GHandle.TempWindow.loadingBar.LandMarks);
+	Atlas.LandMarks = atlas105maker5(Atlas.Scalp.node,Nz,Iz,RPA,LPA,200,landmarkDensity,GHandle.TempWindow.loadingBar.LandMarks);
     GHandle.TempWindow.loadingBar.GrayMatter.loadingText = ['Done!' newline];
 	fclose(landmarkFile);
 end

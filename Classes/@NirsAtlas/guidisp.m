@@ -11,13 +11,11 @@ gmColor = [0.65 0.65 0.65];
 wmColor =  [1 1 1];
 scalpColor = [255 229 204]./255;
 landMarkColor = [1 0.2 0.2];
+landMarkColorSmall = [0.2 1 0.2];
 textFontSize = GHandle.Preference.Font.sizeM;
 
 idx = GHandle.Temp.idx;
 fontName = 'Arial'; %'Lobster Two';
-
-
-
 
 % create the figure and the editable field if is not specify
 if ~exist('editableField','var')
@@ -159,6 +157,20 @@ GHandle.Main.Display.SubPanel(idx).White = trisurf(...
     'EdgeColor','none',...
     'FaceColor',wmColor);
 
+x = reshape(Atlas.LandMarks.coord(:,:,1), [],1);
+y = reshape(Atlas.LandMarks.coord(:,:,2), [],1);
+z = reshape(Atlas.LandMarks.coord(:,:,3), [],1);
+landmarkNames = reshape(Atlas.LandMarks.names(:,:), [], 1);
+iMask = find(~cellfun('isempty', landmarkNames));
+GHandle.Main.Display.SubPanel(idx).LandMarkSmall = plot3(...
+    x(iMask), y(iMask), z(iMask),...
+    'MarkerSize',5,...
+    'LineStyle', 'none',...
+    'Visible', 'on',...
+    'Marker','none',...
+    'Color',landMarkColorSmall,...
+    'Parent', GHandle.Main.Display.SubPanel(idx).Axes);
+
 stepIdx = linspace(1,size(Atlas.LandMarks.coord,1),21);
 x = reshape(Atlas.LandMarks.coord(stepIdx,stepIdx,1), [],1);
 y = reshape(Atlas.LandMarks.coord(stepIdx,stepIdx,2), [],1);
@@ -220,9 +232,10 @@ function landmarkcheckbox_callback(~, evnt, GHandle , idx)
 
 if (evnt.Source.Value)
     GHandle.Main.Display.SubPanel(idx).LandMark.Marker = '.';
-    GHandle.Main.Display.SubPanel(idx).LandMark.Color = 'g';
+    GHandle.Main.Display.SubPanel(idx).LandMarkSmall.Marker = '.';
 else
     GHandle.Main.Display.SubPanel(idx).LandMark.Marker = 'none';
+    GHandle.Main.Display.SubPanel(idx).LandMarkSmall.Marker = 'none';
 end
 
 end
