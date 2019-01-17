@@ -106,6 +106,7 @@ switch objType
         end
         
         if Object2Add.flagVoxel
+            DataBase.Atlas(end).flagVoxel = true;
             voxelPath = fullfile(DBObject.path, 'Voxel');
             Voxel = Data2Save.Voxel;
             save(voxelPath, 'Voxel')
@@ -113,6 +114,7 @@ switch objType
         end
         
         if Object2Add.flagHead
+            DataBase.Atlas(end).flagHead = true;
             headPath = fullfile(DBObject.path, 'HeadAtlas');
             HeadAtlas = Data2Save.HeadAtlas;
             save(headPath, 'HeadAtlas')

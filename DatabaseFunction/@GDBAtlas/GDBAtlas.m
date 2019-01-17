@@ -9,10 +9,14 @@ classdef GDBAtlas
 		subjectId(1,:) char
 		tag(1,:) char
 		path(1,:) char
+        
+        flagVoxel (1,1) logical = false;
+		flagHead (1,1) logical = false;
 	end
 	
 	methods
  		Atlas = load(DBAtlas)
+        HeadAtlas = loadhead(DBAtlas)
 %		DBAtlas = modify(DBAtlas,NewAtlas)
  		DBAtlas = substitute(DBAtlas,Atlas)
 	end

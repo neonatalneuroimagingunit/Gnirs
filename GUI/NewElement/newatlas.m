@@ -2,7 +2,6 @@ function newatlas(~, ~, GHandle)
 
 	figureSize = GHandle.Preference.Figure.sizeMedium;
 
-
 	GHandle.TempWindow.NewAtlasFigure = figure(...
 	'position', figureSize,...
     'Resize', 'on',...
@@ -191,14 +190,14 @@ function load_atlas(~,~, GHandle)
 	GHandle.TempWindow.loadingBar.HeadVolume = LoadingBar;
 	GHandle.TempWindow.loadingBar.LandMarks = LoadingBar;
 	
-	%lissener for perc bar
+	% Listener for perc bar
 	addlistener(GHandle.TempWindow.loadingBar.GrayMatter,'loadingPerc','PostSet',@(src,evnt)loading_graymatter(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.WhiteMatter,'loadingPerc','PostSet',@(src,evnt)loading_whitematter(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.Scalp,'loadingPerc','PostSet',@(src,evnt)loading_scalp(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.Voxel,'loadingPerc','PostSet',@(src,evnt)loading_voxel(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.HeadVolume,'loadingPerc','PostSet',@(src,evnt)loading_headvolume(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.LandMarks,'loadingPerc','PostSet',@(src,evnt)loading_landmarks(src,evnt,GHandle));
-	% lissener for log text
+	% Listener for log text
 	addlistener(GHandle.TempWindow.loadingBar.GrayMatter,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.WhiteMatter,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
 	addlistener(GHandle.TempWindow.loadingBar.Scalp,'loadingText','PostSet',@(src,evnt)add_log(src,evnt,GHandle));
@@ -297,7 +296,7 @@ end
 
 function add_log(~,evnt,GHandle)
 
-	GHandle.TempWindow.NewAtlasNote.Value = [GHandle.TempWindow.NewAtlasNote.Value newline evnt.AffectedObject.loadingText];
+	GHandle.TempWindow.NewAtlasNote.Value = [GHandle.TempWindow.NewAtlasNote.Value, evnt.AffectedObject.loadingText];
 	drawnow;
 	
 end

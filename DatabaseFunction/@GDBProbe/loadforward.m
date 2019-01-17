@@ -1,9 +1,9 @@
-function ForwardSymulation = loadforward(DBProbe)
+function ForwardSimulation = loadforward(DBProbe)
 if DBProbe.forwardFlag
-    temp = load([DBProbe.path, 'ForwardSym'],'ForwardSymulation');
-    ForwardSymulation = temp.ForwardSymulation;
+    temp = load([DBProbe.path, 'ForwardSim'],'ForwardSimulation');
+    ForwardSimulation = temp.ForwardSimulation;
 else
-    warning('there is no symulation')
-    ForwardSymulation = NirsForward;
+    warning('No forward simulation found')
+    ForwardSimulation = NirsForward;
 end
 end
