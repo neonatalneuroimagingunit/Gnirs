@@ -11,6 +11,7 @@ classdef NirsForward
         detDir
         srcFlux
         detFlux
+        Settings
         
         note
     end
@@ -51,6 +52,9 @@ classdef NirsForward
                             
                         case 'srcflux'
                             obj.srcFlux = varargin{i+1};
+                            
+                        case 'settings'
+                            obj.Settings = varargin{i+1};
                             
                         case 'detflux'
                             obj.detFlux = varargin{i+1};
