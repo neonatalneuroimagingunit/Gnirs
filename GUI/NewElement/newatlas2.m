@@ -489,7 +489,7 @@ drawnow;
 end
 
 function add_log(~, evnt, GHandle)
-GHandle.TempWindow.LogName.String = [GHandle.TempWindow.LogName.String, evnt.AffectedObject.loadingText];
+GHandle.TempWindow.LogName.String = char(GHandle.TempWindow.LogName.String, evnt.AffectedObject.loadingText);
 drawnow;
 end
 
