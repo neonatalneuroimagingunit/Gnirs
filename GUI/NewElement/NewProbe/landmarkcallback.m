@@ -22,16 +22,13 @@ if GHandle.TempWindow.Zoom
     
     GHandle.TempWindow.NewProbeAxes.CameraViewAngle = 1;
     GHandle.TempWindow.NewProbeAxes.CameraTarget = Evnt.IntersectionPoint;
-    if GHandle.TempWindow.AtlasWidget.SelectedIndex == 1
-        % toglierlo appena abbiamo il 2d  
-    else
-        iPointMin = max(iPoint-stepDim,1);
-        iPointMax = min(iPoint+stepDim,matDimension);
-        jPointMin = max(jPoint-stepDim,1);
-        jPointMax = min(jPoint+stepDim,matDimension);
-        
-        GHandle.TempWindow.Mask.LandMark(iPointMin:iPointMax,jPointMin:jPointMax) = true;
-    end
+    
+    iPointMin = max(iPoint-stepDim,1);
+    iPointMax = min(iPoint+stepDim,matDimension);
+    jPointMin = max(jPoint-stepDim,1);
+    jPointMax = min(jPoint+stepDim,matDimension);
+    
+    GHandle.TempWindow.Mask.LandMark(iPointMin:iPointMax,jPointMin:jPointMax) = true;
     GHandle.TempWindow.Zoom = false;
 else
     GHandle.TempWindow.SourceList.Value = [];
@@ -57,8 +54,8 @@ else
         if GHandle.TempWindow.MirrorProbe.Value
             GHandle.TempWindow.Mask.LandMark(iPoint,end-jPoint+1) = false;
             GHandle.TempWindow.Mask.Source(iPoint,end-jPoint+1) = true;
-        end  
-    end 
+        end
+    end
 end
 tempplotfunc([],[],GHandle)
 end
