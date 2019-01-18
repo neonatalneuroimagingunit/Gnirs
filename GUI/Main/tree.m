@@ -196,7 +196,7 @@ for iAnalysis = 1:(GHandle.DataBase.nAnalysis) %for each analysis plus the row o
 end
 
 %create a node for each Atlas
-for iAtlas = 1:GHandle.DataBase.nAtlas
+for iAtlas = 2:GHandle.DataBase.nAtlas
     
     % check if there is a tag
     if ~isempty(GHandle.DataBase.Atlas(iAtlas).tag)

@@ -45,7 +45,6 @@ dataBasePath = GHandle.FolderSelector.Value;
 GDataBase.create(dataBasePath);
 GHandle.DataBase.Path = dataBasePath;
 create_preferences(GHandle);
-
 close(GHandle.MainFigure);
 end
 

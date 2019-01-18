@@ -1,10 +1,11 @@
 function  populateprobe(obj)
+lineShrinkFactor = 0.15;
 if ~isempty(obj.Dataset.Probe)
     markerSize = 15;
-
+    
     % Bigmagia
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    egg = 101;
+    egg = max(obj.Dataset.Probe.source.position2D(:));
     spam = zeros(egg,egg);
     bacon = sub2ind(size(spam),obj.Dataset.Probe.source.position2D(:,1),obj.Dataset.Probe.source.position2D(:,2));
     spam(bacon) = 1;
@@ -18,9 +19,21 @@ if ~isempty(obj.Dataset.Probe)
     
     idxSrc = obj.Dataset.Probe.channel.pairs(:,1);
     idxDet = obj.Dataset.Probe.channel.pairs(:,2);
-        xCh = [posSrc(idxSrc,1)'; posDet(idxDet,1)'];
-        yCh = [posSrc(idxSrc,2)'; posDet(idxDet,2)'];
-        zCh = zeros(size(xCh));
+    
+    xCh = [posSrc(idxSrc,1)'; posDet(idxDet,1)'];
+    yCh = [posSrc(idxSrc,2)'; posDet(idxDet,2)'];
+    zCh = zeros(size(xCh));
+    %
+    tempVector = posSrc(idxSrc,:)-posDet(idxDet,:);
+    tempVersor = tempVector./vecnorm(tempVector,2,2);
+    tempCoordSourceShrink = posSrc(idxSrc,:) - tempVersor.*lineShrinkFactor;
+    tempCoordDetectorShrink = posDet(idxDet,:) + tempVersor.*lineShrinkFactor;
+    xCh = [tempCoordSourceShrink(:,1) tempCoordDetectorShrink(:,1)]';
+    yCh = [tempCoordSourceShrink(:,2) tempCoordDetectorShrink(:,2)]';
+    zCh = zeros(size(xCh));...[tempCoordSourceShrink(:,3) tempCoordDetectorShrink(:,3)]';
+    %
+    
+
     obj.Panel.Probe.Channel = plot3(yCh,-xCh,zCh,...
         'LineStyle', '-',...
         'LineWidth',0.5,...
@@ -29,10 +42,11 @@ if ~isempty(obj.Dataset.Probe)
         'Parent',  obj.Panel.Probe.Axes);
     set( obj.Panel.Probe.Channel, {'Tag'}, obj.Dataset.Probe.channel.label);
     
-        x = repmat(posSrc(:,1)',[2,1]);
-        y = repmat(posSrc(:,2)',[2,1]);
-        z = zeros(size(x));
-     obj.Panel.Probe.Source = plot3(y,-x,z,...
+    x = repmat(posSrc(:,1)',[2,1]);
+    y = repmat(posSrc(:,2)',[2,1]);
+    z = zeros(size(x));
+    
+    obj.Panel.Probe.Source = plot3(y,-x,z,...
         'LineStyle', 'none',...
         'Marker', '.',...
         'MarkerSize', markerSize, ...
@@ -40,10 +54,10 @@ if ~isempty(obj.Dataset.Probe)
         'Color', obj.Preference.sourceColor,...
         'Parent',  obj.Panel.Probe.Axes);
     
-        x = repmat(posDet(:,1)',[2,1]);
-        y = repmat(posDet(:,2)',[2,1]);
-        z = zeros(size(x));
-     obj.Panel.Probe.Detector = plot3(y,-x,z,...
+    x = repmat(posDet(:,1)',[2,1]);
+    y = repmat(posDet(:,2)',[2,1]);
+    z = zeros(size(x));
+    obj.Panel.Probe.Detector = plot3(y,-x,z,...
         'LineStyle', 'none',...
         'Marker', '.',...
         'MarkerSize', markerSize, ...

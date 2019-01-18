@@ -1,7 +1,7 @@
 function setselectedtrack(obj, ~, evnt)
 
 colorBackground = [200 200 200]/255;
-alphaBackground = 0.03;
+alphaBackground = 0.3;
 alphaForeground = 1;
 lineWidth = 1;
 linewidthFactor = 2;
@@ -84,6 +84,22 @@ if ~isempty(obj.Dataset.Probe)
         detTag = {obj.Panel.Probe.Detector.Tag}';
         chTag = strcat(srcTag(obj.Dataset.Probe.channel.pairs(:,1)), '_', detTag(obj.Dataset.Probe.channel.pairs(:,2)));
         lineTag = {obj.Panel.Plot.Time.Lines(edvLine).Tag}';
+        
+        for iChannel = 1:length(chTag)
+            mask = contains(lineTag,chTag(iChannel));
+            if sum(mask)>1
+                obj.Panel.Probe.Channel(iChannel).LineWidth = edvLineWidth;
+            else
+                obj.Panel.Probe.Channel(iChannel).LineWidth = notEdvLineWidth;
+            end
+            
+            if sum(mask)== 1
+                obj.Panel.Probe.Channel(iChannel).Color = obj.Panel.Plot.Time.Lines(idxLine(mask)).Color;
+                uistack(obj.Panel.Probe.Channel(iChannel), 'top');
+            else
+                obj.Panel.Probe.Channel(iChannel).Color = notEdvColor;
+            end
+        end
         for iSource = 1:length(srcTag)
             maxSrc = sum(contains({obj.Panel.Plot.Time.Lines.Tag}, srcTag(iSource)));
             mask = contains(lineTag, srcTag(iSource));
@@ -102,20 +118,7 @@ if ~isempty(obj.Dataset.Probe)
                 obj.Panel.Probe.Detector(iDetector).MarkerSize = notEdvMarkerSize;
             end
         end
-        for iChannel = 1:length(chTag)
-            mask = contains(lineTag,chTag(iChannel));
-            if sum(mask)>1
-                obj.Panel.Probe.Channel(iChannel).LineWidth = edvLineWidth;
-            else
-                obj.Panel.Probe.Channel(iChannel).LineWidth = notEdvLineWidth;
-            end
-            
-            if sum(mask)== 1
-                obj.Panel.Probe.Channel(iChannel).Color = obj.Panel.Plot.Time.Lines(idxLine(mask)).Color;
-            else
-                obj.Panel.Probe.Channel(iChannel).Color = notEdvColor;
-            end
-        end
+        
     end
 end
 
