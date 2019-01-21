@@ -19,6 +19,7 @@ GHandle.TempWindow.Probe = Probe;
 GHandle.TempWindow.DBProbe = DBProbe;
 
 DBAtlas = GHandle.DataBase.findid(Probe.atlasId);
+GHandle.TempWindow.DBAtlas = DBAtlas;
 GHandle.TempWindow.Atlas = DBAtlas.load;
 %% Create GUI
 GHandle.TempWindow.SimulationFigure = figure(...
@@ -120,76 +121,14 @@ GHandle.TempWindow.RunButton = uicontrol('Parent', GHandle.TempWindow.RunPanel, 
     'Position', [0.1 0.1 0.8 0.8],...
     'String', 'Run like hell', ...
     'Visible', 'on', ...
-    'Callback', @(h,e)run_simulation(h,e,GHandle));
+    'Callback', @(h,e)runforward(h,e,GHandle));
 
 %% Check forward solver
 
 %% Check atlas
 
-%% Simulate photon migration
-
 %% Turn on figure
 GHandle.TempWindow.SimulationFigure.Visible = 'on';
-end
-
-function run_simulation(~, ~, GHandle)
-
-cfg.nphoton = str2double(GHandle.TempWindow.NPhoton.Value);
-
-%cfg.node = He.node(:,1:3);
-%cfg.face = He.face;
-%cfg.elem = He.elem;
-%cfg.elemprop = ones(size(cfg.elem,1),1);
-%cfg.srcpos = pos;
-
-cfg.srctype = GHandle.TempWindow.SrcType.String(GHandle.TempWindow.SrcType.Value);
-cfg.srcparam1 = 0;
-cfg.srcparam2 = 0; 
-
-cfg.tstart = str2double(GHandle.TempWindow.TStart.String);
-cfg.tend = str2double(GHandle.TempWindow.TEnd.String);
-cfg.tstep = str2double(GHandle.TempWindow.TStep.String);
-
-cfg.debuglevel = GHandle.TempWindow.DebugLevel.String;
-
-cfg.prop = [0.0000  0.00 1.0 1.0; ...    % Air
-             0.0170 17.50 0.9 1.3; ...     % ECT
-             0.0041  0.32 0.9 1.3; ...     % CSF
-             0.0480  5.00 0.9 1.3; ...     % GM
-             0.0370 10.00 0.9 1.3; ...     % WM
-             0.0370 10.00 0.9 1.3; ...     % Brainstem
-             0.0370 10.00 0.9 1.3];        % Cerebellum
-%tic
-%fluxx1 = mmclab(cfg);
-%t(1) = toc;
-
-%% save the results 
-
-%% remove this code {
-[FILENAME, Path] = uigetfile('*.mat');
-load(fullfile(Path, FILENAME));
-%% }
-settingsNote = 'buahahaha';
-ForwardSimulation = NirsForward(...
-        'atlasId', GHandle.TempWindow.DBProbe.atlasId , ...
-        'probeId', GHandle.TempWindow.DBProbe.id , ...
-        'date', datetime, ...
-        'node', GHandle.TempWindow.Atlas.node, ...
-        'src', src3, ...
-        'det', det3, ...
-        'srcDir', srcdir, ...
-        'detDir', detdir, ...
-        'srcFlux', fluxsrc, ...
-        'detFlux', fluxdet, ...
-        'Settings', cfg,...
-        'note', settingsNote);
-
-save([GHandle.TempWindow.DBProbe.path,'ForwardSim'], 'ForwardSimulation');
-probeMask = GHandle.DataBase.Probe == GHandle.TempWindow.DBProbe;
-GHandle.DataBase.Probe(probeMask).forwardFlag = true;
-GHandle.DataBase.save;
-
-close(GHandle.TempWindow.SimulationFigure);
 end
 
 function close_figure(Handle, ~, GHandle)
