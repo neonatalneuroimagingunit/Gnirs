@@ -21,10 +21,13 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         DataType
         SrcListLabel
         SrcList
+        SrcActive
         DetListLabel
         DetList
+        DetActive
         ChannelListLabel
         ChannelList
+        ChannelActive
         OptodeCheckbox
         ArrowCheckbox
         PhotonCheckbox
