@@ -12,6 +12,7 @@ classdef NirsForward
         srcFlux
         detFlux
         Settings
+        Timing
         
         note
     end
@@ -58,6 +59,9 @@ classdef NirsForward
                             
                         case 'detflux'
                             obj.detFlux = varargin{i+1};
+                        
+                        case 'timing'
+                            obj.Timing = varargin{i+1};
                             
                         case 'note'
                             obj.note = varargin{i+1};

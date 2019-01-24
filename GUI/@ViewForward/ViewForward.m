@@ -14,8 +14,7 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         InfoPanel
         PlotPanel
         SettingPanel
-        ResizeButton1
-        ResizeButton2
+        ExtraInfo
         
         DataTypeLabel
         DataType
@@ -31,6 +30,7 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         OptodeCheckbox
         ArrowCheckbox
         PhotonCheckbox
+        ExtraInfoButton
         
         ProbeAxes
         Scalp
@@ -41,6 +41,8 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         SourceOptode
         DetectorOptode
         Sensitivity
+        SrcDirectionArrow
+        DetDirectionArrow
         
         DownSamplingLabel
         DownSampling
@@ -60,6 +62,7 @@ classdef ViewForward < handle & matlab.mixin.SetGet
     end
     methods (Static)
         photonrefresh(h,e,obj);
+        extrainfo(h,e,obj);
     end
     methods
         populateinfo(obj)
@@ -81,30 +84,36 @@ classdef ViewForward < handle & matlab.mixin.SetGet
             
             obj.Forward = Forward;
             
-            obj.MainFigure = figure('Position', [100 100 1200 600], ... % cambiare con g handle
-                'CloseRequestFcn', @(h,e)close_function(h,e,obj));
+            obj.MainFigure = figure(...
+                'Position', obj.GHandle.Preference.Figure.sizeLarge, ...
+                'Units','pixels',...
+                'Visible', 'off', ...
+                'Resize', 'on',...
+                'Name', 'View Forward', ...
+                'Numbertitle', 'off', ...
+                'Toolbar', 'none', ...
+                'Menubar', 'none', ...
+                'CloseRequestFcn',  @(h,e)close_function(h,e,obj),...
+                'DoubleBuffer', 'on', ...
+                'DockControls', 'off', ...
+                'Renderer', 'OpenGL');
             obj.InfoPanel = uipanel('Parent', obj.MainFigure,...
                 'Units', 'normalized', ...
                 'Position', [0 0 0.2 1]);
             obj.PlotPanel = uipanel('Parent', obj.MainFigure,...
                 'Units', 'normalized', ...
-                'Position', [0.21 0 0.59 1]);
+                'Position', [0.2 0 0.6 1]);
             obj.SettingPanel = uipanel('Parent', obj.MainFigure,...
                 'Units', 'normalized', ...
-                'Position', [0.81 0 0.2 1]);
-            
-            obj.ResizeButton1 = annotation(obj.MainFigure, 'textbox', ...
-                'Units', 'normalized', ...
-                'Position', [0.2 0 0.01 1], ...
-                'ButtonDownFcn', @(h,e)resize_1(h,e,obj));
-            obj.ResizeButton2 = annotation(obj.MainFigure, 'textbox', ...
-                'Units', 'normalized',...
-                'Position', [0.8 0 0.01 1],...
-                'ButtonDownFcn', @(h,e)resize_2(h,e,obj));
+                'Position', [0.8 0 0.2 1]);
             
             obj.populateinfo;
             obj.populateplot;
             obj.populatesetting;
+            
+            rotate3d(obj.ProbeAxes);
+            
+            obj.MainFigure.Visible = 'on';
         end
     end
 end
@@ -112,35 +121,6 @@ end
 function close_function(h, ~, obj)
 delete(h);
 obj.GHandle.TempWindow = [];
-end
-
-function resize_1(~, ~, obj)
-obj.MainFigure.WindowButtonMotionFcn = @(h,e)panel_resizing1(h,e,obj);
-obj.MainFigure.WindowButtonUpFcn = @(h,e)stop_resizing(h,e);
-end
-function panel_resizing1(h, ~, obj)
-relXPos = h.CurrentPoint(1)./h.Position(3);
-obj.ResizeButton1.Position(1) = max(relXPos - 0.005,0);
-obj.InfoPanel.Position(3) = obj.ResizeButton1.Position(1);
-obj.PlotPanel.Position(1) = obj.ResizeButton1.Position(1) + 0.01;
-obj.PlotPanel.Position(3) = obj.ResizeButton2.Position(1) - obj.PlotPanel.Position(1);
-end
-
-function resize_2(~, ~, obj)
-obj.MainFigure.WindowButtonMotionFcn = @(h,e)panel_resizing2(h,e,obj);
-obj.MainFigure.WindowButtonUpFcn = @(h,e)stop_resizing(h,e);
-end
-function panel_resizing2(h, ~, obj)
-relXPos = h.CurrentPoint(1)./h.Position(3);
-obj.SettingPanel.Position(1) = min(relXPos + 0.005,1);
-obj.SettingPanel.Position(3) = 1 - obj.SettingPanel.Position(1);
-obj.ResizeButton2.Position(1) = obj.SettingPanel.Position(1) - 0.01;
-obj.PlotPanel.Position(3) = obj.ResizeButton2.Position(1) - obj.PlotPanel.Position(1);
-end
-
-function stop_resizing(h, ~)
-h.WindowButtonMotionFcn = [];
-h.WindowButtonUpFcn = [];
 end
 
 

@@ -54,5 +54,16 @@ obj.DetectorOptode = plot3(...
     'LineStyle', 'none', ...
     'Parent', obj.ProbeAxes);
 
+nSrc = size(obj.Forward.src,1);
+nDet = size(obj.Forward.det,1);
+for iSrc = 1:1:nSrc
+    obj.SrcDirectionArrow(iSrc) = frecciona2(obj.Forward.src(iSrc,:), obj.Forward.src(iSrc,:)+10*obj.Forward.srcDir(iSrc,:),'Size',[20 0.3],'Color',[1 0 0]);
+end
+for iDet = 1:1:nDet
+    obj.DetDirectionArrow(iDet) = frecciona2(obj.Forward.det(iDet,:), obj.Forward.det(iDet,:)+10*obj.Forward.detDir(iDet,:),'Size',[20 0.3],'Color',[0 0 1]);
+end
+set(obj.SrcDirectionArrow, 'Visible', 'off');
+set(obj.DetDirectionArrow, 'Visible', 'off');
+
 obj.Sensitivity = scatter3(0,0,0, 'Visible', 'off');
 end

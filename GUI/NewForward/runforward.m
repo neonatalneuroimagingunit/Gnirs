@@ -1,6 +1,9 @@
 function runforward(~, ~, GHandle)
 
-fw = 1;
+GHandle.TempWindow.ProgressRectangleBG.String = 'Starting...';
+drawnow;
+
+fw = ~GHandle.TempWindow.Test.Value;
 
 Head = GHandle.TempWindow.DBAtlas.loadhead;
 Scalp = GHandle.TempWindow.Atlas.Scalp;
@@ -42,7 +45,6 @@ nTot = nSrc + nDet;
 
 fluxSrc = zeros(size(Head.node,1),nSrc);
 fluxDet = zeros(size(Head.node,1),nDet);
-tP = zeros(nTot,1);
 tS = zeros(nTot,1);
 
 srcPosOrig = Probe.source.position;
@@ -54,16 +56,12 @@ detDir = zeros(size(detPosOrig));
 
 %% Calculate srcpos (refinement)
 tic
-
-nElem = size(Head.elem,1);
-cdm = zeros(nElem,3);
-for iElem = 1:1:nElem
-    cdm(iElem,:) = (...
-        Head.node(Head.elem(iElem,1),1:3) + ...
-        Head.node(Head.elem(iElem,2),1:3) + ...
-        Head.node(Head.elem(iElem,3),1:3) + ...
-        Head.node(Head.elem(iElem,4),1:3)) / 4;
-end
+cdm = mean(cat(3,...
+    Head.node(Head.elem(:,1),1:3),...
+    Head.node(Head.elem(:,2),1:3),...
+    Head.node(Head.elem(:,3),1:3),...
+    Head.node(Head.elem(:,4),1:3)),...
+    3);
 
 for iSrc = 1:1:nSrc
     distCdm = vecnorm(cdm - srcPosOrig(iSrc,:),2,2);
@@ -76,37 +74,10 @@ for iDet = 1:1:nDet
     [~, idxNeighbors] = sort(distCdm);
     detPos(iDet,:) = cdm(idxNeighbors(1),:);
 end
-
 tR = toc;
 
-%% Calculate srcdir
-tic
 
-for iSrc = 1:1:nSrc
-    tic
-    distScalp = vecnorm(Scalp.node - srcPos(iSrc,:),2,2);
-    [~, idxNeighbors] = sort(distScalp);
-    idxNeighbors = idxNeighbors(1:nNeighbors);
-    temp = Scalp.node(idxNeighbors,:);
-    [eigenvectors, ~] = eig(temp'*temp);
-    srcDir(iSrc,:) = -eigenvectors(:,3)';
-    tP(iSrc) = toc;
-end
-
-for iDet = 1:1:nDet
-    tic
-    distScalp = vecnorm(Scalp.node - detPos(iDet,:),2,2);
-    [~, idxNeighbors] = sort(distScalp);
-    idxNeighbors = idxNeighbors(1:nNeighbors);
-    temp = Scalp.node(idxNeighbors,:);
-    [eigenvectors, ~] = eig(temp'*temp);
-    detDir(iDet,:) = -eigenvectors(:,3)';
-    tP(nSrc + iDet) = toc;
-end
-
-tD = toc;
-
-%% Plot srcpos and srcdir over anatomy
+%%
 figure
 hold on
 trisurf(Scalp.face,...
@@ -125,6 +96,33 @@ plot3(srcPosOrig(:,1),srcPosOrig(:,2),srcPosOrig(:,3),'*r', 'MarkerSize',10)
 plot3(detPosOrig(:,1),detPosOrig(:,2),detPosOrig(:,3),'*b', 'MarkerSize',10)
 plot3(srcPos(:,1),srcPos(:,2),srcPos(:,3),'.r', 'MarkerSize',10)
 plot3(detPos(:,1),detPos(:,2),detPos(:,3),'.b', 'MarkerSize',10)
+
+%% Calculate srcdir
+tic
+centroid = mean(Scalp.node(:,1:3),1);
+for iSrc = 1:1:nSrc
+    distScalp = vecnorm(Scalp.node - srcPos(iSrc,:),2,2);
+    [~, idxNeighbors] = sort(distScalp);
+    idxNeighbors = idxNeighbors(1:nNeighbors);
+    temp = Scalp.node(idxNeighbors,:);
+    temp = temp - mean(temp,1);
+    [eigenvectors, ~] = eig(temp'*temp);
+    srcDir(iSrc,:) = sign(dot(centroid-srcPos(iSrc,:),eigenvectors(:,1)'))*eigenvectors(:,1)';
+end
+
+for iDet = 1:1:nDet
+    distScalp = vecnorm(Scalp.node - detPos(iDet,:),2,2);
+    [~, idxNeighbors] = sort(distScalp);
+    idxNeighbors = idxNeighbors(1:nNeighbors);
+    temp = Scalp.node(idxNeighbors,:);
+    temp = temp - mean(temp,1);
+    [eigenvectors, ~] = eig(temp'*temp);
+    detDir(iDet,:) = sign(dot(centroid-detPos(iDet,:),eigenvectors(:,1)'))*eigenvectors(:,1)';
+end
+tD = toc;
+
+%% Plot srcpos and srcdir over anatomy
+
 for iSrc = 1:1:nSrc
     frecciona2(srcPos(iSrc,:), srcPos(iSrc,:)+10*srcDir(iSrc,:),'Size',[20 0.3],'Color',[1 0 0]);
 end
@@ -140,23 +138,31 @@ if fw
     
     for iSrc = 1:1:nSrc
         tic
+        GHandle.TempWindow.ProgressRectangleBG.String = [num2str(iSrc) '/' num2str(nTot) '...'];
+        drawnow;
         cfg.srcpos = srcPos(iSrc,:);
         cfg.srcdir = srcDir(iSrc,:);
         tempflux = mmclab(cfg);
         if ~isempty(tempflux.data)
             fluxSrc(:,iSrc) = sum(tempflux.data,2);
         end
+        GHandle.TempWindow.ProgressRectangleFG.Position(3) = 0.8*(iSrc/nTot);
+        drawnow;
         tS(iSrc) = toc;
     end
     
     for iDet = 1:1:nDet
         tic
+        GHandle.TempWindow.ProgressRectangleBG.String = [num2str(nSrc+iDet) '/' num2str(nTot) '...'];
+        drawnow;
         cfg.srcpos = detPos(iDet,:);
         cfg.srcdir = detDir(iDet,:);
         tempflux = mmclab(cfg);
         if ~isempty(tempflux.data)
             fluxDet(:,iDet) = sum(tempflux.data,2);
         end
+        GHandle.TempWindow.ProgressRectangleFG.Position(3) = 0.8*((nSrc+iDet)/nTot);
+        drawnow;
         tS(nSrc + iDet) = toc;
     end
     
@@ -164,11 +170,13 @@ if fw
     cfg.srcpos = [];
     cfg.srcdir = [];
     
-    settingsNote = sprintf('Total time %f s', tR + tD + sum(tP)+sum(tS));
-    settingsNote = char(settingsNote,['SrcPos time:' num2str(tR, '%f s')]);
-    settingsNote = char(settingsNote,['SrcDir time:' num2str(tD, '%f s')]);
-    settingsNote = char(settingsNote,['Preparation time:' num2str(tP', '%f s')]);
-    settingsNote = char(settingsNote,['Simulation time:' num2str(tS', '%f s')]);
+    Timing.total = tR + tD +sum(tS);
+    Timing.srcpos = tR;
+    Timing.srcdir = tD;
+    Timing.simulation = sum(tS);
+    Timing.simulationAvg = mean(tS);
+    
+    settingsNote = '';
     
     ForwardSimulation = NirsForward(...
         'atlasId', GHandle.TempWindow.DBProbe.atlasId , ...
@@ -182,6 +190,7 @@ if fw
         'srcFlux', fluxSrc, ...
         'detFlux', fluxDet, ...
         'Settings', cfg,...
+        'Timing', Timing, ...
         'note', settingsNote);
     
     save([GHandle.TempWindow.DBProbe.path,'ForwardSim'], 'ForwardSimulation');
