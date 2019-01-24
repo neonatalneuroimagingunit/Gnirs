@@ -36,7 +36,7 @@ axis vis3d
 
 plot3(cfg1.srcpos(:,1),cfg1.srcpos(:,2),cfg1.srcpos(:,3),'.r', 'MarkerSize',10)
 plot3(cfg2.srcpos(:,1),cfg2.srcpos(:,2),cfg2.srcpos(:,3),'.b', 'MarkerSize',10)
-frecciona(cfg1.srcpos,cfg1.srcdir,'Style','down','Size',[20 0.3],'Color',[1 0 0])
+frecciona2(cfg1.srcpos,cfg1.srcdir,'Style','down','Size',[20 0.3],'Color',[1 0 0])
 frecciona(cfg2.srcpos-20*cfg2.srcdir,cfg2.srcdir,'Style','up','Size',[20 0.3],'Color',[0 0 1])
 
 %print(f,'autoExample', '-dpng', '-r300');
