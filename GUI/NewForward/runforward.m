@@ -26,7 +26,10 @@ cfg.tstart = str2double(GHandle.TempWindow.TStart.String);
 cfg.tend = str2double(GHandle.TempWindow.TEnd.String);
 cfg.tstep = str2double(GHandle.TempWindow.TStep.String);
 
-cfg.debuglevel = GHandle.TempWindow.DebugLevel.String; % Remove in future
+cfg.debuglevel = GHandle.TempWindow.DebugLevel.String; % Remove in future, if empty mmclab returns an error
+if isempty(cfg.debuglevel)
+    cfg.debuglevel = 'T';
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fukui 2013 - 800 nm - Human newborn
