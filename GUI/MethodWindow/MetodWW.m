@@ -29,7 +29,7 @@ classdef MetodWW < handle & matlab.mixin.SetGet
         function set.Position(obj,Pos)
             obj.Position_ = Pos;
         end
-        %% constructor
+        %% Constructor
         function  obj = MetodWW(MethodList)
             obj.MethodList = MethodList;
             obj.MainFigure = figure('Position', [100 100 1200 600]); % cambiare con g handle
@@ -52,6 +52,22 @@ classdef MetodWW < handle & matlab.mixin.SetGet
             InputMethod = NirsMethod('tag', 'Input');
             obj.MethodBoxList = MethodBox([0.4 0.8 0.16 0.08],obj.MethodPanel,InputMethod); %sistemare inputmethod
             obj.MethodBoxList.ButtonInput.Visible = 'off';
+        end
+        %% Create Flow
+        function flow = createflow(obj)
+            outIdx = find(strcmp({obj.MethodBoxList.Tag}','Output'));
+            nOut = length(outIdx);
+            flow = cell(nOut,1);
+            for iOut = 1:1:nOut
+                curIdx = outIdx(iOut);
+                CurrentMethodBox = obj.MethodBoxList(curIdx).ArrowInput.BoxOutput;
+                tempflow = [];
+                while ~strcmp(CurrentMethodBox.Tag,'Input')
+                    tempflow = [CurrentMethodBox.Method; tempflow];
+                    CurrentMethodBox = CurrentMethodBox.ArrowInput.BoxOutput;
+                end
+                flow{iOut} = tempflow;
+            end
         end
     end
     
