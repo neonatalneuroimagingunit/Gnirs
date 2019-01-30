@@ -4,17 +4,13 @@ classdef NirsAnalysis
     
     properties
         id(1,:) char
-        
+        tag(1,:) char
         measureId(1,:) char
         
-        date(1,1) datetime = NaT;
-        
+        date(1,1) datetime = NaT;    
         analysis
-        
-        TrackType (:,1) struct
-        
+        TrackType(:,1) struct
         SimplyData
-        
         note(1,:) char
     end
     

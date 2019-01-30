@@ -69,7 +69,7 @@ switch objType
         
     case 'NirsStudy'
         varName = 'Study';
-        if ~isempty(Object2Add.name)
+        if ~isempty(Object2Add.tag)
             [DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.name);
         else
             if (nargin > 2)
@@ -82,8 +82,8 @@ switch objType
         
     case 'NirsProbe'
         varName = 'Probe';
-        if ~isempty(Object2Add.name)
-            [DBObject, DataBase] = DataBase.newprobe('tag',Object2Add.name,'atlasId',Object2Add.atlasId);
+        if ~isempty(Object2Add.tag)
+            [DBObject, DataBase] = DataBase.newprobe('tag',Object2Add.tag,'atlasId',Object2Add.atlasId);
         else
             if (nargin > 2)
                 [DBObject, DataBase] = DataBase.newprobe('tag',tag,'atlasId',Object2Add.atlasId);
@@ -95,8 +95,8 @@ switch objType
         
     case 'NirsAtlas'
         varName = 'Atlas';
-        if ~isempty(Object2Add.name)
-            [DBObject, DataBase] = DataBase.newatlas('tag',Object2Add.name);
+        if ~isempty(Object2Add.tag)
+            [DBObject, DataBase] = DataBase.newatlas('tag',Object2Add.tag);
         else
             if (nargin > 2)
                 [DBObject, DataBase] = DataBase.newatlas('tag',tag);
@@ -110,7 +110,6 @@ switch objType
             voxelPath = fullfile(DBObject.path, 'Voxel');
             Voxel = Data2Save.Voxel;
             save(voxelPath, 'Voxel')
-            
         end
         
         if Object2Add.flagHead

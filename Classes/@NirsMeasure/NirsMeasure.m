@@ -8,25 +8,21 @@ classdef NirsMeasure
     properties
         
         id(1,:) char
-        
+        tag(1,:) char
         subjectId(1,:) char
-        
         studyId(1,:) char
         
         date(1,1) datetime = NaT;
-        
         timeLength(1,1) double
         
-        InstrumentType (1,1) struct
-        
         Event(1,1) NirsEvent
-        
-        videoFlag(1,1) logical
-        
+       
+        InstrumentType (1,1) struct
         Info (1,1) struct
-        
         AdvanceInfo (1,1) struct
         
+        videoFlag(1,1) logical
+         
         note(1,:) char
     end
     

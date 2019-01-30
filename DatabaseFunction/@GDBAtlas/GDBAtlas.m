@@ -17,6 +17,7 @@ classdef GDBAtlas
 	methods
  		Atlas = load(DBAtlas)
         HeadAtlas = loadhead(DBAtlas)
+        Voxel = loadvoxel(DBAtlas)
 %		DBAtlas = modify(DBAtlas,NewAtlas)
  		DBAtlas = substitute(DBAtlas,Atlas)
 	end
