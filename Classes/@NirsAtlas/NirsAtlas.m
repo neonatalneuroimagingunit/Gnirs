@@ -7,7 +7,7 @@ classdef NirsAtlas
 
 	properties
 		id(1,:) char
-		name(1,:) char
+		tag(1,:) char
 		date(1,1) datetime 
 	
 		WhiteMatter struct

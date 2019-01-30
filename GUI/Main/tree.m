@@ -216,7 +216,7 @@ for iAtlas = 2:GHandle.DataBase.nAtlas
     
     % add right click callback
     GHandle.Main.Tree.Atlas(iAtlas).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
-    %uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','AddAtlas','callback',{@newmeasure ,GHandle});
+    uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu,'Label','Duplicate','tag', GHandle.DataBase.Atlas(iAtlas).id,'callback',{@duplicate_obj ,GHandle ,GHandle.DataBase.Atlas(iAtlas).id});
     uimenu(GHandle.Main.Tree.Atlas(iAtlas).ContextMenu, 'Label','Delete','tag', GHandle.DataBase.Atlas(iAtlas).id,'callback',{@delete_callback ,GHandle});
     set(GHandle.Main.Tree.Atlas(iAtlas).MainNode,'UIContextMenu',GHandle.Main.Tree.Atlas(iAtlas).ContextMenu);
     
@@ -243,8 +243,11 @@ for iProbe = 1:GHandle.DataBase.nProbe
     
     % add right click callback
     GHandle.Main.Tree.Probe(iProbe).ContextMenu = uicontextmenu('Parent',GHandle.Main.Figure); % add the new measure right click
+    
+    uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Explore','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@explore_forward ,GHandle});
+    uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Forward Simulation','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@probe_simulation ,GHandle});
+    uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Duplicate','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@duplicate_obj ,GHandle ,GHandle.DataBase.Probe(iProbe).id});
     uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Delete','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@delete_callback ,GHandle});
-   uimenu(GHandle.Main.Tree.Probe(iProbe).ContextMenu, 'Label','Forward Simulation','tag', GHandle.DataBase.Probe(iProbe).id,'callback',{@probe_simulation ,GHandle});
     set(GHandle.Main.Tree.Probe(iProbe).MainNode,'UIContextMenu',GHandle.Main.Tree.Probe(iProbe).ContextMenu);
     
 end
@@ -256,21 +259,15 @@ end
 
 function clickcallback(~, Event, GHandle)
 if ~isempty(Event.Nodes) % click on a node
-    switch Event.SelectionType    
+    switch Event.SelectionType
         case 'normal'
-            populatedisplay(Event.Nodes.Value, GHandle);    
+            populatedisplay(Event.Nodes.Value, GHandle);
         case 'open'
             if idtype(Event.Nodes.Value, 'Analysis')
                 makeanalysiscurrent(GHandle, Event.Nodes.Value);
                 GHandle.Viewer =   [GHandle.Viewer ViewerWindow(GHandle)];
             elseif idtype(Event.Nodes.Value, 'Probe')
-                DBProbe = GHandle.DataBase.findid(Event.Nodes.Value);
-                GHandle.CurrentDataSet.Probe = DBProbe.load;
-                DBAtlas = GHandle.DataBase.findid(DBProbe.atlasId);
-                GHandle.CurrentDataSet.Atlas = DBAtlas.load;
-                Forward = DBProbe.loadforward;
-                
-                GHandle.TempWindow = ViewForward(GHandle, Forward);
+                explore_forward([],[], GHandle);
             end
         case 'alt'
             %'dxstudy
@@ -302,19 +299,32 @@ GHandle.MethodWindow = MetodWW(GHandle.MethodWindow.MethodList);
 end
 
 function modify(~, ~, GHandle)
-    id = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
-    populatedisplay(id, GHandle, true)
+id = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+populatedisplay(id, GHandle, true)
 end
 
-function probe_simulation(handle, ~, GHandle)
-id = handle.Tag;
+function probe_simulation(~, ~, GHandle)
+id = GHandle.Main.Tree.ProbeTree.SelectedNodes.Value;
 DBProbe = GHandle.DataBase.findid(id);
 GHandle.CurrentDataSet.Probe = DBProbe.load;
 probesimulationwindow(GHandle);
 end
 
+function explore_forward(~,~, GHandle)
+id = GHandle.Main.Tree.ProbeTree.SelectedNodes.Value;
+DBProbe = GHandle.DataBase.findid(id);
+GHandle.CurrentDataSet.Probe = DBProbe.load;
+DBAtlas = GHandle.DataBase.findid(DBProbe.atlasId);
+GHandle.CurrentDataSet.Atlas = DBAtlas.load;
+Forward = DBProbe.loadforward;
 
+GHandle.TempWindow = ViewForward(GHandle, Forward);
+end
 
+function duplicate_obj(~,~, GHandle, id)
+GHandle.DataBase = GHandle.DataBase.duplicate(id);
+tree(GHandle);
+end
 
 
 

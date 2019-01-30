@@ -5,6 +5,7 @@
     
     properties
 		id(1,:) char
+        tag(1,:) char
 		name(1,:) char
 		surName(1,:) char
 		birthDay(1,1) datetime

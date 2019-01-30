@@ -45,6 +45,7 @@ classdef GDataBase
 	save(DataBase)
 	DataBase = delete(DataBase, id)
 	DataBase = add(DataBase, Object2Add, tag, Data2Save)
+    DataBase = duplicate(DataBase, id)    
 	[DBMeasure, DataBase] = newmeasure(DataBase, studyId, varargin)
 	[subjectId, DataBase] = newsubject(DataBase, varargin)
 	[probeId, DataBase] = newprobe(DataBase, varargin)
