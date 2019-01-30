@@ -43,8 +43,8 @@ classdef NirsAtlas
 						case 'id'
 							obj.id = varargin{i+1};						
 						
-						case 'name'
-							obj.name = varargin{i+1};
+						case 'tag'
+							obj.tag = varargin{i+1};
 
 						case 'date'
 							obj.date = varargin{i+1};

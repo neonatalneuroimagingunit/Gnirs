@@ -330,7 +330,7 @@ Channel.distance = [GHandle.TempWindow.ChannelList.Data{idxChannel,4}]';
 channelPairsIdx = combvec(1:size(Source.label,1), 1:size(Detector.label,1))';
 Channel.pairs = channelPairsIdx(idxChannel,:);
 
-NewProbe = NirsProbe('name', probeName, 'atlasid', atlasID, 'note', note, 'detector', Detector, 'source', Source, 'channel', Channel);
+NewProbe = NirsProbe('tag', probeName, 'atlasid', atlasID, 'note', note, 'detector', Detector, 'source', Source, 'channel', Channel);
 DataBase = GHandle.DataBase.add(NewProbe);
 GHandle.DataBase = DataBase;
 

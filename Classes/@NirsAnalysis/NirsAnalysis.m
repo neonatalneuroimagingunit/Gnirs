@@ -39,6 +39,10 @@ classdef NirsAnalysis
                         case 'id'
                             obj.id = varargin{i+1};
                             
+                                                    
+                        case 'tag'
+                            obj.tag = varargin{i+1};
+                            
                         case 'measureid'
                             obj.measureId = varargin{i+1};
                             

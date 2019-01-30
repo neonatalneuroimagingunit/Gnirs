@@ -437,7 +437,7 @@ GHandle.TempWindow.LogName.String = 'Start Loading Atlas...';
 
 loadatlasfrommat(GHandle);
 
-GHandle.CurrentDataSet.Atlas.name = name;
+GHandle.CurrentDataSet.Atlas.tag = name;
 GHandle.CurrentDataSet.Atlas.note = note;
 
 DataBase = GHandle.DataBase.add(GHandle.CurrentDataSet.Atlas, name, GHandle.Temp);
