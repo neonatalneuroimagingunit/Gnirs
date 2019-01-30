@@ -23,6 +23,9 @@ classdef MetodWW < handle & matlab.mixin.SetGet
     end
     
     methods
+        flow = createflow(obj);
+        sortmethod(obj);
+        
         function Value = get.Position(obj)
             Value = obj.Position_;
         end
@@ -50,31 +53,16 @@ classdef MetodWW < handle & matlab.mixin.SetGet
             obj.BigRedButton = uicontrol('Callback',@(h,e)add_output(h,e,obj),'Style','pushbutton','Parent',obj.TreePanel,'Units','normalized','Position',[0 0 1 0.1]);
             
             InputMethod = NirsMethod('tag', 'Input');
-            obj.MethodBoxList = MethodBox([0.4 0.8 0.16 0.08],obj.MethodPanel,InputMethod); %sistemare inputmethod
+            obj.MethodBoxList = MethodBox([0.4 0.8 0.16 0.08],obj,InputMethod); %sistemare inputmethod
             obj.MethodBoxList.ButtonInput.Visible = 'off';
         end
-        %% Create Flow
-        function flow = createflow(obj)
-            outIdx = find(strcmp({obj.MethodBoxList.Tag}','Output'));
-            nOut = length(outIdx);
-            flow = cell(nOut,1);
-            for iOut = 1:1:nOut
-                curIdx = outIdx(iOut);
-                CurrentMethodBox = obj.MethodBoxList(curIdx).ArrowInput.BoxOutput;
-                tempflow = [];
-                while ~strcmp(CurrentMethodBox.Tag,'Input')
-                    tempflow = [CurrentMethodBox.Method; tempflow];
-                    CurrentMethodBox = CurrentMethodBox.ArrowInput.BoxOutput;
-                end
-                flow{iOut} = tempflow;
-            end
-        end
+
     end
     
 end
 function add_output(~, ~, obj)
 OutputMethod = NirsMethod('tag', 'Output');
-TempMethodBox = MethodBox([rand-0.08 0 0.16 0.08],obj.MethodPanel,OutputMethod);
+TempMethodBox = MethodBox([rand-0.08 0 0.16 0.08],obj,OutputMethod);
 obj.MethodBoxList = [obj.MethodBoxList; TempMethodBox];
 TempMethodBox.ButtonOutput.Visible = 'off';
 end
@@ -87,7 +75,7 @@ if ~isempty(Event.Nodes) % click on a node
             methodIdx = strcmp({obj.MethodList.tag}, Event.Nodes.Value);
             method2Add = obj.MethodList(methodIdx);
             if ~isempty(method2Add)
-                obj.MethodBoxList = [obj.MethodBoxList; MethodBox([rand-0.08 rand-0.04 0.16 0.08],obj.MethodPanel,method2Add)];
+                obj.MethodBoxList = [obj.MethodBoxList; MethodBox([rand-0.08 rand-0.04 0.16 0.08],obj,method2Add)];
             end
         case 'alt' %dxstudy
     end

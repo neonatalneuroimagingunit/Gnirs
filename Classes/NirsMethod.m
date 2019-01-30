@@ -10,7 +10,7 @@ classdef NirsMethod
 		
 		description(1,:) char
 		
-		parameters struct
+		Parameters struct
 		methodFunction  function_handle
 		plotFunction  function_handle
         

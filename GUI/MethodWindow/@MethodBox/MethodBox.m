@@ -3,11 +3,12 @@ classdef MethodBox < handle & matlab.mixin.SetGet
     properties (Transient)
         Position
         Parent
+     
     end
     
     properties
         Tag
-        Method
+        Method 
         
         Box
         ButtonInput
@@ -20,11 +21,13 @@ classdef MethodBox < handle & matlab.mixin.SetGet
     end
     
     methods
+        dispmethod(obj);
+        
         function set.Parent(obj,Par)
             obj.Parent_ = Par;
-            obj.Box.Parent = Par;
-            obj.ButtonInput.Parent = Par;
-            obj.ButtonOutput.Parent = Par;
+            obj.Box.Parent = Par.MethodPanel;
+            obj.ButtonInput.Parent = Par.MethodPanel;
+            obj.ButtonOutput.Parent = Par.MethodPanel;
         end
         function Value = get.Parent(obj)
             Value = obj.Parent_;
@@ -69,16 +72,16 @@ classdef MethodBox < handle & matlab.mixin.SetGet
             obj.Parent_ = Par;
             posTB = [HPos, Pos(2)+Pos(4)-BtSize, BtSize, BtSize];
             posBB = [HPos, Pos(2), BtSize, BtSize];
-            obj.Box = annotation(Par,'textbox',...
+            obj.Box = annotation(Par.MethodPanel,'textbox',...
                 'Units','normalized',...
                 'String',Method.tag,...
                 'VerticalAlignment', 'middle',...
                 'HorizontalAlignment','center',...
                 'Position',Pos,...
                 'ButtonDownFcn',@(h,evnt)start_moving_box(h,evnt,obj));
-            obj.ButtonInput = uicontrol('Style', 'pushbutton','Parent',Par,'Units','normalized',...
+            obj.ButtonInput = uicontrol('Style', 'pushbutton','Parent',Par.MethodPanel,'Units','normalized',...
                 'String', 'o', 'Position', posTB, 'Callback',@(h,evnt)stop_moving(h,evnt,obj));
-            obj.ButtonOutput = uicontrol('Style', 'pushbutton','Parent',Par,'Units','normalized',...
+            obj.ButtonOutput = uicontrol('Style', 'pushbutton','Parent',Par.MethodPanel,'Units','normalized',...
                 'String', 'o', 'Position', posBB, 'Callback',@(h,evnt)line_draw(h,evnt,obj));
         end
     end
@@ -98,6 +101,7 @@ fig.WindowButtonMotionFcn = @(h,e)moving_arrow(h,e,ArrowHandle, obj);
 end
 function start_moving_box(h,~,obj)
 fig = ancestor(h,'Figure');
+obj.dispmethod;
 fig.WindowButtonMotionFcn = @(h,e)moving_box(h,e,obj);
 fig.WindowButtonUpFcn = @(h,e)stop_moving_box(h,e);
 end
@@ -106,15 +110,15 @@ h.WindowButtonMotionFcn = [];
 h.WindowButtonUpFcn = [];
 end
 function moving_arrow(h,~,ArrowHandle, obj)
-panPos = obj.Parent.Position;
+panPos = obj.Parent.MethodPanel.Position;
 pos = ((h.CurrentPoint./h.Position(3:4))-panPos(1:2))./(panPos(3:4));
 ArrowHandle.Position(3:4) = pos;
 end
 function moving_box(h,~,obj)
-panPos = obj.Parent.Position;
+panPos = obj.Parent.MethodPanel.Position;
 pos = ((h.CurrentPoint./h.Position(3:4))-panPos(1:2))./(panPos(3:4));
 pos = pos - obj.Position(3:4)/2;
-obj.Position(1:2) = pos;
+obj.Position(1:2) = min(max(pos,0),[0.84, 0.92]);
 end
 function stop_moving(handle,~,obj)
 fig = ancestor(handle,'Figure');

@@ -70,7 +70,7 @@ switch objType
     case 'NirsStudy'
         varName = 'Study';
         if ~isempty(Object2Add.tag)
-            [DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.name);
+            [DBObject, DataBase] = DataBase.newstudy('tag',Object2Add.tag);
         else
             if (nargin > 2)
                 [DBObject, DataBase] = DataBase.newstudy('tag',tag);
