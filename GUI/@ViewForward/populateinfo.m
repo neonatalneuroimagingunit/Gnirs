@@ -124,36 +124,50 @@ colorOff = [0.2 0 0];
 if all(obj.SrcActive' == h.Value,'all') && ~isempty(obj.SrcActive)
     h.Value = [];
 end
-set(obj.SourceOptode,'Color', colorOff);
-set(obj.SourceOptode(h.Value),'Color', colorOn);
+set(obj.SourceOptode, 'Color', colorOff);
+set(obj.SourceOptode(h.Value), 'Color', colorOn);
+set(obj.SrcDirectionArrow, 'FaceColor', colorOff);
+set(obj.SrcDirectionArrow(h.Value), 'FaceColor', colorOn);
 ViewForward.photonrefresh([],[],obj);
 obj.SrcActive = h.Value;
 end
+
 function detlist_callback(h, ~, obj)
 colorOn = [0 0 1];
 colorOff = [0 0 0.2];
 if all(obj.DetActive' == h.Value,'all') && ~isempty(obj.DetActive)
     h.Value = [];
 end
-set(obj.DetectorOptode,'Color', colorOff);
-set(obj.DetectorOptode(h.Value),'Color', colorOn);
+set(obj.DetectorOptode, 'Color', colorOff);
+set(obj.DetectorOptode(h.Value), 'Color', colorOn);
+set(obj.DetDirectionArrow, 'FaceColor', colorOff);
+set(obj.DetDirectionArrow(h.Value), 'FaceColor', colorOn);
 ViewForward.photonrefresh([],[],obj);
 obj.DetActive = h.Value;
 end
+
 function channellist_callback(h, ~, obj)
 src = obj.Probe.channel.pairs(h.Value,1);
 det = obj.Probe.channel.pairs(h.Value,2);
-colorOn = [1 0 0];
-colorOff = [0.2 0 0];
+
 if all(obj.ChannelActive' == h.Value,'all') && ~isempty(obj.ChannelActive)
     h.Value = [];
 end
-set(obj.SourceOptode,'Color', colorOff);
-set(obj.SourceOptode(src),'Color', colorOn);
+
+colorOn = [1 0 0];
+colorOff = [0.2 0 0];
+set(obj.SourceOptode, 'Color', colorOff);
+set(obj.SourceOptode(src), 'Color', colorOn);
+set(obj.SrcDirectionArrow, 'FaceColor', colorOff);
+set(obj.SrcDirectionArrow(src), 'FaceColor', colorOn);
+
 colorOn = [0 0 1];
 colorOff = [0 0 0.2];
 set(obj.DetectorOptode,'Color', colorOff);
 set(obj.DetectorOptode(det),'Color', colorOn);
+set(obj.DetDirectionArrow, 'FaceColor', colorOff);
+set(obj.DetDirectionArrow(det), 'FaceColor', colorOn);
+
 ViewForward.photonrefresh([],[],obj);
 obj.ChannelActive = h.Value;
 end
