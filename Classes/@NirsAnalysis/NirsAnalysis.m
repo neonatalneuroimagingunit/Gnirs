@@ -8,7 +8,7 @@ classdef NirsAnalysis
         measureId(1,:) char
         
         date(1,1) datetime = NaT;    
-        analysis
+        MethodList
         TrackType(:,1) struct
         SimplyData
         note(1,:) char

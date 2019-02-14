@@ -7,17 +7,23 @@ classdef MetodWW < handle & matlab.mixin.SetGet
     
     properties
         MethodList
+        GHandle
+        TempAnalysis
         
         MainFigure
         MethodBoxList(:,1) MethodBox
         Tree
         TreePanel
         InfoSetPanel
+        InfoSetPanelUp
+        InfoSetPanelDown
+        InfoSetAxes
         MethodPanel
         ResizeButton1
         ResizeButton2
         
-        BigRedButton
+        EvaluateMethodButton
+        AddOutputButton
         
         Position_
     end
@@ -25,7 +31,7 @@ classdef MetodWW < handle & matlab.mixin.SetGet
     methods
         flow = createflow(obj);
         sortmethod(obj);
-        
+        evaluatemethod(h,e,obj);
         function Value = get.Position(obj)
             Value = obj.Position_;
         end
@@ -33,9 +39,25 @@ classdef MetodWW < handle & matlab.mixin.SetGet
             obj.Position_ = Pos;
         end
         %% Constructor
-        function  obj = MetodWW(MethodList)
+        function  obj = MetodWW(MethodList , GHandle)
+            obj.TempAnalysis = GHandle.CurrentDataSet;
+            
+            obj.GHandle = GHandle;
             obj.MethodList = MethodList;
-            obj.MainFigure = figure('Position', [100 100 1200 600]); % cambiare con g handle
+            obj.MainFigure = figure(...
+                'Position', obj.GHandle.Preference.Figure.sizeLarge, ...
+                'Units','pixels',...
+                'Visible', 'off', ...
+                'Resize', 'on',...
+                'Name', 'Viewer', ...
+                'Numbertitle', 'off', ...
+                'Toolbar', 'none', ...
+                'Menubar', 'none', ...
+                'CloseRequestFcn',  @(h,e)close_request(h,e,obj),...
+                'DoubleBuffer', 'on', ...
+                'DockControls', 'off', ...
+                'Renderer', 'OpenGL');
+            
             obj.MainFigure.addprop('CurrentArrow');
             
             obj.TreePanel = uipanel('Parent',obj.MainFigure,...
@@ -43,25 +65,54 @@ classdef MetodWW < handle & matlab.mixin.SetGet
             obj.MethodPanel = uipanel('Parent',obj.MainFigure,...
                 'Units','normalized','Position',[0.21 0 0.59 1]);
             obj.InfoSetPanel = uipanel('Parent',obj.MainFigure,...
-                'Units','normalized','Position',[0.81 0 0.2 1]);
+                'Units','normalized','Position',[0.81 0 0.2 1]); 
+            
+            obj.InfoSetPanelUp = uipanel('Parent',obj.InfoSetPanel,...
+                'Units','normalized','Position',[0 0.5 1 0.5]);
+            obj.InfoSetPanelDown = uipanel('Parent',obj.InfoSetPanel,...
+                'Units','normalized','Position',[0 0.1 1 0.4]);
+             obj.InfoSetAxes = axes('Parent',obj.InfoSetPanelDown,...
+                'Units','normalized','Position',[0.1 0.1 0.8 0.8]);
+            
+            
             obj.Tree = MethodTree([ 0 0.1 1 0.9 ],obj.TreePanel,MethodList);
             obj.Tree.Root.MouseClickedCallback = @(h,e)add_method(h,e,obj);
             
             obj.ResizeButton1 = annotation(obj.MainFigure,'textbox','Units','normalized','Position',[0.2 0 0.01 1],'ButtonDownFcn' ,@(h,e)resize_1(h,e,obj));
             obj.ResizeButton2 = annotation(obj.MainFigure,'textbox','Units','normalized','Position',[0.8 0 0.01 1],'ButtonDownFcn' ,@(h,e)resize_2(h,e,obj));
             
-            obj.BigRedButton = uicontrol('Callback',@(h,e)add_output(h,e,obj),'Style','pushbutton','Parent',obj.TreePanel,'Units','normalized','Position',[0 0 1 0.1]);
+            obj.AddOutputButton = uicontrol('Callback',@(h,e)add_output(h,e,obj),...
+                'Style','pushbutton',...
+                'Parent',obj.TreePanel,...
+                'Units','normalized',...
+                'Position',[0 0 1 0.1],...
+                'String','Add Output');
             
-            InputMethod = NirsMethod('tag', 'Input');
+            obj.EvaluateMethodButton = uicontrol('Callback',@(h,e)obj.evaluatemethod(h,e),...
+                'Style','pushbutton',...
+                'Parent',obj.InfoSetPanel,...
+                'Units','normalized',...
+                'Position',[0 0 1 0.1],...
+                'String','Evaluate');
+            
+            
+            Parameters.name = 'Input';
+            Parameters.value = '';
+            Parameters.style = 'text';
+            InputMethod = NirsMethod('tag', 'Input','Parameters',Parameters);
             obj.MethodBoxList = MethodBox([0.4 0.8 0.16 0.08],obj,InputMethod); %sistemare inputmethod
             obj.MethodBoxList.ButtonInput.Visible = 'off';
+            obj.MainFigure.Visible = 'on';
         end
-
+        
     end
     
 end
 function add_output(~, ~, obj)
-OutputMethod = NirsMethod('tag', 'Output');
+Parameters.name = 'Output';
+Parameters.value = '';
+Parameters.style = 'text';
+OutputMethod = NirsMethod('tag', 'Output','Parameters',Parameters);
 TempMethodBox = MethodBox([rand-0.08 0 0.16 0.08],obj,OutputMethod);
 obj.MethodBoxList = [obj.MethodBoxList; TempMethodBox];
 TempMethodBox.ButtonOutput.Visible = 'off';
@@ -111,3 +162,7 @@ h.WindowButtonMotionFcn = [];
 h.WindowButtonUpFcn = [];
 end
 
+function close_request(Handle, ~, obj)
+delete(Handle);
+obj.GHandle.MethodWindow = [];
+end

@@ -287,7 +287,7 @@ analysisId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
 makeanalysiscurrent(GHandle, analysisId)
 methodPath = fullfile(GHandle.Preference.Path.currentPath, 'Method', 'MethodList.mat');
 GHandle.MethodWindow = load(methodPath); % it wipes out also the field
-GHandle.MethodWindow = MetodWW(GHandle.MethodWindow.MethodList);
+GHandle.MethodWindow = MetodWW(GHandle.MethodWindow.MethodList, GHandle);
 end
 
 function new_analysis (~, ~, GHandle)
