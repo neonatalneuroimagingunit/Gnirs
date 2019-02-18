@@ -52,8 +52,8 @@ classdef NirsAnalysis
                         case 'tracktype'
                             obj.TrackType = varargin{i+1};
                             
-                        case 'analysis'
-                            obj.analysis = varargin{i+1};
+                        case 'methodlist'
+                            obj.MethodList = varargin{i+1};
                             
                         case 'note'
                             obj.note = varargin{i+1};
