@@ -15,8 +15,8 @@ obj.Parent.InfoSetPanelUp.Children.delete;
 
 %% Create GUI objects
 for iParam = 1:1:nParam
-    labelPos = [0.1, intra*iParam + 3*inter*(iParam-1)+inter, 0.8, inter];
-    valuePos = [0.1, intra*iParam + 3*inter*(iParam-1), 0.8, inter];   
+    labelPos = [0.1, intra*(nParam-iParam+1) + 3*inter*(nParam-iParam)+inter, 0.8, inter];
+    valuePos = [0.1, intra*(nParam-iParam+1) + 3*inter*(nParam-iParam), 0.8, inter];   
     textLabel(iParam) = uicontrol('Parent', obj.Parent.InfoSetPanelUp, ...
         'Style', 'text', ...
         'Units', 'normalized',...
