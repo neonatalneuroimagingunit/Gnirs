@@ -24,6 +24,7 @@ create_trackinfo(obj);
 
 obj.populateprobe;
 obj.populatepreference;
+obj.populateinfo;
 end
 
 function create_panel(obj)
