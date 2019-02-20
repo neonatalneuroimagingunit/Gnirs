@@ -14,6 +14,9 @@ notEdvColor = 'k';
 
 edvLine = evnt.AffectedObject.edvLine;
 idxLine = find(edvLine);
+
+xRange = obj.Panel.Plot.Time.MainAxes.XLim;
+
 if all(edvLine)
     linewidthBackground = lineWidth;
     linewidthForeground = lineWidth;
@@ -56,11 +59,10 @@ end
 uistack(obj.Panel.Plot.Time.Lines(edvLine),'top');
 uistack(obj.Panel.Plot.Frequency.Lines(edvLine),'top');
 
-xRange = obj.Panel.Plot.Time.MainAxes.XLim;
 if  obj.Panel.Preference.CheckBoxYAutoscale.Value
     xVal = cat(1,obj.Panel.Plot.Time.Lines(edvLine).XData)';
     yVal = cat(1,obj.Panel.Plot.Time.Lines(edvLine).YData)';
-    mask = any((xVal>xRange(1) & xVal<xRange(2)),2);
+    mask = any((xVal>=xRange(1) & xVal<=xRange(2)),2);
     yLimit = [min(yVal(mask,:),[],'all'), max(yVal(mask,:),[],'all')];
     obj.Panel.Plot.Time.MainAxes.YLim = yLimit;
     nEvents = length(obj.Panel.Plot.Time.Events);
