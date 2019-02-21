@@ -12,6 +12,8 @@ classdef NirsMethod
         
         Parameters(:,1) struct
         methodFunction  function_handle
+        
+        UserParameters(:,1) struct
         plotFunction  function_handle
         
         inputType
@@ -58,6 +60,9 @@ classdef NirsMethod
                             
                         case 'parameters'
                             obj.Parameters = varargin{i+1};
+                            
+                        case 'userparameters'
+                            obj.UserParameters = varargin{i+1};
                             
                         case 'methodfunction'
                             obj.methodFunction = varargin{i+1};

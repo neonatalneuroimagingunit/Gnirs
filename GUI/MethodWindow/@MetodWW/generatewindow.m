@@ -51,10 +51,11 @@ obj.EvaluateMethodButton = uicontrol('Callback',@(h,e)obj.evaluatemethod(h,e),..
     'String','Evaluate');
 
 
-Parameters.name = 'Input';
-Parameters.value = '';
-Parameters.style = 'text';
-InputMethod = NirsMethod('tag', 'Input','Parameters',Parameters);
+UserParameters.name = 'Input';
+UserParameters.field = '';
+UserParameters.string = '';
+UserParameters.style = 'text';
+InputMethod = NirsMethod('tag', 'Input', 'UserParameters', UserParameters);
 obj.MethodBoxList = MethodBox([0.4 0.8 0.16 0.08],obj,InputMethod); %sistemare inputmethod
 obj.MethodBoxList.ButtonInput.Visible = 'off';
 obj.MainFigure.Visible = 'on';
@@ -62,10 +63,11 @@ end
 
 
 function add_output(~, ~, obj)
-Parameters.name = 'Output';
-Parameters.value = '';
-Parameters.style = 'text';
-OutputMethod = NirsMethod('tag', 'Output','Parameters',Parameters);
+UserParameters.name = 'Output';
+UserParameters.field = '';
+UserParameters.string = '';
+UserParameters.style = 'text';
+OutputMethod = NirsMethod('tag', 'Output','UserParameters', UserParameters);
 TempMethodBox = MethodBox([rand-0.08 0 0.16 0.08],obj,OutputMethod);
 obj.MethodBoxList = [obj.MethodBoxList; TempMethodBox];
 TempMethodBox.ButtonOutput.Visible = 'off';
@@ -79,7 +81,7 @@ if ~isempty(Event.Nodes) % click on a node
             methodIdx = strcmp({obj.MethodList.tag}, Event.Nodes.Value);
             method2Add = obj.MethodList(methodIdx);
             if ~isempty(method2Add)
-                obj.MethodBoxList = [obj.MethodBoxList; MethodBox([rand-0.08 rand-0.04 0.16 0.08],obj,method2Add)];
+                obj.MethodBoxList = [obj.MethodBoxList; MethodBox([rand-0.08 rand-0.04 0.16 0.08], obj, method2Add)];
             end
         case 'alt' %dxstudy
     end

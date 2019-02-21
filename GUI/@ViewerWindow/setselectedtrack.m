@@ -30,9 +30,11 @@ color = obj.WatchList.colorLine;
 for lineIdx = 1:1:length(edvLine)
     if (edvLine(lineIdx))
         obj.Panel.Plot.Time.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
+        
         obj.Panel.Plot.Time.Lines(lineIdx).LineWidth = lineWidth;
         
         obj.Panel.Plot.Frequency.Lines(lineIdx).Color = [color(lineIdx,:), alphaForeground];
+        
         obj.Panel.Plot.Frequency.Lines(lineIdx).LineWidth = lineWidth;
     else
         obj.Panel.Plot.Time.Lines(lineIdx).Color = [colorBackground, alphaBackground];
@@ -41,6 +43,8 @@ for lineIdx = 1:1:length(edvLine)
         obj.Panel.Plot.Frequency.Lines(lineIdx).Color = [colorBackground, alphaBackground];
         obj.Panel.Plot.Frequency.Lines(lineIdx).LineWidth = linewidthBackground;
     end
+    obj.Panel.Plot.Time.SmallLines(lineIdx).Color =  [color(lineIdx,:), alphaForeground];
+    obj.Panel.Plot.Frequency.SmallLines(lineIdx).Color =  [color(lineIdx,:), alphaForeground];
 end
 
 if sum(edvLine) == 1
