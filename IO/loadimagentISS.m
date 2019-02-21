@@ -265,38 +265,38 @@ else
     
     
     if pobeFlag
-    nName = length(channelNames);
-    newChannelNames = cell(nName,1);
-    newChannelNames{1} = 'Time';
-    for iName = 2 : nName
-        tempChannelNames = '';
-        currentChannelName = channelNames{iName};
-        switch currentChannelName(2:3)
-            case 'AC'
-                typeName = 'tAC';
-            case 'DC'
-                typeName = 'tDC';
-            case 'Ph'
-                typeName = 'tPh';
+        nName = length(channelNames);
+        newChannelNames = cell(nName,1);
+        newChannelNames{1} = 'Time';
+        for iName = 2 : nName
+            tempChannelNames = '';
+            currentChannelName = channelNames{iName};
+            switch currentChannelName(2:3)
+                case 'AC'
+                    typeName = 'tAC';
+                case 'DC'
+                    typeName = 'tDC';
+                case 'Ph'
+                    typeName = 'tPh';
+            end
+            if  mod(iName,2)
+                wavelenghName = '_w690';
+            else
+                wavelenghName = '_w830';
+            end
+            idxDet = currentChannelName(1)-'A'+1;
+            egg = reshape([Probe.channel.pairs]',2, [])';
+            idxSrc = egg(egg(:,2)==idxDet,1);
+            idxSrc =  idxSrc(ceil(str2double(currentChannelName(4:end))/2));
+            srcName = num2str(idxSrc, '_s%.3d');
+            %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
+            %tempChannelNames = [tempChannelNames, '_s' ,sourceName];
+            %detName = num2str(currentChannelName(1)-'A'+1, '%.3d');
+            detName = num2str(idxDet, '_d%.3d');
+            %tempChannelNames = [tempChannelNames, '_d', detName];
+            newChannelNames{iName} = [typeName wavelenghName srcName detName];
         end
-        if  mod(iName,2)
-            wavelenghName = '_w690';
-        else
-            wavelenghName = '_w830';
-        end
-        idxDet = currentChannelName(1)-'A'+1;
-        egg = reshape([Probe.channel.pairs]',2, [])';
-        idxSrc = egg(egg(:,2)==idxDet,1);
-        idxSrc =  idxSrc(ceil(str2double(currentChannelName(4:end))/2));
-        srcName = num2str(idxSrc, '_s%.3d');
-        %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
-        %tempChannelNames = [tempChannelNames, '_s' ,sourceName];
-        %detName = num2str(currentChannelName(1)-'A'+1, '%.3d');
-        detName = num2str(idxDet, '_d%.3d');
-        %tempChannelNames = [tempChannelNames, '_d', detName];
-        newChannelNames{iName} = [typeName wavelenghName srcName detName];
-    end
-    MdataClean.Properties.VariableNames = newChannelNames;
+        MdataClean.Properties.VariableNames = newChannelNames;
     end
     
     Event = NirsEvent;
@@ -325,9 +325,18 @@ else
         'Info', Info ...
         );
     
-    
+    RawMethod = NirsMethod(...
+        'Parameters',[],...
+        'UserParameters', [],...
+        'description', 'Raw' ,...
+        'name', 'Raw' ,...
+        'note', [] ,...
+        'tag', 'Raw',...
+        'type', 'Raw'...
+        );
     GHandle.CurrentDataSet.Analysis = NirsAnalysis(...
         'date', date,...
+        'MethodList', RawMethod,...
         'TrackType', TrackType,...
         'SimplyData', SimplyData...
         );
