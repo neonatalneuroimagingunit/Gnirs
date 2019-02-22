@@ -125,6 +125,7 @@ obj.Panel.Data.Event.Table.Data = [...
 obj.WatchList.timeLim = [obj.Dataset.Data.Time.Time(1),...
     obj.Dataset.Data.Time.Time(end)];
 
+%% Call setselectedtrack via edvLine listener
 if isempty(obj.WatchList.edvLine)
    obj.WatchList.edvLine = true(size(obj.Panel.Plot.Time.SmallLines));
 else

@@ -34,6 +34,7 @@ obj.Panel.Plot.Frequency.Rectangle = rectangle(obj.Panel.Plot.Frequency.SmallAxe
     'Curvature', [0 0],...
     'EdgeColor', foregroundColor);
 
+obj.WatchList.edvLine = obj.WatchList.edvLine;
 obj.WatchList.freqLim = [Data{1,1},Data{end,1}];
 end
 

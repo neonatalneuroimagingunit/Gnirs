@@ -1,9 +1,9 @@
 function  populateprobe(obj)
 lineShrinkFactor = 0.15;
 if ~isempty(obj.Dataset.Probe)
-    markerSize = 15;
+    markerSize = 25;
     
-    % Bigmagia
+    % Bigmagic
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     egg = max(obj.Dataset.Probe.source.position2D(:));
     spam = zeros(egg,egg);

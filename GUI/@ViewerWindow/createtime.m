@@ -229,6 +229,8 @@ switch eventData.EventName
                     obj.WatchList.timeLim(2) = xmax;
                 else
                     msgbox('Invalid value - max must be larger than min')
+                    xmin = obj.WatchList.timeLim(1);
+                    xmax = obj.WatchList.timeLim(2);
                 end
                 
             case 'min'
@@ -238,6 +240,8 @@ switch eventData.EventName
                     obj.WatchList.timeLim(1) = xmin;
                 else
                     msgbox('Invalid value - min must be smaller than max')
+                    xmin = obj.WatchList.timeLim(1);
+                    xmax = obj.WatchList.timeLim(2);
                 end
         end
         
@@ -247,8 +251,8 @@ switch eventData.EventName
         xmax = xmin + xrange;
 end
 if strcmp(obj.Toolbar.LockMultipleWiewer.State,'on')
-    for VieverList = obj.GHandle.Viewer
-        VieverList.WatchList.timeLim = [xmin , xmax];
+    for ViewerList = obj.GHandle.Viewer
+        ViewerList.WatchList.timeLim = [xmin , xmax];
     end
 else
     obj.WatchList.timeLim = [xmin , xmax];
