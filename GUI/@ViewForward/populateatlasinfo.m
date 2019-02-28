@@ -1,3 +1,0 @@
-function populateatlasinfo(obj)
-
-end

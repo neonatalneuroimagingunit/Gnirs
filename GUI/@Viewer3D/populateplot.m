@@ -6,13 +6,14 @@ obj.MainPlot.Axes = axes('Parent', obj.MainPlot.Panel, ...
     'Position', [0.1 0.1 0.8 0.8], ...
     'Visible', 'off');
 
-axis equal
-axis off
-axis vis3d
+set(obj.MainPlot.Axes,'CameraViewAngle',get(obj.MainPlot.Axes,'CameraViewAngle'));
+set(obj.MainPlot.Axes,'PlotBoxAspectRatio',get(obj.MainPlot.Axes,'PlotBoxAspectRatio'));
+set(obj.MainPlot.Axes,'DataAspectRatio',get(obj.MainPlot.Axes,'DataAspectRatio'));
+rotate3d(obj.MainPlot.Axes, 'on');
 
-obj.MainPlot.Light1 = light('Position',[100 0 100]);     % x is left->right, y is back->front
-obj.MainPlot.Light2 = light('Position',[-100 0 100]);
-
+lighting(obj.MainPlot.Axes,'gouraud');
+obj.MainPlot.Light(1) = light('Position', [+100 0 50]);
+obj.MainPlot.Light(2) = light('Position', [-100 0 50]);
 
 if ~isempty(obj.Atlas) 
     obj.populateatlasplot;

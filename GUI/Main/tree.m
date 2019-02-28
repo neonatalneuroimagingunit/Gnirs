@@ -317,9 +317,12 @@ DBAtlas = GHandle.DataBase.findid(DBProbe.atlasId);
 
 Atlas = DBAtlas.load;
 Probe = DBProbe.load;
-Forward = DBProbe.loadforward;
-
-GHandle.TempWindow = ViewForward(GHandle, Atlas, Probe, Forward);
+if DBProbe.forwardFlag
+	Forward = DBProbe.loadforward;
+	GHandle.Viewer3D = Viewer3D(GHandle, Atlas, Probe, Forward);
+else
+	GHandle.Viewer3D = Viewer3D(GHandle, Atlas, Probe);
+end
 end
 
 function duplicate_obj(~,~, GHandle, id)

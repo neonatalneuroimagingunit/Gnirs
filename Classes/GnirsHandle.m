@@ -3,6 +3,7 @@ classdef GnirsHandle < handle
    properties
       Main
 	  Viewer
+      Viewer3D
 	  MethodWindow
 	  TempWindow
 	  
