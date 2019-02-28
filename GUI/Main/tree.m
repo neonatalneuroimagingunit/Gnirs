@@ -311,13 +311,15 @@ end
 
 function explore_forward(~,~, GHandle)
 id = GHandle.Main.Tree.ProbeTree.SelectedNodes.Value;
+
 DBProbe = GHandle.DataBase.findid(id);
-GHandle.CurrentDataSet.Probe = DBProbe.load;
 DBAtlas = GHandle.DataBase.findid(DBProbe.atlasId);
-GHandle.CurrentDataSet.Atlas = DBAtlas.load;
+
+Atlas = DBAtlas.load;
+Probe = DBProbe.load;
 Forward = DBProbe.loadforward;
 
-GHandle.TempWindow = ViewForward(GHandle, Forward);
+GHandle.TempWindow = ViewForward(GHandle, Atlas, Probe, Forward);
 end
 
 function duplicate_obj(~,~, GHandle, id)

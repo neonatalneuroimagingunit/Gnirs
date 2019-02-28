@@ -101,21 +101,21 @@ obj.ForwardInfo.ExtraInfoButton = uicontrol('Parent', obj.MainInfo.TabForward, .
 end
 
 function switch_datatype(h, ~, obj)
-% if h.Value == 1
-%     obj.SrcListLabel.Visible = 'on';
-%     obj.SrcList.Visible = 'on';
-%     obj.DetListLabel.Visible = 'on';
-%     obj.DetList.Visible = 'on';
-%     obj.ChannelList.Visible = 'off';
-%     obj.ChannelListLabel.Visible = 'off';
-% else
-%     obj.SrcListLabel.Visible = 'off';
-%     obj.SrcList.Visible = 'off';
-%     obj.DetListLabel.Visible = 'off';
-%     obj.DetList.Visible = 'off';
-%     obj.ChannelList.Visible = 'on';
-%     obj.ChannelListLabel.Visible = 'on';
-% end
+if h.Value == 1
+    obj.ForwardInfo.SrcListLabel.Visible = 'on';
+    obj.ForwardInfo.SrcList.Visible = 'on';
+    obj.ForwardInfo.DetListLabel.Visible = 'on';
+    obj.ForwardInfo.DetList.Visible = 'on';
+    obj.ForwardInfo.ChannelList.Visible = 'off';
+    obj.ForwardInfo.ChannelListLabel.Visible = 'off';
+else
+    obj.ForwardInfo.SrcListLabel.Visible = 'off';
+    obj.ForwardInfo.SrcList.Visible = 'off';
+    obj.ForwardInfo.DetListLabel.Visible = 'off';
+    obj.ForwardInfo.DetList.Visible = 'off';
+    obj.ForwardInfo.ChannelList.Visible = 'on';
+    obj.ForwardInfo.ChannelListLabel.Visible = 'on';
+end
 end
 
 function srclist_callback(h, ~, obj)
@@ -149,25 +149,25 @@ end
 function channellist_callback(h, ~, obj)
 % src = obj.Probe.channel.pairs(h.Value,1);
 % det = obj.Probe.channel.pairs(h.Value,2);
-% 
+%
 % if all(obj.ChannelActive' == h.Value,'all') && ~isempty(obj.ChannelActive)
 %     h.Value = [];
 % end
-% 
+%
 % colorOn = [1 0 0];
 % colorOff = [0.2 0 0];
 % set(obj.SourceOptode, 'Color', colorOff);
 % set(obj.SourceOptode(src), 'Color', colorOn);
 % set(obj.SrcDirectionArrow, 'FaceColor', colorOff);
 % set(obj.SrcDirectionArrow(src), 'FaceColor', colorOn);
-% 
+%
 % colorOn = [0 0 1];
 % colorOff = [0 0 0.2];
 % set(obj.DetectorOptode,'Color', colorOff);
 % set(obj.DetectorOptode(det),'Color', colorOn);
 % set(obj.DetDirectionArrow, 'FaceColor', colorOff);
 % set(obj.DetDirectionArrow(det), 'FaceColor', colorOn);
-% 
+%
 % ViewForward.photonrefresh([],[],obj);
 % obj.ChannelActive = h.Value;
 end
