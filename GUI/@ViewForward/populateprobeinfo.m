@@ -1,3 +1,3 @@
-function popprobeinfo(obj)
+function populateprobeinfo(obj)
 end
 

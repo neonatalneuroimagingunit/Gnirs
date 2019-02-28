@@ -1,2 +1,2 @@
-function poptrackinfo(obj)
+function populatetrackinfo(obj)
 end

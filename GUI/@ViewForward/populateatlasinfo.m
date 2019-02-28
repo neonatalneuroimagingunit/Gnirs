@@ -1,3 +1,3 @@
-function popatlasinfo(obj)
+function populateatlasinfo(obj)
 
 end

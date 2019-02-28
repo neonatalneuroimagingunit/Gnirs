@@ -10,28 +10,28 @@ if ~isempty(obj.Atlas)
     obj.MainInfo.TabAtlas = uitab(...
         'Parent',obj.MainInfo.TabGroup,...
         'Title','Atlas');
-    obj.popatlasinfo;
+    obj.populateatlasinfo;
 end
 
 if ~isempty(obj.Probe)
     obj.MainInfo.TabProbe = uitab(...
         'Parent',obj.MainInfo.TabGroup,...
         'Title','Probe');
-    obj.popprobeinfo;
+    obj.populateprobeinfo;
 end
 
 if ~isempty(obj.Forward)
     obj.MainInfo.TabForward = uitab(...
         'Parent',obj.MainInfo.TabGroup,...
         'Title','Forward');
-    obj.popforwardinfo;
+    obj.populateforwardinfo;
 end
 
 if ~isempty(obj.Track)
     obj.MainInfo.TabTrack = uitab(...
         'Parent',obj.MainInfo.TabGroup,...
         'Title','Track');
-    obj.poptrackinfo;
+    obj.populatetrackinfo;
 end
 
 end

@@ -1,4 +1,4 @@
-function popforwardplot(obj)
+function populateforwardplot(obj)
 
 nSrc = size(obj.Forward.src,1);
 nDet = size(obj.Forward.det,1);

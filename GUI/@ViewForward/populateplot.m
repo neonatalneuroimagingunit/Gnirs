@@ -1,6 +1,6 @@
 function populateplot(obj)
 
-obj.MainPlot.Axes = axes('Parent', obj.PlotPanel, ...
+obj.MainPlot.Axes = axes('Parent', obj.MainPlot.Panel, ...
     'Units', 'normalized', ...
     'NextPlot', 'add', ...
     'Position', [0.1 0.1 0.8 0.8], ...
@@ -15,19 +15,19 @@ obj.MainPlot.Light2 = light('Position',[-100 0 100]);
 
 
 if ~isempty(obj.Atlas) 
-    obj.popatlasplot;
+    obj.populateatlasplot;
 end
 
 if ~isempty(obj.Probe) 
-    obj.popprobeplot;
+    obj.populateprobeplot;
 end
 
 if ~isempty(obj.Forward)  
-    obj.popforwardplot;
+    obj.populateforwardplot;
 end
 
 if ~isempty(obj.Track) 
-    obj.poptrackplot;
+    obj.populatetrackplot;
 end
 
 end

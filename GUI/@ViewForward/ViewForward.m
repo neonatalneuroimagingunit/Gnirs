@@ -75,8 +75,11 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         %% Constructor
         function  obj = ViewForward(GHandle, Atlas, Probe, Forward, Track)
             
+            
+            figureSize = [0 0 800 600];  
             if ~isempty(GHandle)
                 obj.GHandle = GHandle;
+                figureSize = obj.GHandle.Preference.Figure.sizeLarge;
             end
             
             if nargin >= 2
@@ -94,7 +97,7 @@ classdef ViewForward < handle & matlab.mixin.SetGet
             
             
             obj.MainFigure = figure(...
-                'Position', obj.GHandle.Preference.Figure.sizeLarge, ...
+                'Position', figureSize, ...
                 'Units','pixels',...
                 'Visible', 'off', ...
                 'Resize', 'on',...

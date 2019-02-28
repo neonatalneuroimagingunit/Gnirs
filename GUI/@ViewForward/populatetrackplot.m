@@ -1,3 +1,3 @@
-function poptrackplot(obj)
+function populatetrackplot(obj)
 
 end
