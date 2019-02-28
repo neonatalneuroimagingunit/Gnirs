@@ -5,58 +5,38 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         Forward
         Probe
         Atlas
+        Track
     end
     
     properties
         GHandle
         
         MainFigure
-        InfoPanel
-        PlotPanel
-        SettingPanel
-        ExtraInfo
+        MainInfo
+        MainPlot
+        MainSetting
+        MainExtra
         
-        DataTypeLabel
-        DataType
-        SrcListLabel
-        SrcList
-        SrcActive
-        DetListLabel
-        DetList
-        DetActive
-        ChannelListLabel
-        ChannelList
-        ChannelActive
-        OptodeCheckbox
-        ArrowCheckbox
-        PhotonCheckbox
-        ExtraInfoButton
+        AtlasInfo
+        ProbeInfo
+        ForwardInfo
+        TrackInfo
         
-        ProbeAxes
-        Scalp
-        GreyMatter
-        WhiteMatter
-        Light1
-        Light2
-        SourceOptode
-        DetectorOptode
-        Sensitivity
-        SrcDirectionArrow
-        DetDirectionArrow
+        AtlasPlot
+        ProbePlot
+        ForwardPlot
+        TrackPlot
         
-        DownSamplingLabel
-        DownSampling
-        MaxMarkerSizeLabel
-        MaxMarkerSize
-        AngleLabel
-        Angle1
-        Angle2
-        SensitivityThresholdLabel
-        SensitivityThreshold
-        ColormapLabel
-        Colormap
-        ScaleLabel
-        Scale
+        AtlasSettings
+        ProbeSettings
+        ForwardSettings
+        TrackSettings
+        
+        AtlasExtra
+        ProbeExtra
+        ForwardExtra
+        TrackExtra
+        
         
         Position_
     end
@@ -69,6 +49,23 @@ classdef ViewForward < handle & matlab.mixin.SetGet
         populateplot(obj)
         populatesetting(obj)
         
+        populateatlasinfo(obj)
+        populateatlasplot(obj)
+        populateatlassetting(obj)
+        
+        populateprobeinfo(obj)
+        populateprobeplot(obj)
+        populateprobesetting(obj)
+        
+        populateforwardinfo(obj)
+        populateforwardplot(obj)
+        populateforwardsetting(obj)
+        
+        populatetrackinfo(obj)
+        populatetrackplot(obj)
+        populatetracksetting(obj)
+        
+        
         function Value = get.Position(obj)
             Value = obj.Position_;
         end
@@ -76,13 +73,25 @@ classdef ViewForward < handle & matlab.mixin.SetGet
             obj.Position_ = Pos;
         end
         %% Constructor
-        function  obj = ViewForward(GHandle, Forward)
-            obj.GHandle = GHandle;
+        function  obj = ViewForward(GHandle, Atlas, Probe, Forward, Track)
             
-            obj.Probe = GHandle.CurrentDataSet.Probe;
-            obj.Atlas = GHandle.CurrentDataSet.Atlas;
+            if ~isempty(GHandle)
+                obj.GHandle = GHandle;
+            end
             
-            obj.Forward = Forward;
+            if nargin >= 2
+                obj.Atlas = Atlas;
+                if nargin >= 3
+                    obj.Probe = Probe;
+                    if nargin >= 4
+                        obj.Forward = Forward;
+                        if nargin == 5
+                            obj.Track = Track;
+                        end
+                    end
+                end
+            end
+            
             
             obj.MainFigure = figure(...
                 'Position', obj.GHandle.Preference.Figure.sizeLarge, ...
@@ -97,13 +106,13 @@ classdef ViewForward < handle & matlab.mixin.SetGet
                 'DoubleBuffer', 'on', ...
                 'DockControls', 'off', ...
                 'Renderer', 'OpenGL');
-            obj.InfoPanel = uipanel('Parent', obj.MainFigure,...
+            obj.MainInfo.Panel = uipanel('Parent', obj.MainFigure,...
                 'Units', 'normalized', ...
                 'Position', [0 0 0.2 1]);
-            obj.PlotPanel = uipanel('Parent', obj.MainFigure,...
+            obj.MainPlot.Panel = uipanel('Parent', obj.MainFigure,...
                 'Units', 'normalized', ...
                 'Position', [0.2 0 0.6 1]);
-            obj.SettingPanel = uipanel('Parent', obj.MainFigure,...
+            obj.MainSetting.Panel = uipanel('Parent', obj.MainFigure,...
                 'Units', 'normalized', ...
                 'Position', [0.8 0 0.2 1]);
             
@@ -111,8 +120,7 @@ classdef ViewForward < handle & matlab.mixin.SetGet
             obj.populateplot;
             obj.populatesetting;
             
-            rotate3d(obj.ProbeAxes);
-            
+            rotate3d(obj.MainPlot.Axes);
             obj.MainFigure.Visible = 'on';
         end
     end
