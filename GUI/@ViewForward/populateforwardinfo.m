@@ -98,6 +98,9 @@ obj.ForwardInfo.ExtraInfoButton = uicontrol('Parent', obj.MainInfo.TabForward, .
     'String', 'Forward Details', ...
     'Callback', @(h,e)ViewForward.extrainfo(h,e,obj));
 
+obj.ForwardInfo.SrcActive = [];
+obj.ForwardInfo.DetActive = [];
+obj.ForwardInfo.ChannelActive = [];
 end
 
 function switch_datatype(h, ~, obj)
@@ -119,75 +122,75 @@ end
 end
 
 function srclist_callback(h, ~, obj)
-% colorOn = 'r';
-% colorOff = [0.2 0 0];
-% if all(obj.SrcActive' == h.Value,'all') && ~isempty(obj.SrcActive)
-%     h.Value = [];
-% end
-% set(obj.SourceOptode, 'Color', colorOff);
-% set(obj.SourceOptode(h.Value), 'Color', colorOn);
-% set(obj.SrcDirectionArrow, 'FaceColor', colorOff);
-% set(obj.SrcDirectionArrow(h.Value), 'FaceColor', colorOn);
-% ViewForward.photonrefresh([],[],obj);
-% obj.SrcActive = h.Value;
+colorOn = 'r';
+colorOff = [0.2 0 0];
+if all(obj.ForwardInfo.SrcActive' == h.Value, 'all') && ~isempty(obj.ForwardInfo.SrcActive)
+    h.Value = [];
+end
+set(obj.ForwardPlot.SourceOptode, 'Color', colorOff);
+set(obj.ForwardPlot.SourceOptode(h.Value), 'Color', colorOn);
+set(obj.ForwardPlot.SrcDirectionArrow, 'FaceColor', colorOff);
+set(obj.ForwardPlot.SrcDirectionArrow(h.Value), 'FaceColor', colorOn);
+ViewForward.photonrefresh([],[],obj);
+obj.ForwardInfo.SrcActive = h.Value;
 end
 
 function detlist_callback(h, ~, obj)
-% colorOn = [0 0 1];
-% colorOff = [0 0 0.2];
-% if all(obj.DetActive' == h.Value,'all') && ~isempty(obj.DetActive)
-%     h.Value = [];
-% end
-% set(obj.DetectorOptode, 'Color', colorOff);
-% set(obj.DetectorOptode(h.Value), 'Color', colorOn);
-% set(obj.DetDirectionArrow, 'FaceColor', colorOff);
-% set(obj.DetDirectionArrow(h.Value), 'FaceColor', colorOn);
-% ViewForward.photonrefresh([],[],obj);
-% obj.DetActive = h.Value;
+colorOn = [0 0 1];
+colorOff = [0 0 0.2];
+if all(obj.ForwardInfo.DetActive' == h.Value,'all') && ~isempty(obj.ForwardInfo.DetActive)
+    h.Value = [];
+end
+set(obj.ForwardPlot.DetectorOptode, 'Color', colorOff);
+set(obj.ForwardPlot.DetectorOptode(h.Value), 'Color', colorOn);
+set(obj.ForwardPlot.DetDirectionArrow, 'FaceColor', colorOff);
+set(obj.ForwardPlot.DetDirectionArrow(h.Value), 'FaceColor', colorOn);
+ViewForward.photonrefresh([],[],obj);
+obj.ForwardInfo.DetActive = h.Value;
 end
 
 function channellist_callback(h, ~, obj)
-% src = obj.Probe.channel.pairs(h.Value,1);
-% det = obj.Probe.channel.pairs(h.Value,2);
-%
-% if all(obj.ChannelActive' == h.Value,'all') && ~isempty(obj.ChannelActive)
-%     h.Value = [];
-% end
-%
-% colorOn = [1 0 0];
-% colorOff = [0.2 0 0];
-% set(obj.SourceOptode, 'Color', colorOff);
-% set(obj.SourceOptode(src), 'Color', colorOn);
-% set(obj.SrcDirectionArrow, 'FaceColor', colorOff);
-% set(obj.SrcDirectionArrow(src), 'FaceColor', colorOn);
-%
-% colorOn = [0 0 1];
-% colorOff = [0 0 0.2];
-% set(obj.DetectorOptode,'Color', colorOff);
-% set(obj.DetectorOptode(det),'Color', colorOn);
-% set(obj.DetDirectionArrow, 'FaceColor', colorOff);
-% set(obj.DetDirectionArrow(det), 'FaceColor', colorOn);
-%
-% ViewForward.photonrefresh([],[],obj);
-% obj.ChannelActive = h.Value;
+src = obj.Probe.channel.pairs(h.Value,1);
+det = obj.Probe.channel.pairs(h.Value,2);
+
+if all(obj.ForwardInfo.ChannelActive' == h.Value,'all') && ~isempty(obj.ForwardInfo.ChannelActive)
+    h.Value = [];
+end
+
+colorOn = [1 0 0];
+colorOff = [0.2 0 0];
+set(obj.ForwardPlot.SourceOptode, 'Color', colorOff);
+set(obj.ForwardPlot.SourceOptode(src), 'Color', colorOn);
+set(obj.ForwardPlot.SrcDirectionArrow, 'FaceColor', colorOff);
+set(obj.ForwardPlot.SrcDirectionArrow(src), 'FaceColor', colorOn);
+
+colorOn = [0 0 1];
+colorOff = [0 0 0.2];
+set(obj.ForwardPlot.DetectorOptode,'Color', colorOff);
+set(obj.ForwardPlot.DetectorOptode(det),'Color', colorOn);
+set(obj.ForwardPlot.DetDirectionArrow, 'FaceColor', colorOff);
+set(obj.ForwardPlot.DetDirectionArrow(det), 'FaceColor', colorOn);
+
+ViewForward.photonrefresh([],[],obj);
+obj.ForwardInfo.ChannelActive = h.Value;
 end
 
 function optode_checkbox(h, ~, obj)
-% if h.Value == true
-%     set(obj.SourceOptode,'Visible', 'on');
-%     set(obj.DetectorOptode,'Visible', 'on');
-% else
-%     set(obj.SourceOptode,'Visible', 'off');
-%     set(obj.DetectorOptode,'Visible', 'off');
-% end
+if h.Value == true
+    set(obj.ForwardPlot.SourceOptode,'Visible', 'on');
+    set(obj.ForwardPlot.DetectorOptode,'Visible', 'on');
+else
+    set(obj.ForwardPlot.SourceOptode,'Visible', 'off');
+    set(obj.ForwardPlot.DetectorOptode,'Visible', 'off');
+end
 end
 
 function arrow_checkbox(h, ~, obj)
-% if h.Value
-%     set(obj.SrcDirectionArrow, 'Visible', 'on');
-%     set(obj.DetDirectionArrow, 'Visible', 'on');
-% else
-%     set(obj.SrcDirectionArrow, 'Visible', 'off');
-%     set(obj.DetDirectionArrow, 'Visible', 'off');
-% end
+if h.Value
+    set(obj.ForwardPlot.SrcDirectionArrow, 'Visible', 'on');
+    set(obj.ForwardPlot.DetDirectionArrow, 'Visible', 'on');
+else
+    set(obj.ForwardPlot.SrcDirectionArrow, 'Visible', 'off');
+    set(obj.ForwardPlot.DetDirectionArrow, 'Visible', 'off');
+end
 end
