@@ -88,7 +88,7 @@ obj.ForwardInfo.PhotonCheckbox = uicontrol('Parent', obj.MainInfo.TabForward, ..
     'HorizontalAlignment', 'left', ...
     'Visible', 'on', ...
     'String', 'Photon density', ...
-    'Callback', @(h,e)Viewer3D.photonrefresh(h,e,obj));
+    'Callback', @(h,e)photon_checkbox_callback(h,e,obj));
 obj.ForwardInfo.ExtraInfoButton = uicontrol('Parent', obj.MainInfo.TabForward, ...
     'Style', 'pushbutton', ...
     'Units', 'normalized',...
@@ -193,4 +193,13 @@ else
     set(obj.ForwardPlot.SrcDirectionArrow, 'Visible', 'off');
     set(obj.ForwardPlot.DetDirectionArrow, 'Visible', 'off');
 end
+end
+
+function photon_checkbox_callback(~,~,obj)
+
+if ~isempty(obj.Track)
+    obj.TrackInfo.TrackCheckbox.Value = false;
+end
+
+Viewer3D.photonrefresh([],[],obj)
 end

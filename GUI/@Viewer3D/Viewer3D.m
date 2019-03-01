@@ -42,6 +42,7 @@ classdef Viewer3D < handle & matlab.mixin.SetGet
     end
     methods (Static)
         photonrefresh(h,e,obj);
+        trackrefresh(h,e,obj);
         extrainfo(h,e,obj);
     end
     methods

@@ -190,6 +190,11 @@ for iAnalysis = 1:(GHandle.DataBase.nAnalysis) %for each analysis plus the row o
     uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,...
         'Label','Develop',...
         'callback',{@develop_analysis ,GHandle});
+    uimenu(GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu,...
+        'Label','3D Viewer (3d glasses included)',...
+        'callback',{@viewer3d_analysis ,GHandle});
+    
+  
     
     set(GHandle.Main.Tree.Analysis(iAnalysis).MainNode,'UIContextMenu',GHandle.Main.Tree.Analysis(iAnalysis).ContextMenu);
     
@@ -329,6 +334,8 @@ function duplicate_obj(~,~, GHandle, id)
 GHandle.DataBase = GHandle.DataBase.duplicate(id);
 tree(GHandle);
 end
+function viewer3d_analysis(~,~, GHandle)
+idAnalysis = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+GHandle.Viewer3D = pagnosblackmagic(idAnalysis,GHandle);
 
-
-
+end
