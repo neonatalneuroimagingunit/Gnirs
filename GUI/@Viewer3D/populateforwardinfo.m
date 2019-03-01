@@ -70,7 +70,7 @@ obj.ForwardInfo.OptodeCheckbox = uicontrol('Parent', obj.MainInfo.TabForward, ..
     'HorizontalAlignment', 'left', ...
     'Visible', 'on', ...
     'String', 'Optodes', ...
-    'Value', true, ...
+    'Value', false, ...
     'Callback', @(h,e)optode_checkbox(h,e,obj));
 obj.ForwardInfo.ArrowCheckbox = uicontrol('Parent', obj.MainInfo.TabForward, ...
     'Style', 'checkbox', ...
@@ -88,7 +88,7 @@ obj.ForwardInfo.PhotonCheckbox = uicontrol('Parent', obj.MainInfo.TabForward, ..
     'HorizontalAlignment', 'left', ...
     'Visible', 'on', ...
     'String', 'Photon density', ...
-    'Callback', @(h,e)ViewForward.photonrefresh(h,e,obj));
+    'Callback', @(h,e)Viewer3D.photonrefresh(h,e,obj));
 obj.ForwardInfo.ExtraInfoButton = uicontrol('Parent', obj.MainInfo.TabForward, ...
     'Style', 'pushbutton', ...
     'Units', 'normalized',...
@@ -96,7 +96,7 @@ obj.ForwardInfo.ExtraInfoButton = uicontrol('Parent', obj.MainInfo.TabForward, .
     'HorizontalAlignment', 'left', ...
     'Visible', 'on', ...
     'String', 'Forward Details', ...
-    'Callback', @(h,e)ViewForward.extrainfo(h,e,obj));
+    'Callback', @(h,e)Viewer3D.extrainfo(h,e,obj));
 
 obj.ForwardInfo.SrcActive = [];
 obj.ForwardInfo.DetActive = [];
@@ -131,7 +131,7 @@ set(obj.ForwardPlot.SourceOptode, 'Color', colorOff);
 set(obj.ForwardPlot.SourceOptode(h.Value), 'Color', colorOn);
 set(obj.ForwardPlot.SrcDirectionArrow, 'FaceColor', colorOff);
 set(obj.ForwardPlot.SrcDirectionArrow(h.Value), 'FaceColor', colorOn);
-ViewForward.photonrefresh([],[],obj);
+Viewer3D.photonrefresh([],[],obj);
 obj.ForwardInfo.SrcActive = h.Value;
 end
 
@@ -145,7 +145,7 @@ set(obj.ForwardPlot.DetectorOptode, 'Color', colorOff);
 set(obj.ForwardPlot.DetectorOptode(h.Value), 'Color', colorOn);
 set(obj.ForwardPlot.DetDirectionArrow, 'FaceColor', colorOff);
 set(obj.ForwardPlot.DetDirectionArrow(h.Value), 'FaceColor', colorOn);
-ViewForward.photonrefresh([],[],obj);
+Viewer3D.photonrefresh([],[],obj);
 obj.ForwardInfo.DetActive = h.Value;
 end
 
@@ -171,7 +171,7 @@ set(obj.ForwardPlot.DetectorOptode(det),'Color', colorOn);
 set(obj.ForwardPlot.DetDirectionArrow, 'FaceColor', colorOff);
 set(obj.ForwardPlot.DetDirectionArrow(det), 'FaceColor', colorOn);
 
-ViewForward.photonrefresh([],[],obj);
+Viewer3D.photonrefresh([],[],obj);
 obj.ForwardInfo.ChannelActive = h.Value;
 end
 

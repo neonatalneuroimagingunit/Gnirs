@@ -27,10 +27,10 @@ classdef Viewer3D < handle & matlab.mixin.SetGet
         ForwardPlot
         TrackPlot
         
-        AtlasSettings
-        ProbeSettings
-        ForwardSettings
-        TrackSettings
+        AtlasSetting
+        ProbeSetting
+        ForwardSetting
+        TrackSetting
         
         AtlasExtra
         ProbeExtra
