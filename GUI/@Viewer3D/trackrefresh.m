@@ -1,10 +1,16 @@
 function trackrefresh(~, ~, obj)
-maxValue = -1;
-minValue = -2;
+
 
 
 if obj.TrackInfo.TrackCheckbox.Value == true
     obj.TrackPlot.TrackSource.delete;
+    
+    sourceColormap = feval(obj.TrackSetting.Colormap.String{obj.TrackSetting.Colormap.Value},128); % take information from the gui
+    sourceThreshold = max(str2double(obj.TrackSetting.Threshold.String), -Inf);
+    maxMarkerSize = max(str2double(obj.TrackSetting.MaxMarkerSize.String), 0);
+    downsamplingFactor = round(max(str2double(obj.TrackSetting.DownSampling.String), 1));
+    
+    
     nChannel = size(obj.TrackInfo.Channel.Value,2);
     flaggona = nChannel == 1;
     
@@ -23,33 +29,32 @@ if obj.TrackInfo.TrackCheckbox.Value == true
     end
     %%%
     
-    
-    minSourceValue = min(sourceValueOrig);
-%     maxSourceValue = max(sourceValueOrig);
+    minSourceValue = min(min(obj.Track.Value, [], 'all'),0);
+    maxSourceValue = max(obj.Track.Value,[],'all');
     
     switch obj.TrackSetting.Scale.String{obj.TrackSetting.Scale.Value}
         case 'linear'
             sourceValue = sourceValueOrig;
         case 'log10'
-        sourceValue = log10(sourceValueOrig - minSourceValue);
+            sourceValue = log10(sourceValueOrig - minSourceValue);
+            maxSourceValue = log10(maxSourceValue);
         case 'log'
             sourceValue = log(sourceValueOrig -minSourceValue);
+            maxSourceValue = log(maxSourceValue);
         case 'exp'
             sourceValue = exp(sourceValueOrig);
+            maxSourceValue = exp(maxSourceValue);
         case 'sqrt'
             sourceValue = (sourceValueOrig - minSourceValue).^(1/2);
+            maxSourceValue = maxSourceValue.^(1/2);
         case 'cube root'
             sourceValue = (sourceValueOrig - minSourceValue).^(1/3);
+            maxSourceValue = maxSourceValue.^(1/3);
     end
     
-    sourceColormap = feval(obj.TrackSetting.Colormap.String{obj.TrackSetting.Colormap.Value},128);
-    sourceThreshold = max(str2double(obj.TrackSetting.Threshold.String), -Inf);
-    maxMarkerSize = max(str2double(obj.TrackSetting.MaxMarkerSize.String), 0);
-    downsamplingFactor = round(max(str2double(obj.TrackSetting.DownSampling.String), 1));
+    
     
     sourceMask = sourceValue > sourceThreshold;
-    
-    
     angleMask = true(size(sourceMask));
     % get the half sensitivity to see the section in plot
     if flaggona
@@ -78,13 +83,13 @@ if obj.TrackInfo.TrackCheckbox.Value == true
     plotMask = and(downSampleMask, angleMask);
     source2Plot = sourceValue(plotMask);
     
-    sourceNormalized = (source2Plot - minValue)./(maxValue - minValue);
+    sourceNormalized = (source2Plot - sourceThreshold)./(maxSourceValue - sourceThreshold);
     colorIdx = floor(sourceNormalized*127) + 1;
     
     scatterSize = max(maxMarkerSize.*sourceNormalized , 0.01);
     scatterColor = sourceColormap(colorIdx,:);
     
-    obj.ForwardPlot.Sensitivity = scatter3(obj.MainPlot.Axes, ...
+    obj.TrackPlot.TrackSource = scatter3(obj.MainPlot.Axes, ...
         obj.Forward.node(plotMask,1), ...
         obj.Forward.node(plotMask,2), ...
         obj.Forward.node(plotMask,3),...
