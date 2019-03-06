@@ -153,6 +153,10 @@ for iMeasure = 1:GHandle.DataBase.nMeasure %for each measure in the study create
         'Label','Delete',...
         'tag', GHandle.DataBase.Measure(iMeasure).id,...
         'callback',{@delete_callback ,GHandle});
+    uimenu(GHandle.Main.Tree.Measure(iMeasure).ContextMenu,...
+        'Label','Anonymize subject',...
+        'tag', GHandle.DataBase.Measure(iMeasure).id,...
+        'callback',{@anonymize_subject ,GHandle});
     
     set(GHandle.Main.Tree.Measure(iMeasure).MainNode,'UIContextMenu',GHandle.Main.Tree.Measure(iMeasure).ContextMenu);
     
@@ -338,4 +342,11 @@ function viewer3d_analysis(~,~, GHandle)
 idAnalysis = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
 GHandle.Viewer3D = pagnosblackmagic(idAnalysis,GHandle);
 
+end
+
+
+function anonymize_subject(~, ~, GHandle)
+measureId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
+subjectId = GHandle.DataBase.findid(measureId).subjectId;
+anonymize(GHandle.DataBase.findid(subjectId), {'name', 'surname'});
 end
