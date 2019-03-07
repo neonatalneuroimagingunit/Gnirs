@@ -1,31 +1,28 @@
 function trackrefresh(~, ~, obj)
 
-
-
 if obj.TrackInfo.TrackCheckbox.Value == true
     obj.TrackPlot.TrackSource.delete;
     
-    sourceColormap = feval(obj.TrackSetting.Colormap.String{obj.TrackSetting.Colormap.Value},128); % take information from the gui
+    sourceColormap = feval(obj.TrackSetting.Colormap.String{obj.TrackSetting.Colormap.Value}, 128); % take information from the gui
     sourceThreshold = max(str2double(obj.TrackSetting.Threshold.String), -Inf);
     maxMarkerSize = max(str2double(obj.TrackSetting.MaxMarkerSize.String), 0);
     downsamplingFactor = round(max(str2double(obj.TrackSetting.DownSampling.String), 1));
     
-    
     nChannel = size(obj.TrackInfo.Channel.Value,2);
     flaggona = nChannel == 1;
     
-    frame = max(round(obj.TrackSetting.TimeSliderLabel.Value .* size(obj.Track.Value,1)) ,1);
+    frame = max(round(obj.TrackSetting.TimeSliderLabel.Value .* size(obj.Track.Value,1)), 1);
     
-    %%% sistemare con CUBBO
+    %%% sistemare con CUBBO (hypercubbo)
     sourceValueOrig = zeros(size(obj.Forward.srcFlux(:,1)));
     for iChannel = 1:1:nChannel
         channelIdx =  obj.TrackInfo.Channel.Value(iChannel);
         src = obj.Probe.channel.pairs(channelIdx ,1);
         det = obj.Probe.channel.pairs(channelIdx ,2);
         photonDensity = abs(obj.Forward.srcFlux(:,src).*obj.Forward.detFlux(:,det));
-        photonDensity =(photonDensity - min(photonDensity))./(max(photonDensity) - min(photonDensity));
+        photonDensity = (photonDensity - min(photonDensity))./(max(photonDensity) - min(photonDensity));
         
-        sourceValueOrig = sourceValueOrig +  photonDensity.*(mean(obj.Track.Value(frame,obj.TrackInfo.TrackList.Value,channelIdx))./nChannel);
+        sourceValueOrig = sourceValueOrig + photonDensity.*(mean(obj.Track.Value(frame,obj.TrackInfo.TrackList.Value,channelIdx))./nChannel);
     end
     %%%
     
@@ -37,22 +34,20 @@ if obj.TrackInfo.TrackCheckbox.Value == true
             sourceValue = sourceValueOrig;
         case 'log10'
             sourceValue = log10(sourceValueOrig - minSourceValue);
-            maxSourceValue = log10(maxSourceValue);
+            maxSourceValue = log10((maxSourceValue - minSourceValue));
         case 'log'
-            sourceValue = log(sourceValueOrig -minSourceValue);
-            maxSourceValue = log(maxSourceValue);
+            sourceValue = log(sourceValueOrig - minSourceValue);
+            maxSourceValue = log((maxSourceValue - minSourceValue));
         case 'exp'
             sourceValue = exp(sourceValueOrig);
             maxSourceValue = exp(maxSourceValue);
         case 'sqrt'
             sourceValue = (sourceValueOrig - minSourceValue).^(1/2);
-            maxSourceValue = maxSourceValue.^(1/2);
+            maxSourceValue = (maxSourceValue - minSourceValue).^(1/2);
         case 'cube root'
             sourceValue = (sourceValueOrig - minSourceValue).^(1/3);
-            maxSourceValue = maxSourceValue.^(1/3);
+            maxSourceValue = (maxSourceValue - minSourceValue).^(1/3);
     end
-    
-    
     
     sourceMask = sourceValue > sourceThreshold;
     angleMask = true(size(sourceMask));
@@ -62,7 +57,6 @@ if obj.TrackInfo.TrackCheckbox.Value == true
         p1 = obj.Forward.src(src,:);
         p2 = obj.Forward.det(det,:);
         p3 = centerofmass(obj.Forward.node(:,1:3), sourceValueOrig);
-        
         
         coffp3 = points2plane(p1, p2, p3);
         angle1 = deg2rad(str2double(obj.TrackSetting.Angle1.String));
@@ -83,7 +77,7 @@ if obj.TrackInfo.TrackCheckbox.Value == true
     plotMask = and(downSampleMask, angleMask);
     source2Plot = sourceValue(plotMask);
     
-    sourceNormalized = (source2Plot - sourceThreshold)./(maxSourceValue - sourceThreshold);
+    sourceNormalized = (source2Plot - sourceThreshold)./(maxSourceValue - sourceThreshold); % questa cosa fa pasticcio
     colorIdx = floor(sourceNormalized*127) + 1;
     
     scatterSize = max(maxMarkerSize.*sourceNormalized , 0.01);

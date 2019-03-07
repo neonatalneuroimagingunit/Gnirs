@@ -207,8 +207,6 @@ else
     %% Load raw data
     TrackType.WaveLength = num2cell(wavelength');
     TrackType.Component = datatype;
-    nChannel =  length(DetectorCHName)/2;
-    TrackType.Channel = num2cell(1:nChannel);
     
     frewind(FILE); %back to the begin of the file
     currentline = fgetl(FILE);     %acquisisce linea per linea fino a che incontra i dati
@@ -219,10 +217,12 @@ else
         end
     end
     
-    fgetl(FILE);
+    currentline = fgetl(FILE);
     temptimedata = textscan(FILE,'%f %*[^\n]');
     Mdata = table(temptimedata{:},'VariableNames',{'time'});
-    
+    nColumn = sum(contains(strsplit(currentline), datatype));
+    nChannel =  nColumn/(length(datatype)*length(wavelength));
+    TrackType.Channel = num2cell(1:nChannel);
     
     if fast == false
         
@@ -263,7 +263,7 @@ else
     %create new variable name
     channelNames = MdataClean.Properties.VariableNames';
     
-    
+    bacon = 1;
     if pobeFlag
         nName = length(channelNames);
         newChannelNames = cell(nName,1);
@@ -286,8 +286,14 @@ else
             end
             idxDet = currentChannelName(1)-'A'+1;
             egg = reshape([Probe.channel.pairs]',2, [])';
-            idxSrc = egg(egg(:,2)==idxDet,1);
-            idxSrc =  idxSrc(ceil(str2double(currentChannelName(4:end))/2));
+            spam = egg(egg(:,2)==idxDet,1);
+            %idxSrc =  idxSrc( ceil(str2double(currentChannelName(4:end))/2) ); % SBAGLIATO!!! %%%!!!%%%!!!%%%!!!%%%
+            idxSrc =  spam(bacon);
+            if bacon == length(spam)
+                bacon = 1;
+            else
+                bacon = bacon + 1;
+            end
             srcName = num2str(idxSrc, '_s%.3d');
             %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
             %tempChannelNames = [tempChannelNames, '_s' ,sourceName];
