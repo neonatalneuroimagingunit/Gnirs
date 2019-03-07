@@ -22,6 +22,6 @@ end
 
 Track.List = erase(allLabel(mask & maskDC), tobesearched);
 
-obj = Viewer3D([], Atlas, Probe, Forward, Track);
+obj = Viewer3D(GHandle, Atlas, Probe, Forward, Track);
 end
 
