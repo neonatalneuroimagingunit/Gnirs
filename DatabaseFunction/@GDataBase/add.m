@@ -39,6 +39,19 @@ switch objType
         end
         
         
+        DBStudy = DataBase.findid(DataBase.findid(Object2Add.measureId).studyId);
+        Study = DBStudy.load;
+        
+        if (Study.dateFirstAnalysis > Object2Add.date) ||  isnat(Study.dateFirstAnalysis)
+            DBStudy.modify('dateFirstAnalysis', Object2Add.date)
+        end
+        
+        if (Study.dateLastAnalysis < Object2Add.date) ||  isnat(Study.dateLastAnalysis)
+            DBStudy.modify('dateLastAnalysis', Object2Add.date)
+        end
+        
+        
+        
     case 'NirsMeasure'
         varName = 'Measure';
         
@@ -66,6 +79,17 @@ switch objType
                 Object2Add.studyId,...
                 'subjectId',subjectId);
         end
+        DBStudy = DataBase.findid(Object2Add.studyId);
+        Study = DBStudy.load;
+        
+        if (Study.dateFirstMeasure > Object2Add.date) ||  isnat(Study.dateFirstMeasure)
+            DBStudy.modify('dateFirstMeasure', Object2Add.date)
+        end
+        
+        if (Study.dateLastMeasure < Object2Add.date) ||  isnat(Study.dateLastMeasure)
+            DBStudy.modify('dateLastMeasure', Object2Add.date)
+        end
+        
         
     case 'NirsStudy'
         varName = 'Study';

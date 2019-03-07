@@ -106,8 +106,10 @@ GHandle.DataBase = DataBase;
 tree(GHandle);
 
 idxListMeasure = GHandle.TempWindow.NewStudyListBox.Value;
-fileNameCell = GHandle.TempWindow.NewStudyListBox.String(GHandle.TempWindow.NewStudyListBox.Value);
-filePathCell = fullfile(GHandle.TempWindow.NewStudySelector.Value, fileNameCell);
+if ~isempty(idxListMeasure)
+    fileNameCell = GHandle.TempWindow.NewStudyListBox.String(GHandle.TempWindow.NewStudyListBox.Value);
+    filePathCell = fullfile(GHandle.TempWindow.NewStudySelector.Value, fileNameCell);
+end
 close_function(GHandle.TempWindow.NewStudyFigure,[], GHandle)
 for idxMeasure = 1:length(idxListMeasure)
     filePath = filePathCell{idxMeasure};

@@ -32,7 +32,7 @@ function [DBAnalysis, DataBase] = newanalysis(DataBase,measureId, varargin)
 		
 		DataBase.Analysis(posNewAn) = DBAnalysis;
 	else
-		error('Study not present in the database')
+		error('Measure not present in the database')
 	end	
 end
 

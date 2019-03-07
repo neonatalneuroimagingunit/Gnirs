@@ -3,7 +3,7 @@ function [DBMeasure, DataBase] = newmeasure(DataBase, studyId, varargin)
 	[Study, idxStudy] = DataBase.findid(studyId);
 	if ~isempty(Study)
 		% generate the new id
-
+ 
 		measurePostFix = ['M' ,num2str(DataBase.nSMeasure,'%.6d')];
 		measureId = [DataBase.id , measurePostFix ]; 
 		DataBase.nSMeasure = DataBase.nSMeasure+1;
@@ -44,6 +44,7 @@ function [DBMeasure, DataBase] = newmeasure(DataBase, studyId, varargin)
 		DataBase.Measure(posNewMeas) = DBMeasure;
 		posNewMeasure = Study.nMeasure + 1;
 		DataBase.Study(idxStudy).measureId(posNewMeasure,:)	= measureId;
+
 		
 	else
 		error('Study not present in the database')

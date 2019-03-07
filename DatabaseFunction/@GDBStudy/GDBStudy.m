@@ -20,7 +20,7 @@ classdef GDBStudy
 		%%	method
 	methods
 		 Study = load(DBStudy)
-		 DBStudy = modify(DBStudy,NewStudy)
+		 DBStudy = modify(DBStudy, field, value)
 		 DBStudy = substitute(DBStudy,Study)
 	end
 	%% Static method

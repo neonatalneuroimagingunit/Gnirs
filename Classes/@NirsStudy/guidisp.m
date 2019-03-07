@@ -97,7 +97,7 @@ lowerPos = (overunderEdge) + 3 *( 1 - overunderEdge)/4;
 if isnat(Study.dateFirstMeasure)
     dateString = 'NaT';
 else
-    dateString = datestr(Study.dateLastMeasure, 'dd/mm/yyyy');
+    dateString = datestr(Study.dateFirstMeasure, 'dd/mm/yyyy');
 end
 
 GHandle.Main.Display.SubPanel(idx).DateTextBox = gtextbox(...

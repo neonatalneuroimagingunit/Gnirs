@@ -1,26 +1,15 @@
-function DBStudy = modify(DBStudy,NewStudy)
-%ADDMODIFYSUBJECT add or modify a subject present in the database
+function DBStudy = modify(DBStudy, field, value)
+if ~iscell(field)
+    field = {field};
+end
 
+if ~iscell(value)
+    value = {value};
+end
 
-	if (strcmp(DBStudy.id,NewStudy.id) || isempty(NewStudy.id))
-	
-		OldStudy = DBStudy.load;
-
-		Study = NewStudy;
-		
-		% assign all nonspecify value to the old value
-		studyFieldName = fieldnames(NewStudy);
-		for iFieldName = 1 : length(studyFieldName)
-
-			if isempty(NewStudy.(studyFieldName{iFieldName}))
-				Study.(studyFieldName{iFieldName}) = OldStudy.(studyFieldName{iFieldName});
-			end
-
-		end
-		
-		save(DBStudy.path,'Study');
-		
-	else 
-		error('id not match')
-	end
+Study = DBStudy.load;
+for iField = 1:1:length(field)
+    Study.(field{iField}) = value{iField};
+end
+save(DBStudy.path,'Study');
 end
