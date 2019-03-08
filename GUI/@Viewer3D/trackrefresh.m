@@ -22,12 +22,18 @@ if obj.TrackInfo.TrackCheckbox.Value == true
     frame = max(round(obj.TrackSetting.TimeSlider.Value .* size(obj.Track.Value,1)), 1);
     
     %%% sistemare con CUBBO (hypercubbo)
-    sourceValueOrig = zeros(size(obj.Forward.srcFlux(:,1)));
-    for iChannel = 1:1:nChannel
-        channelIdx =  obj.TrackInfo.Channel.Value(iChannel);
-        photonDensity = obj.Forward.jFluxNorm(:, channelIdx);
-        sourceValueOrig = sourceValueOrig + photonDensity.*(mean(obj.Track.Value(frame,obj.TrackInfo.TrackList.Value,channelIdx))./nChannel);
-    end
+    %sourceValueOrig = zeros(size(obj.Forward.srcFlux(:,1)));
+    %     for iChannel = 1:1:nChannel
+    %         channelIdx =  obj.TrackInfo.Channel.Value(iChannel);
+    %         photonDensity = obj.Forward.jFluxNorm(:, channelIdx);
+    %         sourceValueOrig = sourceValueOrig + photonDensity.*(mean(obj.Track.Value(frame,obj.TrackInfo.TrackList.Value,channelIdx))./nChannel);
+    %     end
+    
+    channelIdx =  obj.TrackInfo.Channel.Value;
+    channelMask = false(1,size(obj.Forward.jFluxNorm,2));
+    channelMask(channelIdx) = true;
+    photonDensity = obj.Forward.jFluxNorm(:, channelMask);
+    sourceValueOrig = mean(photonDensity.*(reshape(mean(obj.Track.Value(frame,obj.TrackInfo.TrackList.Value,channelMask),2),1,[])),2);
     
     sourceMaskP = sourceValueOrig>minP & sourceValueOrig<maxP;
     sourceMaskN = sourceValueOrig>minN & sourceValueOrig<maxN;
@@ -104,7 +110,7 @@ if obj.TrackInfo.TrackCheckbox.Value == true
     
     source2PlotP = sourceValue(plotMask & sourceMaskP);
     source2PlotN = sourceValue(plotMask & sourceMaskN);
-     
+    
     sourceNormalizedP = (source2PlotP - minP)./(maxP - minP); % questa cosa fa pasticcio
     sourceNormalizedN = (source2PlotN - minN)./(maxN - minN);
     
