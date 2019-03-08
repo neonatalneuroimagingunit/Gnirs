@@ -7,7 +7,7 @@ if obj.ForwardInfo.PhotonCheckbox.Value == true
         flaggona = size([obj.ForwardInfo.SrcList.Value, obj.ForwardInfo.DetList.Value],2) == 1;
         photonDensity = photonDensityOrig ./ max(photonDensityOrig);
     else
-        photonDensity = obj.Forward.jFluxNorm(:,obj.ForwardInfo.ChannelList.Value);
+        photonDensity = mean(obj.Forward.jFluxNorm(:,obj.ForwardInfo.ChannelList.Value),2);
         flaggona = size(obj.ForwardInfo.ChannelList.Value,2) == 1;
     end
     
@@ -31,7 +31,7 @@ if obj.ForwardInfo.PhotonCheckbox.Value == true
     maxMarkerSize = max(str2double(obj.ForwardSetting.MaxMarkerSize.String), 0);
     downsamplingFactor = round(max(str2double(obj.ForwardSetting.DownSampling.String), 1));
     
-    sensitivityMask = photonDensity > sensitivityThreshold;
+  sensitivityMask = photonDensity > sensitivityThreshold;
     
     
     angleMask = true(size(sensitivityMask));
@@ -54,7 +54,7 @@ if obj.ForwardInfo.PhotonCheckbox.Value == true
             det = obj.Probe.channel.pairs(obj.ForwardInfo.ChannelList.Value,2);
             p1 = obj.Forward.src(src,:);
             p2 = obj.Forward.det(det,:);
-            p3 = centerofmass(obj.Forward.node(:,1:3), photonDensityOrig);
+            p3 = centerofmass(obj.Forward.node(sensitivityMask,1:3), photonDensity(sensitivityMask));
         end
         
         coffp3 = points2plane(p1, p2, p3);
