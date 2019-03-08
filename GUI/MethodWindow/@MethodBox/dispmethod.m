@@ -2,16 +2,20 @@ function dispmethod(obj)
 backgroundColor = [0.9 0.9 0.9];
 
 Method = obj.Method;
-paramNames = {Method.UserParameters.name};
-paramField = {Method.UserParameters.field};
-paramString = {Method.UserParameters.string};
-paramStyle = {Method.UserParameters.style};
+nParam = 0;
 
-%% Calculate sizing parameters
-nParam = length(paramNames);
-inter = 1/(5*nParam+1);
-%%
-intra = 2*inter;
+if isfield(Method.UserParameters,'name')
+    paramNames = {Method.UserParameters.name};
+    paramField = {Method.UserParameters.field};
+    paramString = {Method.UserParameters.string};
+    paramStyle = {Method.UserParameters.style};
+    
+    %% Calculate sizing parameters
+    nParam = length(paramNames);
+    inter = 1/(5*nParam+1);
+    %%
+    intra = 2*inter;
+end
 obj.Parent.InfoSetPanelUp.Children.delete;
 
 %% Create GUI objects
@@ -29,15 +33,15 @@ for iParam = 1:1:nParam
     switch paramStyle{iParam}
         case {'edit', 'text'}
             if ~isempty(paramField{iParam})
-            textValue(iParam) = uicontrol('Parent', obj.Parent.InfoSetPanelUp, ...
-                'Style', paramStyle{iParam}, ...
-                'Units', 'normalized',...
-                'Position', valuePos,...
-                'Callback', @(h,e)update_parameter(h,e,obj,iParam),...
-                'HorizontalAlignment', 'left', ...
-                'BackgroundColor', backgroundColor*1.1, ...
-                'Visible', 'on', ...
-                'String', num2str(Method.Parameters.(paramField{iParam})));
+                textValue(iParam) = uicontrol('Parent', obj.Parent.InfoSetPanelUp, ...
+                    'Style', paramStyle{iParam}, ...
+                    'Units', 'normalized',...
+                    'Position', valuePos,...
+                    'Callback', @(h,e)update_parameter(h,e,obj,iParam),...
+                    'HorizontalAlignment', 'left', ...
+                    'BackgroundColor', backgroundColor*1.1, ...
+                    'Visible', 'on', ...
+                    'String', num2str(Method.Parameters.(paramField{iParam})));
             end
             
         case 'checkbox'
