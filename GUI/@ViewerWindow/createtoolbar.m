@@ -4,8 +4,9 @@ obj.Toolbar.MainToolbar = uitoolbar('Parent',obj.MainFigure);
 img1 = rand(16,16,3);
 obj.Toolbar.pushtool1 = uipushtool(obj.Toolbar.MainToolbar,...
     'CData', img1, 'Separator', 'on', ...
-    'TooltipString', 'Your toggle tool', ...
-    'HandleVisibility', 'off');
+    'TooltipString', 'Export figure', ...
+    'ClickedCallback', @(h,e)print_figure(h, e, obj),...
+    'HandleVisibility', 'on');
 
 %img2 = 0.5.*ones(16,16,3);
 [X,map] = imread([obj.GHandle.Preference.Path.currentPath filesep 'Images' filesep 'lock.png']);
@@ -31,4 +32,8 @@ function lockmultiplewiewer_callback(handle, ~, obj)
     for VieverList = obj.GHandle.Viewer
         VieverList.Toolbar.LockMultipleWiewer.State = handle.State;
     end
+end
+
+function print_figure(~, ~, obj)
+exportimage(obj.GHandle, obj.MainFigure);
 end
