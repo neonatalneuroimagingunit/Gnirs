@@ -341,12 +341,12 @@ function duplicate_obj(~,~, GHandle, id)
 GHandle.DataBase = GHandle.DataBase.duplicate(id);
 tree(GHandle);
 end
+
 function viewer3d_analysis(~,~, GHandle)
 idAnalysis = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;
 GHandle.Viewer3D = pagnosblackmagic(idAnalysis,GHandle);
 
 end
-
 
 function anonymize_subject(~, ~, GHandle)
 measureId = GHandle.Main.Tree.StudyTree.SelectedNodes.Value;

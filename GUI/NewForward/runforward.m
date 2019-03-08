@@ -33,13 +33,15 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fukui 2013 - 800 nm - Human newborn
-cfg.prop = [0.0000  0.00 1.0 1.0; ...     % Air
+cfg.prop = [...
+    0.0000  0.00 1.0 1.0; ...     % Air
     0.0170 17.50 0.9 1.3; ...     % ECT
     0.0041  0.32 0.9 1.3; ...     % CSF
     0.0480  5.00 0.9 1.3; ...     % GM
     0.0370 10.00 0.9 1.3; ...     % WM
     0.0370 10.00 0.9 1.3; ...     % Brainstem
-    0.0370 10.00 0.9 1.3];        % Cerebellum
+    0.0370 10.00 0.9 1.3  ...     % Cerebellum
+    ];       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 nSrc = size(Probe.source.label,1);
@@ -169,6 +171,18 @@ if fw
         tS(nSrc + iDet) = toc;
     end
     
+    %% jacobian
+    channel = Probe.channel.pairs;
+    nChannel = length(Probe.channel.label);
+    jFlux = zeros(size(fluxSrc,1), nChannel);
+    for iChannel = 1:1:nChannel
+        tempSrc = channel(iChannel,1);
+        tempDet = channel(iChannel,2);
+        jFlux(:,iChannel) = abs(fluxSrc(:,tempSrc) .* fluxDet(:,tempDet));
+    end
+    
+    jFluxNorm = (jFlux-min(jFlux(:))) ./ (max(jFlux(:))-min(jFlux(:)));
+    
     %% Save the results
     cfg.srcpos = [];
     cfg.srcdir = [];
@@ -178,7 +192,7 @@ if fw
     Timing.srcdir = tD;
     Timing.simulation = sum(tS);
     Timing.simulationAvg = mean(tS);
-    
+ 
     settingsNote = '';
     
     ForwardSimulation = NirsForward(...
@@ -188,10 +202,13 @@ if fw
         'node', Head.node, ...
         'src', srcPos, ...
         'det', detPos, ...
+        'channel', channel, ...
         'srcDir', srcDir, ...
         'detDir', detDir, ...
         'srcFlux', fluxSrc, ...
         'detFlux', fluxDet, ...
+        'jFlux', jFlux, ...
+        'jFluxNorm', jFluxNorm, ...
         'Settings', cfg,...
         'Timing', Timing, ...
         'note', settingsNote);

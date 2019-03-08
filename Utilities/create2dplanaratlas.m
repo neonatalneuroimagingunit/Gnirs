@@ -11,7 +11,7 @@ y = 1:101;
 [X,Y] = meshgrid(x,y);
 face = delaunay(X,Y);
 
-Atlas.name = '2D';
+Atlas.tag = '2D';
 Atlas.date = datetime;
 
 WhiteMatter.node = [X(:),Y(:),ones(size(X(:)))];

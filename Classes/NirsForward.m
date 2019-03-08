@@ -7,10 +7,13 @@ classdef NirsForward
         node
         src
         det
+        channel
         srcDir
         detDir
         srcFlux
         detFlux
+        jFlux
+        jFluxNorm
         Settings
         Timing
         
@@ -59,7 +62,16 @@ classdef NirsForward
                             
                         case 'detflux'
                             obj.detFlux = varargin{i+1};
-                        
+                            
+                        case 'jflux'
+                            obj.jFlux = varargin{i+1};
+                            
+                        case 'jfluxnorm'
+                            obj.jFluxNorm = varargin{i+1};
+                            
+                        case 'channel'
+                            obj.channel = varargin{i+1};
+                            
                         case 'timing'
                             obj.Timing = varargin{i+1};
                             
