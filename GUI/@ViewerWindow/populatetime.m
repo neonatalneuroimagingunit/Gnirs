@@ -31,7 +31,9 @@ for iEventType = 1 : nEventType
 end
 
 %% Plot lines in main and support axes
-for iLines = 1 : nLines
+%  spam = [1 3 5 8 9 41 72 78];
+% for iLines = spam
+for iLines = 1 :1: nLines
      obj.Panel.Plot.Time.Lines(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
         'LineWidth', 1, 'LineStyle', '-',...
         'buttonDownFcn', {@line_callback obj},...
