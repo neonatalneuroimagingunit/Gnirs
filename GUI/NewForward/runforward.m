@@ -41,7 +41,7 @@ cfg.prop = [...
     0.0370 10.00 0.9 1.3; ...     % WM
     0.0370 10.00 0.9 1.3; ...     % Brainstem
     0.0370 10.00 0.9 1.3  ...     % Cerebellum
-    ];       
+    ];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 nSrc = size(Probe.source.label,1);
@@ -141,12 +141,16 @@ if fw
     %cfg.srcdir = srcDir(1,:);
     %cfg = mmclab(cfg, 'prep');
     
+    %     cfg.detpos =  [detPos(1,:), 3];
+    %     cfg.issaveexit = 1;
+    
     for iSrc = 1:1:nSrc
         tic
         GHandle.TempWindow.ProgressRectangleBG.String = [num2str(iSrc) '/' num2str(nTot) '...'];
         drawnow;
         cfg.srcpos = srcPos(iSrc,:);
         cfg.srcdir = srcDir(iSrc,:);
+        [tempflux, pera ,a ,b ] = mmclab(cfg);
         tempflux = mmclab(cfg);
         if ~isempty(tempflux.data)
             fluxSrc(:,iSrc) = sum(tempflux.data,2);
@@ -192,7 +196,7 @@ if fw
     Timing.srcdir = tD;
     Timing.simulation = sum(tS);
     Timing.simulationAvg = mean(tS);
- 
+    
     settingsNote = '';
     
     ForwardSimulation = NirsForward(...
