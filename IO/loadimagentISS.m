@@ -288,11 +288,11 @@ else
             egg = reshape([Probe.channel.pairs]',2, [])';
             spam = egg(egg(:,2)==idxDet,1);
             %idxSrc =  idxSrc( ceil(str2double(currentChannelName(4:end))/2) ); % SBAGLIATO!!! %%%!!!%%%!!!%%%!!!%%%
-            idxSrc =  spam(bacon);
-            if bacon == length(spam)
+            idxSrc =  spam(floor(bacon));
+            if bacon == length(spam)+0.5
                 bacon = 1;
             else
-                bacon = bacon + 1;
+                bacon = bacon + 0.5;
             end
             srcName = num2str(idxSrc, '_s%.3d');
             %sourceName = num2str(ceil(str2double(currentChannelName(4:end))/2),'%.3d');
