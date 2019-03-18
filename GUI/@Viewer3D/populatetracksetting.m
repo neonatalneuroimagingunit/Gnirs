@@ -213,6 +213,8 @@ while (obj.TrackSetting.PlayButton.Value)
         nextframe = 0;
     end
     obj.TrackSetting.TimeSlider.Value = nextframe;
+    xval = max(round(obj.TrackSetting.TimeSlider.Value .* size(obj.Track.Value,1)), 1);
+    obj.TrackInfo.TimePointVertical.XData = [xval xval];
     obj.trackrefresh([], [], obj)
     drawnow;
     %pause(0.01);
