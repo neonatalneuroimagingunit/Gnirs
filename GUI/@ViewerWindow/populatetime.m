@@ -30,11 +30,33 @@ for iEventType = 1 : nEventType
         'LineWidth', 2);
 end
 
+%% Plot events rectangles
+yMin = min(Data{:,:},[],'all');
+yMax = max(Data{:,:},[],'all');
+nEventType = size(obj.Dataset.Event.Dictionary,1);
+obj.Panel.Plot.Time.EventsRectangle = gobjects(0);
+for iEventType = 1 : nEventType
+    eventMask = obj.Dataset.Event.type == iEventType;
+    nEvent = size(obj.Dataset.Event.startTime(eventMask),1);
+    x = obj.Dataset.Event.startTime(eventMask);
+    y = eventRatio.*yMin.*ones(size(obj.Dataset.Event.startTime(eventMask)));
+    w = obj.Dataset.Event.durationTime(eventMask);
+    h = (yMax-yMin).*ones(size(obj.Dataset.Event.startTime(eventMask)));
+    for iEvent = 1 : nEvent
+        obj.Panel.Plot.Time.EventsRectangle(end + 1) = rectangle(obj.Panel.Plot.Time.MainAxes,...
+            'Position', [x(iEvent), y(iEvent), w(iEvent), h(iEvent)],...
+            'FaceColor', [eventColor(iEventType,:) 0.2], ...
+            ...'EdgeColor', eventColor(iEventType,:), ...
+            'EdgeColor', 'none', ...
+            'Visible', showEvents{obj.Panel.Preference.CheckBoxShowEventRectangle.Value + 1});
+    end
+end
+
 %% Plot lines in main and support axes
 %  spam = [1 3 5 8 9 41 72 78];
 % for iLines = spam
 for iLines = 1 :1: nLines
-     obj.Panel.Plot.Time.Lines(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
+    obj.Panel.Plot.Time.Lines(iLines) = plot(Data{:,1}, Data{:, iLines + 1},...
         'LineWidth', 1, 'LineStyle', '-',...
         'buttonDownFcn', {@line_callback obj},...
         'Color', obj.WatchList.colorLine(iLines,:),...
@@ -129,7 +151,7 @@ obj.WatchList.timeLim = [obj.Dataset.Data.Time.Time(1),...
 
 %% Call setselectedtrack via edvLine listener
 if isempty(obj.WatchList.edvLine)
-   obj.WatchList.edvLine = true(size(obj.Panel.Plot.Time.SmallLines));
+    obj.WatchList.edvLine = true(size(obj.Panel.Plot.Time.SmallLines));
 else
     obj.WatchList.edvLine = obj.WatchList.edvLine;
 end
